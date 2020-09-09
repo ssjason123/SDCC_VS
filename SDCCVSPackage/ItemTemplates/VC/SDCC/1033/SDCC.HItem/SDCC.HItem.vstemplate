@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>SDCC H Source Header File (.h)</Name>
+    <Description>SDCC C source code header file.</Description>
+    <Icon>SDCC.HItem.ico</Icon>
+    <TemplateID>Microsoft.VC.SDCC.HFile</TemplateID>
+    <ProjectType>VC</ProjectType>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <DefaultName>HFile.h</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <References/>
+    <ProjectItem ReplaceParameters="true" ItemType="ClInclude">HFile.h</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

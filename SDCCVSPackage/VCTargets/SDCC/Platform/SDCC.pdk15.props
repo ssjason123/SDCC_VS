@@ -1,0 +1,8 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- SDCC PIC15 Overrides -->
+  <PropertyGroup Condition="'$(ProcessorType)' == 'pic15'">
+    <!-- TODO: Add Overrides -->
+  </PropertyGroup>
+
+</Project>

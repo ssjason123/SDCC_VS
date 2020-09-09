@@ -1,0 +1,8 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- SDCC STM8 Overrides -->
+  <PropertyGroup Condition="'$(ProcessorType)' == 'stm8'">
+    <!-- TODO: Add Overrides -->
+  </PropertyGroup>
+
+</Project>

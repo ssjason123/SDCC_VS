@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rule
+  Name="General"
+  PageTemplate="generic"
+  DisplayName="SDCC General"
+  SwitchPrefix="-"
+  Order="5"
+  xmlns="http://schemas.microsoft.com/build/2009/properties"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule.Categories>
+    <Category
+      Name="Project"
+      DisplayName="Project"/>
+    <Category
+      Name="SDCC"
+      DisplayName="SDCC"/>
+  </Rule.Categories>
+  <Rule.DataSource>
+    <DataSource
+      Persistence="ProjectFile"
+      Label=""
+      ItemType=""
+      HasConfigurationCondition="true" />
+  </Rule.DataSource>
+  <StringProperty
+    Name="ProjectName"
+    DisplayName="Project Name"
+    Description="The project file name. Used to generate the output file name."
+    Category="Project"
+    F1Keyword="VC.Project.SDCCGeneral.ProjectName"/>
+  <StringProperty
+    Name="Extension"
+    DisplayName="Output File Extension"
+    Description="The extension appended to the Project Name for file output."
+    Category="Project"
+    F1Keyword="VC.Project.SDCCGeneral.Extension"/>
+  <EnumProperty
+    Name="BuildFormat"
+    DisplayName="Build Format"
+    Description="The project build file format (Binary or Library)."
+    Category="Project"
+    F1Keyword="VC.Project.SDCCGeneral.BuildFormat">
+    <EnumValue
+      Name="Binary"
+      DisplayName="Binary"
+      Description="Generate a binary file."/>
+    <EnumValue
+      Name="Library"
+      DisplayName="Library"
+      Description="Generate a library file."/>
+  </EnumProperty>
+  <StringProperty
+    Name="SDCCPath"
+    DisplayName="Path to SDCC"
+    Description="The path to the SDCC installation."
+    Subtype="folder"
+    Category="SDCC"
+    F1Keyword="VC.Project.SDCCGeneral.SDCC"/>
+</Rule>

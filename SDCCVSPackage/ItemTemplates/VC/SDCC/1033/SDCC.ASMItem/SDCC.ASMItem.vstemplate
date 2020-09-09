@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>SDCC ASM Source File (.asm/.s)</Name>
+    <Description>SDCC assembly source code file.</Description>
+    <Icon>SDCC.ASMItem.ico</Icon>
+    <TemplateID>Microsoft.VC.SDCC.ASMFile</TemplateID>
+    <ProjectType>VC</ProjectType>
+    <NumberOfParentCategoriesToRollUp>0</NumberOfParentCategoriesToRollUp>
+    <DefaultName>ASMFile.asm</DefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <References/>
+    <ProjectItem ReplaceParameters="true" ItemType="AsmCompile">ASMFile.asm</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

@@ -1,0 +1,190 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- SDCC Common Variables -->
+  <PropertyGroup>
+    <!-- <SDCCPath>C:\Development\Development\Projects\GBDKProjects\gbdk\bin\SDCC\</SDCCPath> -->
+    <SDCCPath Condition="'$(SDCCPath)' == ''">$(SDCC_HOME)</SDCCPath>
+    <SDCCBinPath Condition="'$(SDCCBinPath)' == ''">$(SDCCPath)bin\</SDCCBinPath>
+    <BuildFormat Condition="'$(BuildFormat)' == ''">Binary</BuildFormat>
+    <IntBinaryExtension Condition="'$(IntBinaryExtension)' == ''">.ihx</IntBinaryExtension>
+    <ObjectExtension Condition="'$(ObjectExtension)' == ''">.rel</ObjectExtension>
+    <MapExtension Condition="'$(MapExtension)' == ''">.map</MapExtension>
+    <PortType Condition="'$(PortType)' == ''">gbz80</PortType>
+    <Extension Condition="'$(Extension)' == '' and '$(BuildFormat)' == 'Library'">.lib</Extension>
+  </PropertyGroup>
+
+  <!-- SDCC Compiler Variables -->
+  <PropertyGroup>
+    <!--
+    <AdditionalIncludeDirectories   Condition="'$(AdditionalIncludeDirectories)' == ''">$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    <PreprocessorDefinitions        Condition="'$(PreprocessorDefinitions)' == ''">$(PreprocessorDefinitions)</PreprocessorDefinitions>
+    <DependencyRule                 Condition="'$(DependencyRule)' == ''">$(DependencyRule)</DependencyRule>
+    <KeepComments                   Condition="'$(KeepComments)' == ''">$(KeepComments)</KeepComments>
+    <AssertAnswer                   Condition="'$(AssertAnswer)' == ''">$(AssertAnswer)</AssertAnswer>
+    <PreprocessorUndefines          Condition="'$(PreprocessorUndefines)' == ''">$(PreprocessorUndefines)</PreprocessorUndefines>
+    <PreprocessorOutput             Condition="'$(PreprocessorOutput)' == ''">$(PreprocessorOutput)</PreprocessorOutput>
+    <PedanticParseNum               Condition="'$(PedanticParseNum)' == ''">$(PedanticParseNum)</PedanticParseNum>
+
+    <NoGcse                         Condition="'$(NoGcse)' == ''">$(NoGcse)</NoGcse>
+    <NoInvariant                    Condition="'$(NoInvariant)' == ''">$(NoInvariant)</NoInvariant>
+    <NoInduction                    Condition="'$(NoInduction)' == ''">$(NoInduction)</NoInduction>
+    <NoLabelOpt                     Condition="'$(NoLabelOpt)' == ''">$(NoLabelOpt)</NoLabelOpt>
+    <NoXinitOpt                     Condition="'$(NoXinitOpt)' == ''">$(NoXinitOpt)</NoXinitOpt>
+    <NoOverlay                      Condition="'$(NoOverlay)' == ''">$(NoOverlay)</NoOverlay>
+    <NoPeep                         Condition="'$(NoPeep)' == ''">$(NoPeep)</NoPeep>
+    <PeepAsm                        Condition="'$(PeepAsm)' == ''">$(PeepAsm)</PeepAsm>
+    <NoPeepReturn                   Condition="'$(NoPeepReturn)' == ''">$(NoPeepReturn)</NoPeepReturn>
+    <CodeOptimization               Condition="'$(CodeOptimization)' == ''">$(CodeOptimization)</CodeOptimization>
+    <OmitFramePointer               Condition="'$(OmitFramePointer)' == ''">$(OmitFramePointer)</OmitFramePointer>
+    <MaxAllocsPerNode               Condition="'$(MaxAllocsPerNode)' == ''">$(MaxAllocsPerNode)</MaxAllocsPerNode>
+    <NoLospre                       Condition="'$(NoLospre)' == ''">$(NoLospre)</NoLospre>
+    <AllowUnsafeRead                Condition="'$(AllowUnsafeRead)' == ''">$(AllowUnsafeRead)</AllowUnsafeRead>
+    <NoStdLibCall                   Condition="'$(NoStdLibCall)' == ''">$(NoStdLibCall)</NoStdLibCall>
+
+    <AdditionalLibraryPath          Condition="'$(AdditionalLibraryPath)' == ''">$(AdditionalLibraryPath)</AdditionalLibraryPath>
+    <XRamLocation                   Condition="'$(XRamLocation)' == ''">$(XRamLocation)</XRamLocation>
+    <CodeLocation                   Condition="'$(CodeLocation)' == ''">$(CodeLocation)</CodeLocation>
+    <StackLocation                  Condition="'$(StackLocation)' == ''">$(StackLocation)</StackLocation>
+    <XStackLocation                 Condition="'$(XStackLocation)' == ''">$(XStackLocation)</XStackLocation>
+    <DataLocation                   Condition="'$(DataLocation)' == ''">$(DataLocation)</DataLocation>
+    <IDataLocation                  Condition="'$(IDataLocation)' == ''">$(IDataLocation)</IDataLocation>
+    <BitLocation                    Condition="'$(BitLocation)' == ''">$(BitLocation)</BitLocation>
+    <OutputFormat                   Condition="'$(OutputFormat)' == ''">$(OutputFormat)</OutputFormat>
+    <LinkOptions                    Condition="'$(LinkOptions)' == ''">$(LinkOptions)</LinkOptions>
+    -->
+  </PropertyGroup>
+
+  <!-- SDCC Assembler Variables -->
+  <PropertyGroup>
+    <CreateObjectFile Condition="'$(CreateObjectFile)' == ''">true</CreateObjectFile>
+
+    <!--
+    <ExternalAssembler Condition="'$(ExternalAssembler)' == ''">$(ExternalAssembler)</ExternalAssembler>
+    <ListingFormat Condition="'$(ListingFormat)' == ''">$(ListingFormat)</ListingFormat>
+    <UndefinedSymbolsMadeGlobal Condition="'$(UndefinedSymbolsMadeGlobal)' == ''">$(UndefinedSymbolsMadeGlobal)</UndefinedSymbolsMadeGlobal>
+    <AllUserSymbolsMadeGlobal Condition="'$(AllUserSymbolsMadeGlobal)' == ''">$(AllUserSymbolsMadeGlobal)</AllUserSymbolsMadeGlobal>
+    <ListingDefineFormat Condition="'$(ListingDefineFormat)' == ''">$(ListingDefineFormat)</ListingDefineFormat>
+    <DisableInstructionCycleCountInListing Condition="'$(DisableInstructionCycleCountInListing)' == ''">$(DisableInstructionCycleCountInListing)</DisableInstructionCycleCountInListing>
+    <EnableNoICEDebugSymbols Condition="'$(EnableNoICEDebugSymbols)' == ''">$(EnableNoICEDebugSymbols)</EnableNoICEDebugSymbols>
+    <EnableSDCCDebugSymbols Condition="'$(EnableSDCCDebugSymbols)' == ''">$(EnableSDCCDebugSymbols)</EnableSDCCDebugSymbols>
+    <CreateListFile Condition="'$(CreateListFile)' == ''">$(CreateListFile)</CreateListFile>
+    <CreateSymbolFile Condition="'$(CreateSymbolFile)' == ''">$(CreateSymbolFile)</CreateSymbolFile>
+    <DisableAutoListingPagination Condition="'$(DisableAutoListingPagination)' == ''">$(DisableAutoListingPagination)</DisableAutoListingPagination>
+    <DisableListProcessing Condition="'$(DisableListProcessing)' == ''">$(DisableListProcessing)</DisableListProcessing>
+    <UseWideListingFormat Condition="'$(UseWideListingFormat)' == ''">$(UseWideListingFormat)</UseWideListingFormat>
+    <DisableCaseSensitivity Condition="'$(DisableCaseSensitivity)' == ''">$(DisableCaseSensitivity)</DisableCaseSensitivity>
+    <RelocatableReferenceMode Condition="'$(RelocatableReferenceMode)' == ''">$(RelocatableReferenceMode)</RelocatableReferenceMode>
+    -->
+
+  </PropertyGroup>
+
+  <!-- SDCC Linker Variables -->
+  <PropertyGroup>
+    <OutputFormat Condition="'$(OutputFormat)' == ''">Intel</OutputFormat>
+    <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">true</GenerateMapFile>
+    <EchoMode Condition="'$(EchoMode)' == ''">NoEcho</EchoMode>
+
+    <!--
+    <ExternalLinker Condition="'$(ExternalLinker)' == ''">$(ExternalLinker)</ExternalLinker>
+
+    <LibraryPaths Condition="'$(LibraryPaths)' == ''">$(LibraryPaths)</LibraryPaths>
+    <LibraryFiles Condition="'$(LibraryFiles)' == ''">$(LibraryFiles)</LibraryFiles>
+
+    <AreaBaseAddress Condition="'$(AreaBaseAddress)' == ''">$(AreaBaseAddress)</AreaBaseAddress>
+    <GlobalSymbols Condition="'$(GlobalSymbols)' == ''">$(GlobalSymbols)</GlobalSymbols>
+
+    <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">$(GenerateMapFile)</GenerateMapFile>
+    <WideListMapFormatEnabled Condition="'$(WideListMapFormatEnabled)' == ''">$(WideListMapFormatEnabled)</WideListMapFormatEnabled>
+    <MapNumberFormat Condition="'$(MapNumberFormat)' == ''">$(MapNumberFormat)</MapNumberFormat>
+
+    <OutputFormat Condition="'$(OutputFormat)' == ''">$(OutputFormat)</OutputFormat>
+    <NoIceDebugOutput Condition="'$(NoIceDebugOutput)' == ''">$(NoIceDebugOutput)</NoIceDebugOutput>
+    <SDCDBDebugOutput Condition="'$(SDCDBDebugOutput )' == ''">$(SDCDBDebugOutput)</SDCDBDebugOutput >
+
+    <UpdateListingFiles Condition="'$(UpdateListingFiles)' == ''">$(UpdateListingFiles)</UpdateListingFiles>
+
+    <DisableSymbolCaseSensitivity Condition="'$(DisableSymbolCaseSensitivity)' == ''">$(DisableSymbolCaseSensitivity)</DisableSymbolCaseSensitivity>
+
+    <IRamSize Condition="'$(IRamSize)' == ''">$(IRamSize)</IRamSize>
+    <XRamSize Condition="'$(XRamSize)' == ''">$(XRamSize)</XRamSize>
+    <CodeSize Condition="'$(CodeSize)' == ''">$(CodeSize)</CodeSize>
+    <GenerateMemSummaryFile Condition="'$(GenerateMemSummaryFile)' == ''">$(GenerateMemSummaryFile)</GenerateMemSummaryFile>
+    <PackInternalRam Condition="'$(PackInternalRam)' == ''">$(PackInternalRam)</PackInternalRam>
+    <StackSize Condition="'$(StackSize)' == ''">$(StackSize)</StackSize>
+    -->
+  </PropertyGroup>
+
+  <!-- SDCC MakeBin Variables -->
+  <PropertyGroup>
+    <!--
+    <PackBinary Condition="'$(PackBinary)' == ''">$(PackBinary)</PackBinary>
+    <BinarySize Condition="'$(BinarySize)' == ''">$(BinarySize)</BinarySize>
+    <GenerateGameBoyBinary Condition="'$(GenerateGameBoyBinary)' == ''">$(GenerateGameBoyBinary)</GenerateGameBoyBinary>
+
+    <GameBoyRomBankCount Condition="'$(GameBoyRomBankCount)' == ''">$(GameBoyRomBankCount)</GameBoyRomBankCount>
+    <GameBoyRamBankCount Condition="'$(GameBoyRamBankCount)' == ''">$(GameBoyRamBankCount)</GameBoyRamBankCount>
+    <GameBoyMemoryBankController Condition="'$(GameBoyMemoryBankController)' == ''">$(GameBoyMemoryBankController)</GameBoyMemoryBankController>
+    <GameBoyCartridgeName Condition="'$(GameBoyCartridgeName)' == ''">$(ProjectName)</GameBoyCartridgeName>
+    <GameBoyColor Condition="'$(GameBoyColor)' == ''">$(GameBoyColor)</GameBoyColor>
+    -->
+  </PropertyGroup>
+
+  <!-- SDCC Processor Specific Overrides -->
+  <Import Condition="'$(PortType)' == 'mcs51'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.mcs51.props"/>
+  <Import Condition="'$(PortType)' == 'z80'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.z80.props"/>
+  <Import Condition="'$(PortType)' == 'z180'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.z180.props"/>
+  <Import Condition="'$(PortType)' == 'r2k'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.r2k.props"/>
+  <Import Condition="'$(PortType)' == 'r3ka'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.r3ka.props"/>
+  <Import Condition="'$(PortType)' == 'gbz80'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.gbz80.props"/>
+  <Import Condition="'$(PortType)' == 'tlcs90'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.tlcs90.props"/>
+  <Import Condition="'$(PortType)' == 'ez80_z80'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.ez80_z80.props"/>
+  <Import Condition="'$(PortType)' == 'ds390'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.ds390.props"/>
+  <Import Condition="'$(PortType)' == 'pic16'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pic16.props"/>
+  <Import Condition="'$(PortType)' == 'pic14'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pic14.props"/>
+  <Import Condition="'$(PortType)' == 'TININative'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.TININative.props"/>
+  <Import Condition="'$(PortType)' == 'ds400'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.ds400.props"/>
+  <Import Condition="'$(PortType)' == 'hc08'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.hc08.props"/>
+  <Import Condition="'$(PortType)' == 's08'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.s08.props"/>
+  <Import Condition="'$(PortType)' == 'stm8'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.stm8.props"/>
+  <Import Condition="'$(PortType)' == 'pdk13'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pdk13.props"/>
+  <Import Condition="'$(PortType)' == 'pdk14'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pdk14.props"/>
+  <Import Condition="'$(PortType)' == 'pdk15'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pdk15.props"/>
+
+  <!-- General SDCC general override settings. -->
+  <PropertyGroup>
+    <Extension Condition="'$(Extension)' == ''">.bin</Extension>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AreaBaseAddress Condition="'$(CodeLocation)' != '' and '$(CodeSegmentName)' != ''">$(AreaBaseAddress);$(CodeSegmentName)=$(CodeLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(DataLocation)' != '' and '$(DataSegmentName)' != ''">$(AreaBaseAddress);$(DataSegmentName)=$(DataLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(XRamLocation)' != '' and '$(XRamSegmentName)' != ''">$(AreaBaseAddress);$(XRamSegmentName)=$(XRamLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(StackLocation)' != '' and '$(StackSegmentName)' != ''">$(AreaBaseAddress);$(StackSegmentName)=$(StackLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(XStackLocation)' != '' and '$(XStackSegmentName)' != ''">$(AreaBaseAddress);$(XStackSegmentName)=$(XStackLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(IDataLocation)' != '' and '$(IDataSegmentName)' != ''">$(AreaBaseAddress);$(IDataSegmentName)=$(IDataLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(BitLocation)' != '' and '$(BitSegmentName)' != ''">$(AreaBaseAddress);$(BitSegmentName)=$(BitLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(AdditionalAreaBaseAddress)' == ''">$(AreaBaseAddress);$(AdditionalAreaBaseAddress)</AreaBaseAddress>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PlatformActual>$(Platform)</PlatformActual>
+    <Platform Condition="'$(Platform)' == 'Gameboy'">Win32</Platform>
+    <IncludePath>$(GBDK_Include)</IncludePath>
+
+    <!-- Load the default C++ makefile configuration, exclude the default property pages and override them with our own. -->
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDefaultPropertyPageSchemas>false</UseDefaultPropertyPageSchemas>
+    <UseSDCCPropertyPageSchemas>true</UseSDCCPropertyPageSchemas>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)Microsoft.Cpp.Default.props"/>
+
+  <PropertyGroup Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+</Project>

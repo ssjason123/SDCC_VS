@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArgumentOutOfRange" xml:space="preserve">
+    <value>Element &lt;{0}&gt; has an invalid value of "{1}".</value>
+  </data>
+  <data name="ArgumentRequired" xml:space="preserve">
+    <value>Switch &lt;{0}&gt; requires an argument.</value>
+  </data>
+  <data name="CL.RebuildingNoPDB" xml:space="preserve">
+    <value>Forcing recompile of all source files due to missing PDB "{0}".</value>
+  </data>
+  <data name="CommandLineDiffer" xml:space="preserve">
+    <value>Expected "{0}" but got "{1}".</value>
+  </data>
+  <data name="CustomBuild.CircularDepedencyDetected" xml:space="preserve">
+    <value>MSB8017: A circular dependency has been detected while executing custom build commands for item "{0}". This may cause incremental build to work incorrectly.</value>
+  </data>
+  <data name="CustomBuild.NoOutputs" xml:space="preserve">
+    <value>MSB8018: No outputs specified for item "{0}". Its custom build command will be skipped.</value>
+  </data>
+  <data name="Error.MissingFile" xml:space="preserve">
+    <value>Required file "{0}" is missing.</value>
+  </data>
+  <data name="FileNotOpen" xml:space="preserve">
+    <value>Unable to open file {0} because {1}</value>
+  </data>
+  <data name="General.InvalidValue" xml:space="preserve">
+    <value>MSB3098: "{1}" task received an invalid value for the "{0}" parameter.</value>
+  </data>
+  <data name="GetOutOfDateItems.ItemDependsOnAnotherItemOutput" xml:space="preserve">
+    <value>"The build of '{0}' depends on '{1}' which is produced by the build of '{2}'. The items cannot be built in parallel."</value>
+  </data>
+  <data name="GetOutOfDateItems.RebuildingSourceDependenciesChanged" xml:space="preserve">
+    <value>Source file '{0}' is not up-to-date: list of dependencies has changed since the last build.</value>
+  </data>
+  <data name="GetOutOfDateItems.RebuildingSourceOutputsChanged" xml:space="preserve">
+    <value>Source file '{0}' is not up-to-date: list of outputs has changed since the last build.</value>
+  </data>
+  <data name="ImproperType" xml:space="preserve">
+    <value>Element &lt;{0}&gt; has invalid type of "{1}".</value>
+  </data>
+  <data name="InternalError" xml:space="preserve">
+    <value>Internal Error has occurred. Most likely a bug.</value>
+  </data>
+  <data name="InvalidType" xml:space="preserve">
+    <value>Expecting "{0}".</value>
+  </data>
+  <data name="Message.InvalidImportance" xml:space="preserve">
+    <value>MSB3511: "{0}" is an invalid value for the "Importance" parameter. Valid values are: High, Normal and Low.</value>
+  </data>
+  <data name="MetaGenInfoReferenceDirectories" xml:space="preserve">
+    <value>To improve incremental build performance for managed components, please make sure that the 'VC++ Directories-&gt;Reference Directories' points to all the paths which contain the referenced managed assemblies.</value>
+  </data>
+  <data name="MissingAttribute" xml:space="preserve">
+    <value>Element &lt;{0}&gt; does not contain the required attribute "{1}".</value>
+  </data>
+  <data name="MissingRequiredArgument" xml:space="preserve">
+    <value>Missing required argument &lt;{0}&gt; for property &lt;{1}&gt;.</value>
+  </data>
+  <data name="MissingRequiredArgumentWithValue" xml:space="preserve">
+    <value>Missing required argument &lt;{0}&gt; for property &lt;{1}&gt; which is set to {2}.</value>
+  </data>
+  <data name="MissingRootElement" xml:space="preserve">
+    <value>Xml file must start with the root element &lt;{0}&gt;.</value>
+  </data>
+  <data name="Move.Error" xml:space="preserve">
+    <value>Unable to move file "{0}" to "{1}". {2}</value>
+  </data>
+  <data name="Move.FileComment" xml:space="preserve">
+    <value>Moving file from "{0}" to "{1}".</value>
+  </data>
+  <data name="MultiTool.AddDone" xml:space="preserve">
+    <value>{0} is building {1} file(s).</value>
+  </data>
+  <data name="MultiTool.AddSource" xml:space="preserve">
+    <value>Adding source {0}.</value>
+  </data>
+  <data name="MultiTool.AddSourceWithDep" xml:space="preserve">
+    <value>Adding source {0} with dependency on {1}.</value>
+  </data>
+  <data name="MultiTool.BuildingWith" xml:space="preserve">
+    <value>Building with {0}.</value>
+  </data>
+  <data name="MultiTool.SameTrackerLogDirectory" xml:space="preserve">
+    <value>All Sources must have the same TrackerLogDirectory ({0},{1}).</value>
+  </data>
+  <data name="MultiTool.SourceNotMatchCommand" xml:space="preserve">
+    <value>Source {0} doesn't match previous command line.</value>
+  </data>
+  <data name="MultiTool.SourceOutOfDate" xml:space="preserve">
+    <value>Source {0} is out of date.</value>
+  </data>
+  <data name="MultiTool.TaskFound" xml:space="preserve">
+    <value>{0} task found.</value>
+  </data>
+  <data name="Native_TrackingCommandMessage" xml:space="preserve">
+    <value>Tracking command:</value>
+  </data>
+  <data name="Shared.FailedCreatingTempFile" xml:space="preserve">
+    <value>MSB5003: Failed to create a temporary file. Temporary files folder is full or its path is incorrect. {0}</value>
+  </data>
+  <data name="Shared.ParameterCannotBeNull" xml:space="preserve">
+    <value>Parameter "{0}" cannot be null.</value>
+  </data>
+  <data name="Shared.ParameterCannotHaveZeroLength" xml:space="preserve">
+    <value>Parameter "{0}" cannot have zero length.</value>
+  </data>
+  <data name="Shared.ParametersMustHaveTheSameLength" xml:space="preserve">
+    <value>Parameters "{0}" and "{1}" must have the same number of elements.</value>
+  </data>
+  <data name="TrackedVCToolTask.CreateUnicodeOutputPipeFailed" xml:space="preserve">
+    <value>MSB8016: Can not turn on Unicode output for "{0}". Some Unicode characters will be improperly displayed.</value>
+  </data>
+  <data name="TrackedVCToolTask.RebuildingAllSourcesCommandLineChanged" xml:space="preserve">
+    <value>All source files are not up-to-date:  command line has changed since the last build.</value>
+  </data>
+  <data name="TrackedVCToolTask.RebuildingDueToInvalidTLog" xml:space="preserve">
+    <value>MSB8014: All source files are not up-to-date:  forcing a rebuild of all sources due to an error with the tracking logs. {0}</value>
+  </data>
+  <data name="TrackedVCToolTask.RebuildingDueToInvalidTLogContents" xml:space="preserve">
+    <value>MSB8015: All source files are not up-to-date:  forcing a rebuild of all source files due to the contents of '{0}' being invalid.</value>
+  </data>
+  <data name="TrackedVCToolTask.RebuildingNoCommandTLog" xml:space="preserve">
+    <value>All source files are not up-to-date: missing command TLog "{0}".</value>
+  </data>
+  <data name="TrackedVCToolTask.RebuildingSourceCommandLineChanged" xml:space="preserve">
+    <value>Source file "{0}" is not up-to-date: command line has changed since the last build.</value>
+  </data>
+  <data name="VCMessage.InvalidCode" xml:space="preserve">
+    <value>MSB8001: "{0}" is an invalid value for the "Code" parameter.</value>
+  </data>
+  <data name="VCMessage.InvalidType" xml:space="preserve">
+    <value>MSB8000: "{0}" is an invalid value for the "Type" parameter. Valid values are: Warning and Error.</value>
+  </data>
+  <data name="VCMessage.MSB8002" xml:space="preserve">
+    <value>MSB8002: Specified platform toolset ({0}) is not compatible with the targeted .NET Framework version ({1}). Please set TargetFrameworkVersion to one of the supported values ('v2.0', 'v3.0', 'v3.5').</value>
+  </data>
+  <data name="VCMessage.MSB8003" xml:space="preserve">
+    <value>MSB8003: Could not find {0} variable from the registry.  TargetFrameworkVersion or PlatformToolset may be set to an invalid version number.</value>
+  </data>
+  <data name="VCMessage.MSB8004" xml:space="preserve">
+    <value>MSB8004: {0} Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the {1} Directory.</value>
+  </data>
+  <data name="VCMessage.MSB8005" xml:space="preserve">
+    <value>MSB8005: The property '{0}' doesn't exist.  Skipping...</value>
+  </data>
+  <data name="VCMessage.MSB8006" xml:space="preserve">
+    <value>MSB8006: The Platform for project '{0}' is invalid.  Platform='{1}'. This error may also appear if some other project is trying to follow a project-to-project reference to this project, this project has been unloaded or is not included in the solution, and the referencing project does not build using the same or an equivalent Platform.</value>
+  </data>
+  <data name="VCMessage.MSB8007" xml:space="preserve">
+    <value>MSB8007: The Platform for project '{0}' is invalid.  Platform='{1}'. You may be seeing this message because you are trying to build a project without a solution file, and have specified a non-default Platform that doesn't exist for this project.</value>
+  </data>
+  <data name="VCMessage.MSB8008" xml:space="preserve">
+    <value>MSB8008: Specified platform toolset ({0}) is not installed or invalid. Please make sure that a supported PlatformToolset value is selected.</value>
+  </data>
+  <data name="VCMessage.MSB8009" xml:space="preserve">
+    <value>MSB8009: .NET Framework 2.0/3.0/3.5 target the v90 platform toolset. Please make sure that Visual Studio 2008 is installed on the machine.</value>
+  </data>
+  <data name="VCMessage.MSB8010" xml:space="preserve">
+    <value>MSB8010: Specified platform toolset (v90) requires Visual Studio 2008. Please make sure that Visual Studio 2008 is installed on the machine.</value>
+  </data>
+  <data name="VCMessage.MSB8011" xml:space="preserve">
+    <value>MSB8011: Failed to register output. Please try enabling Per-user Redirection or register the component from a command prompt with elevated permissions.</value>
+  </data>
+  <data name="VCMessage.MSB8012" xml:space="preserve">
+    <value>MSB8012: {0}({1}) does not match the {2}'s OutputFile property value ({3}). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %({4}.OutputFile).</value>
+  </data>
+  <data name="VCMessage.MSB8013" xml:space="preserve">
+    <value>MSB8013: This project doesn't contain the Configuration and Platform combination of {0}.</value>
+  </data>
+  <data name="VCMessage.MSB8016" xml:space="preserve">
+    <value>MSB8016: This project does not support the current Configuration Type ({0}).</value>
+  </data>
+  <data name="VCMessage.MSB8019" xml:space="preserve">
+    <value>MSB8019: This build is consuming a component "{0}" that is not packaged because the component is not coming from a Windows Store app project "{1}".</value>
+  </data>
+  <data name="VCMessage.MSB8020" xml:space="preserve">
+    <value>MSB8020: The build tools for {0} (Platform Toolset = '{1}') cannot be found. To build using the {1} build tools, please install {0} build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting "Retarget solution".</value>
+  </data>
+  <data name="VCMessage.MSB8021" xml:space="preserve">
+    <value>MSB8021: The value '{0}' of the variable '{1}' is incompatible with the value '{2}' of the variable '{3}'.</value>
+  </data>
+  <data name="VCMessage.MSB8022" xml:space="preserve">
+    <value>MSB8022: Building Desktop applications for the {0} platform is not supported.</value>
+  </data>
+  <data name="VCMessage.MSB8023" xml:space="preserve">
+    <value>MSB8023: Execution path ({0}) could not be found.</value>
+  </data>
+  <data name="VCMessage.MSB8024" xml:space="preserve">
+    <value>MSB8024: Using static version of the C++ runtime library is not supported.</value>
+  </data>
+  <data name="VCMessage.MSB8025" xml:space="preserve">
+    <value>MSB8025: Using legacy manifest embedding because of {0} on Manifest Tool is set.</value>
+  </data>
+  <data name="VCMessage.MSB8026" xml:space="preserve">
+    <value>MSB8026: Static analysis is not supported with the current platform toolset.</value>
+  </data>
+  <data name="VCMessage.MSB8027" xml:space="preserve">
+    <value>MSB8027: Two or more files with the name of {0} will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are {1}.</value>
+  </data>
+  <data name="VCMessage.MSB8028" xml:space="preserve">
+    <value>MSB8028: The intermediate directory ({1}) contains files shared from another project ({0}).  This can lead to incorrect clean and rebuild behavior.</value>
+  </data>
+  <data name="VCMessage.MSB8029" xml:space="preserve">
+    <value>MSB8029: The Intermediate directory or Output directory cannot reside under the Temporary directory as it could lead to issues with incremental build.</value>
+  </data>
+  <data name="VCMessage.MSB8030" xml:space="preserve">
+    <value>MSB8030: The linker switch "Minimum Required Version" requires "SubSystem" to be set.  Without "SubSystem", the "Minimum Required Version" would not be passed to linker and could prevent to the output binary from running on older Operating Systems.</value>
+  </data>
+  <data name="VCMessage.MSB8031" xml:space="preserve">
+    <value>MSB8031: Building an MFC project for a non-Unicode character set is deprecated. You must change the project property to Unicode or download an additional library. See https://go.microsoft.com/fwlink/p/?LinkId=286820 for more information.</value>
+  </data>
+  <data name="VCMessage.MSB8032" xml:space="preserve">
+    <value>MSB8032: The Platform or PlatformToolset is not available from a 64bit environment.  Consider building from 32bit environment instead.</value>
+  </data>
+  <data name="VCMessage.MSB8033" xml:space="preserve">
+    <value>{0} -&gt; {1} (Partial PDB)</value>
+  </data>
+  <data name="VCMessage.MSB8033.RemoteBuild.MissingDirectoryMapping" xml:space="preserve">
+    <value>MSB8033: Cannot determine a remote location corresponding to {0} directory on local machine. Some files might not be found during remote build. Please change the properties to use relative paths or add a local-remote folders mapping in Tools - Options - Cross Platform – C++ - iOS - Mapping.</value>
+  </data>
+  <data name="VCMessage.MSB8034" xml:space="preserve">
+    <value>{0} -&gt; {1} (Full PDB)</value>
+  </data>
+  <data name="VCMessage.MSB8035" xml:space="preserve">
+    <value>{0} -&gt; {1} (Partial -&gt; Full PDB)</value>
+  </data>
+  <data name="VCMessage.MSB8035.RemoteBuild.MissingRootFolderForLocalRelativePaths" xml:space="preserve">
+    <value>MSB8035: Root folder for local relative paths is not defined, but relative path {0} is used. Please change it to a full path or define root folder.</value>
+  </data>
+  <data name="VCMessage.MSB8036" xml:space="preserve">
+    <value>MSB8036:The Windows SDK version {0} was not found. Install the required version of Windows SDK or change the SDK version in the project property pages or by right-clicking the solution and selecting "Retarget solution".</value>
+  </data>
+  <data name="VCMessage.MSB8037" xml:space="preserve">
+    <value>MSB8037:The Windows SDK version {0} for Desktop C++ {1} Apps was not found. Install the required version of Windows SDK or change the SDK version in the project property pages or by right-clicking the solution and selecting "Retarget solution". </value>
+  </data>
+  <data name="VCMessage.MSB8038" xml:space="preserve">
+    <value>MSB8038: Platform Toolset is not defined. Please select one of the available Platform Toolsets in the Project Properties UI.</value>
+  </data>
+  <data name="VCMessage.MSB8039" xml:space="preserve">
+    <value>Warning: Full debug symbol generation from partial PDBs is not supported for static libraries.</value>
+  </data>
+  <data name="VCMessage.MSB8040" xml:space="preserve">
+    <value>MSB8038: Spectre mitigation is enabled but Spectre mitigated libraries are not found.  Verify that the Visual Studio Workload includes the Spectre mitigated libraries.  See https://aka.ms/Ofhn4c for more information.</value>
+  </data>
+  <data name="VCMessage.MSB8051" xml:space="preserve">
+    <value>MSB8051: Support for targeting Windows XP is deprecated and will not be present in future releases of Visual Studio. Please see https://go.microsoft.com/fwlink/?linkid=2023588 for more information.</value>
+  </data>
+  <data name="XamlTaskCreationFailed" xml:space="preserve">
+    <value>Unable to create Xaml task.  Compilation failed.  {0}</value>
+  </data>
+  <data name="XamlTaskParseFailed" xml:space="preserve">
+    <value>Unable to parse Xaml task.  {0}</value>
+  </data>
+  <data name="XmlError" xml:space="preserve">
+    <value>Xml Error: {0}.</value>
+  </data>
+</root>

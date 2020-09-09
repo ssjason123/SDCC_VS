@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Rule 
+    Name="SDLD" 
+    PageTemplate="tool" 
+    DisplayName="SDLD" 
+    SwitchPrefix="-" 
+    Order="12" 
+    xmlns="http://schemas.microsoft.com/build/2009/properties" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule.Categories>
+    <Category 
+      Name="General" 
+      DisplayName="General"/>
+  </Rule.Categories>
+  <Rule.DataSource>
+    <DataSource 
+        Persistence="ProjectFile" 
+        Label="" 
+        ItemType=""
+        HasConfigurationCondition="true" />
+  </Rule.DataSource>
+
+  <!--
+  **************************************
+  * General Rules
+  **************************************
+
+Startup:
+  -p   Echo commands to stdout (default)
+  -n   No echo of commands to stdout
+Alternates to Command Line Input:
+  -c                   ASlink >> prompt input
+  -f   file[.lk]       Command File input
+Libraries:
+  -k   Library path specification, one per -k
+  -->
+  <StringListProperty
+    Name="AdditionalLibraryPath"
+    DisplayName="Additional Library Path"
+    Description="Library path specification, one per -k.    (-k&lt;path&gt;)"
+    Category="General"
+    Switch="k "
+    Subtype="folder"
+    F1Keyword="VC.Project.SDLDLinkerTool.AdditionalLibraryPath"/>
+  <!--
+  -l   Library file specification, one per -l
+  -->
+  <StringListProperty
+    Name="IncludeLibraries"
+    DisplayName="Include Additional Library"
+    Description="Library file specification, one per -l.    (-l&lt;library&gt;)"
+    Category="General"
+    Switch="l "
+    F1Keyword="VC.Project.SDLDLinkerTool.IncludeLibraries"/>
+  <!--
+Relocation:
+  -b   area base address = expression
+  -->
+  <StringListProperty
+    Name="AreaBaseAddress"
+    DisplayName="Area Base Adddress Locations"
+    Description="Area base address = expression.    (-b &lt;address&gt;=&lt;expression&gt;)"
+    Category="General"
+    Switch="b "
+    F1Keyword="VC.Project.SDLDLinkerTool.AreaBaseAddress"/>
+  <!--
+  -g   global symbol = expression
+  -->
+  <StringListProperty
+    Name="GlobalSymbols"
+    DisplayName="Global Symbol Expressions"
+    Description="Global symbol = expression.    (-g &lt;global symbol&gt;=&lt;expression&gt;)"
+    Category="General"
+    Switch="g "
+    F1Keyword="VC.Project.SDLDLinkerTool.GlobalSymbols"/>
+  <!--
+Map format:
+  -m   Map output generated as (out)file[.map]
+  -->
+  <BoolProperty
+    Name="GenerateMapFile"
+    DisplayName="Generate Map File"
+    Description="Map output generated as (out)file[.map].     (-m)"
+    Category="General"
+    Switch="m"
+    F1Keyword="VC.Project.SDLDLinkerTool.GenerateMapFile"/>
+  <!--
+  -w   Wide listing format for map file
+  -->
+  <BoolProperty
+    Name="WideListMapFormatEnabled"
+    DisplayName="Use Wide Listing Map Format"
+    Description="Wide listing format for map file.     (-m)"
+    Category="General"
+    Switch="w"
+    F1Keyword="VC.Project.SDLDLinkerTool.WideListMapFormatEnabled"/>
+  <!--
+  -x   Hexadecimal (default)
+  -d   Decimal
+  -q   Octal
+  -->
+  <EnumProperty
+    Name="NumberFormat"
+    DisplayName="Map Number Format"
+    Description="The format to report numbers in the map file."
+    Category="General"
+    F1Keyword="VC.Project.SDLDLinkerTool.MapNumberFormat">
+    <EnumValue
+      Name="Decimal"
+      Switch="d"
+      DisplayName="Decimal"
+      Description="Decimal number format.    (-d)."/>
+    <EnumValue
+      Name="Octal"
+      Switch="q"
+      DisplayName="Octal"
+      Description="Octal number format.    (-q)."/>
+    <EnumValue
+      Name="Hex"
+      Switch="x"
+      DisplayName="Hex"
+      Description="Hex number format.    (-x)."/>
+  </EnumProperty>
+  <!--
+Output:
+  -i   Intel Hex as (out)file[.ihx]
+  -s   Motorola S Record as (out)file[.s19]
+  -->
+  <EnumProperty
+    Name="OutputFormat"
+    DisplayName="Output Format"
+    Description="Output file format"
+    Category="General"
+    F1Keyword="VC.Project.SDLDLinkerTool.OutputFormat">
+    <EnumValue
+      Name="Intel"
+      Switch="i"
+      DisplayName="Intel Hex Format"
+      Description="Output in Intel hex format.    (-i)."/>
+    <EnumValue
+      Name="S19"
+      Switch="s"
+      DisplayName="S19 Hex Format"
+      Description="Output in S19 hex format.    (-s)."/>
+    <EnumValue
+      Name="ELF"
+      Switch="e"
+      DisplayName="Elf Format"
+      Description="Output in ELF hex format. (Currently only supported for the HC08 andS08 processors)    (-E)."/>
+  </EnumProperty>
+  <!--
+  -j   NoICE Debug output as (out)file[.noi]
+  -->
+  <BoolProperty
+    Name="NoIceDebugOutput"
+    DisplayName="Output NoICE Debug File"
+    Description="NoICE Debug output as (out)file[.noi].     (-j)"
+    Category="General"
+    Switch="j"
+    F1Keyword="VC.Project.SDLDLinkerTool.NoIceDebugOutput"/>
+  <!--
+  -y   SDCDB Debug output as (out)file[.cdb]
+  -->
+  <BoolProperty
+    Name="SDCDBDebugOutput"
+    DisplayName="Output SDCDB Debug File"
+    Description="SDCDB Debug output as (out)file[.cdb].     (-y)"
+    Category="General"
+    Switch="y"
+    F1Keyword="VC.Project.SDLDLinkerTool.SDCDBDebugOutput"/>
+  <!--
+List:
+  -u   Update listing file(s) with link data as file(s)[.rst]
+  -->
+  <BoolProperty
+    Name="UpdateListingFiles"
+    DisplayName="Update Listing File(s)"
+    Description="Update listing file(s) with link data as file(s)[.rst].     (-u)"
+    Category="General"
+    Switch="u"
+    F1Keyword="VC.Project.SDLDLinkerTool.UpdateListingFiles"/>
+  <!--
+Case Sensitivity:
+  -z   Disable Case Sensitivity for Symbols
+  -->
+  <BoolProperty
+    Name="DisableSymbolCaseSensitivity"
+    DisplayName="Disable Symbol Case Sensitivity"
+    Description="Disable Case Sensitivity for Symbols.     (-z)"
+    Category="General"
+    Switch="z"
+    F1Keyword="VC.Project.SDLDLinkerTool.DisableSymbolCaseSensitivity"/>
+  <!--
+Miscellaneous:
+  -I   [iram-size] Check for internal RAM overflow
+  -->
+  <StringProperty
+    Name="IRamSize"
+    DisplayName="Internal Ram Size"
+    Description="Internal Ram size.    (-I &lt;value&gt;)"
+    Category="General"
+    Switch="I "
+    F1Keyword="VC.Project.SDLDLinkerTool.IRamSize"/>
+  <!--
+  -X   [xram-size] Check for external RAM overflow
+  -->
+  <StringProperty
+    Name="XRamSize"
+    DisplayName="External Ram Size"
+    Description="External Ram size.    (-X &lt;value&gt;)"
+    Category="General"
+    Switch="X "
+    F1Keyword="VC.Project.SDLDLinkerTool.XRamSize"/>
+  <!--
+  -C   [code-size] Check for code overflow
+  -->
+  <StringProperty
+    Name="CodeSize"
+    DisplayName="Code Segment Size"
+    Description="Code Segment size.    (-C &lt;value&gt;)"
+    Category="General"
+    Switch="C "
+    F1Keyword="VC.Project.SDLDLinkerTool.CodeSize"/>
+  <!--
+  -M   Generate memory usage summary file[.mem]
+  -->
+  <BoolProperty
+    Name="GenerateMemSummaryFile"
+    DisplayName="Generate Memory Usage Summary File"
+    Description="Generate memory usage summary file[.mem].     (-M)"
+    Category="General"
+    Switch="M"
+    F1Keyword="VC.Project.SDLDLinkerTool.GenerateMemSummaryFile"/>
+  <!--
+  -Y   Pack internal ram
+  -->
+  <BoolProperty
+    Name="PackInternalRam"
+    DisplayName="Pack Internal RAM"
+    Description="Pack internal ram.     (-Y)"
+    Category="General"
+    Switch="Y"
+    F1Keyword="VC.Project.SDLDLinkerTool.PackInternalRam"/>
+  <!--
+  -S   [stack-size] Allocate space for stack
+  -->
+  <StringProperty
+    Name="StackSize"
+    DisplayName="Stack Size"
+    Description="Stack size.    (-S &lt;value&gt;)"
+    Category="General"
+    Switch="S "
+    F1Keyword="VC.Project.SDLDLinkerTool.CodeSize"/>
+  <!--
+End:
+  -e   or null line terminates input
+  -->
+</Rule>

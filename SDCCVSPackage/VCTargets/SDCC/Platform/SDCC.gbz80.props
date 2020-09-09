@@ -1,0 +1,36 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- SDCC GBZ80 Overrides -->
+  <PropertyGroup Condition="'$(PortType)' == 'gbz80'">
+
+    <Extension Condition="'$(Extension)' == ''">.gb</Extension>
+
+    <CodeSegmentName Condition="'$(CodeSegmentName)' == ''">_CODE</CodeSegmentName>
+    <DataSegmentName Condition="'$(DataSegmentName)' == ''">_DATA</DataSegmentName>
+
+    <!-- SDCC Compiler Overrides -->
+    <CodeLocation Condition="'$(CodeLocation)' == ''">0x200</CodeLocation>
+    <DataLocation Condition="'$(DataLocation)' == ''">0xC000</DataLocation>
+
+    <!-- SDCC Assembler Overrides -->
+    <DisableAutoListingPagination Condition="'$(DisableAutoListingPagination)' == ''">true</DisableAutoListingPagination>
+    <CreateListFile Condition="'$(CreateListFile)' == ''">true</CreateListFile>
+    <CreateSymbolFile Condition="'$(CreateSymbolFile)' == ''">true</CreateSymbolFile>
+    <AllUserSymbolsMadeGlobal Condition="'$(AllUserSymbolsMadeGlobal)' == ''">true</AllUserSymbolsMadeGlobal>
+    <RelocatableReferenceMode Condition="'$(RelocatableReferenceMode)' == ''">Flag by mode</RelocatableReferenceMode>
+    <UseWideListingFormat Condition="'$(UseWideListingFormat)' == ''">true</UseWideListingFormat>
+    <EnableSDCCDebugSymbols Condition="'$(EnableSDCCDebugSymbols)' == '' and '$(Configuration)' == 'Debug'">true</EnableSDCCDebugSymbols>
+
+    <!-- SDCC Linker Overrides -->
+    <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">true</GenerateMapFile>
+    <NoIceDebugOutput Condition="'$(NoIceDebugOutput)' == ''">true</NoIceDebugOutput>
+    <WideListMapFormatEnabled Condition="'$(WideListMapFormatEnabled)' == ''">true</WideListMapFormatEnabled>
+    <MapNumberFormat Condition="'$(MapNumberFormat)' == ''">Hexadecimal</MapNumberFormat>
+    <SDCDBDebugOutput Condition="'$(SDCDBDebugOutput )' == '' and '$(Configuration)' == 'Debug'">true</SDCDBDebugOutput>
+
+    <!-- SDCC MakeBin Overrides -->
+    <GenerateGameBoyBinary Condition="'$(GenerateGameBoyBinary)' == ''">true</GenerateGameBoyBinary>
+
+  </PropertyGroup>
+
+</Project>
