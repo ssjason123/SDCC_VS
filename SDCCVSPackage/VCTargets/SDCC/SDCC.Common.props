@@ -1,16 +1,22 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <PropertyGroup Label="Globals">
+    <BuildFormat Condition="'$(BuildFormat)' == ''">Binary</BuildFormat>
+    <PortType Condition="'$(PortType)' == ''">gbz80</PortType>
+  </PropertyGroup>
+
   <!-- SDCC Common Variables -->
   <PropertyGroup>
     <!-- <SDCCPath>C:\Development\Development\Projects\GBDKProjects\gbdk\bin\SDCC\</SDCCPath> -->
-    <SDCCPath Condition="'$(SDCCPath)' == ''">$(SDCC_HOME)</SDCCPath>
-    <SDCCBinPath Condition="'$(SDCCBinPath)' == ''">$(SDCCPath)bin\</SDCCBinPath>
-    <BuildFormat Condition="'$(BuildFormat)' == ''">Binary</BuildFormat>
     <IntBinaryExtension Condition="'$(IntBinaryExtension)' == ''">.ihx</IntBinaryExtension>
     <ObjectExtension Condition="'$(ObjectExtension)' == ''">.rel</ObjectExtension>
     <MapExtension Condition="'$(MapExtension)' == ''">.map</MapExtension>
-    <PortType Condition="'$(PortType)' == ''">gbz80</PortType>
-    <Extension Condition="'$(Extension)' == '' and '$(BuildFormat)' == 'Library'">.lib</Extension>
+    <Extension Condition="'$(BuildFormat)' == 'Library'">.lib</Extension>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SDCCPath Condition="'$(SDCCPath)' == ''">$(SDCC_HOME)</SDCCPath>
+    <SDCCBinPath Condition="'$(SDCCBinPath)' == ''">$(SDCCPath)bin\</SDCCBinPath>
   </PropertyGroup>
 
   <!-- SDCC Compiler Variables -->
@@ -150,26 +156,30 @@
   <Import Condition="'$(PortType)' == 'pdk14'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pdk14.props"/>
   <Import Condition="'$(PortType)' == 'pdk15'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pdk15.props"/>
 
+
+  <Import Condition="'$(PortType)' == 'gbz80'" Project="$(MSBuildThisFileDirectory)GBDK-N/SDCC.GBDK-N.props"/>
+
   <!-- General SDCC general override settings. -->
-  <PropertyGroup>
+  <!--
+  <PropertyGroup Label="Globals">
     <Extension Condition="'$(Extension)' == ''">.bin</Extension>
   </PropertyGroup>
+  -->
 
   <PropertyGroup>
-    <AreaBaseAddress Condition="'$(CodeLocation)' != '' and '$(CodeSegmentName)' != ''">$(AreaBaseAddress);$(CodeSegmentName)=$(CodeLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(DataLocation)' != '' and '$(DataSegmentName)' != ''">$(AreaBaseAddress);$(DataSegmentName)=$(DataLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(XRamLocation)' != '' and '$(XRamSegmentName)' != ''">$(AreaBaseAddress);$(XRamSegmentName)=$(XRamLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(StackLocation)' != '' and '$(StackSegmentName)' != ''">$(AreaBaseAddress);$(StackSegmentName)=$(StackLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(XStackLocation)' != '' and '$(XStackSegmentName)' != ''">$(AreaBaseAddress);$(XStackSegmentName)=$(XStackLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(IDataLocation)' != '' and '$(IDataSegmentName)' != ''">$(AreaBaseAddress);$(IDataSegmentName)=$(IDataLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(BitLocation)' != '' and '$(BitSegmentName)' != ''">$(AreaBaseAddress);$(BitSegmentName)=$(BitLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(CodeLocation)' != '' and '$(CodeSeg)' != ''">$(AreaBaseAddress);_$(CodeSeg)=$(CodeLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(DataLocation)' != '' and '$(DataSeg)' != ''">$(AreaBaseAddress);_$(DataSeg)=$(DataLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(XRamLocation)' != '' and '$(XRamSegmentName)' != ''">$(AreaBaseAddress);_$(XRamSegmentName)=$(XRamLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(StackLocation)' != '' and '$(StackSegmentName)' != ''">$(AreaBaseAddress);_$(StackSegmentName)=$(StackLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(XStackLocation)' != '' and '$(XStackSegmentName)' != ''">$(AreaBaseAddress);_$(XStackSegmentName)=$(XStackLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(IDataLocation)' != '' and '$(IDataSegmentName)' != ''">$(AreaBaseAddress);_$(IDataSegmentName)=$(IDataLocation)</AreaBaseAddress>
+    <AreaBaseAddress Condition="'$(BitLocation)' != '' and '$(BitSegmentName)' != ''">$(AreaBaseAddress);_$(BitSegmentName)=$(BitLocation)</AreaBaseAddress>
     <AreaBaseAddress Condition="'$(AdditionalAreaBaseAddress)' == ''">$(AreaBaseAddress);$(AdditionalAreaBaseAddress)</AreaBaseAddress>
   </PropertyGroup>
 
   <PropertyGroup>
     <PlatformActual>$(Platform)</PlatformActual>
     <Platform Condition="'$(Platform)' == 'Gameboy'">Win32</Platform>
-    <IncludePath>$(GBDK_Include)</IncludePath>
 
     <!-- Load the default C++ makefile configuration, exclude the default property pages and override them with our own. -->
     <ConfigurationType>Makefile</ConfigurationType>

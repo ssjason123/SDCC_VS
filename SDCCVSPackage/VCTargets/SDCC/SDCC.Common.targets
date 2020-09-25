@@ -9,6 +9,9 @@
   <UsingTask TaskName="SDCCLib" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
   <UsingTask TaskName="SDCCMakeBin" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
 
+  <PropertyGroup Label="Configuration">
+    <_ApplicableDebuggers>Desktop</_ApplicableDebuggers>
+  </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 
@@ -27,6 +30,24 @@
     <Exec Command="%(PostBuildEvent.Command)$(_BuildSuffix)" Condition="'%(PostBuildEvent.Command)' != ''"/>
   </Target>
 
+
+  <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false' and '$(UseDefaultDebuggersPropertyPageSchemas)' != 'false'">
+    <DesktopDebuggerPages Include="$(VCTargetsPath)$(LangID)\debugger_*.xml" Exclude="$(VCTargetsPath)$(LangID)\debugger_smartdevice_native.xml" />
+    <!-- Make sure the following debugger schemas are explicitly included, to allow CPS to search for them
+         in the alternative locations. To avoid duplicate schemas, we don't include them
+         if they already exist in $(VCTargetsPath)$(LangID)\debugger_*.xml -->
+
+    <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_local_windows.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_local_windows.xml" />
+    <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_remote_windows.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_remote_windows.xml" />
+    <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_web_browser.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_web_browser.xml" />
+    <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_web_service.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_web_service.xml" />
+
+    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\AppHostDebugger_Local.xml" />
+    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\AppHostDebugger_Simulator.xml" />
+    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\AppHostDebugger_Remote.xml" />
+    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\WindowsAppEmulatorDebugger.xaml" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false'">
     <PropertyPageSchema Include="
         $(MSBuildThisFileDirectory)$(LangID)/ProjectItemsSchema.xml;
@@ -39,12 +60,9 @@
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.General.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.Common.xml">
-      <Context>PropertySheet;Project;File</Context>
-    </PropertyPageSchema>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDAS.Common.xml">
-      <Context>PropertySheet;Project;File</Context>
-    </PropertyPageSchema>
+    
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.Common.xml"/>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDAS.Common.xml"/>
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDLD.Common.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
@@ -54,19 +72,29 @@
       <Context>PropertySheet;Project;File</Context>
     </PropertyPageSchema>
 
+    <PropertyPageSchema Condition="'$(PortType)' == 'gbz80'" Include="$(MSBuildThisFileDirectory)GBDK-N/SDCC.GBDK-N.xml">
+      <Context>Project</Context>
+    </PropertyPageSchema>
+
+    <!-- Debuggers -->
+    <DebuggerPages Condition="'$(_ApplicableDebuggers)' == 'Desktop'" Include="@(DesktopDebuggerPages)" />
+    <DebuggerPages Condition="'$(_ApplicableDebuggers)' == 'AppHost'" Include="@(AppHostDebuggerPages)" />
+
+    <!-- We always need debuggers general page as soon as we have at least one debugger -->
+    <PropertyPageSchema Condition="'@(DebuggerPages)' != ''" Include="$(VCTargetsPath)$(LangID)\debugger_general.xml" />
+    <PropertyPageSchema Include="@(DebuggerPages)" />
+
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Pass properties down to the Properties Visual Studio uses to resolve symbols. -->
-    <PreprocessorDefinitions>$(PreprocessorDefinitions);$(SDCCPreprocessorDefinitions)</PreprocessorDefinitions>
-    <AdditionalIncludeDirectories>$(AdditionalIncludeDirectories);$(SDCCAdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    <PreprocessorDefinitions>$(PreprocessorDefinitions)</PreprocessorDefinitions>
+    <AdditionalIncludeDirectories>$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    <IncludePath>$(AdditionalIncludeDirectories)</IncludePath>
+    <LibraryPath>$(AdditionalLibraryPath)</LibraryPath>
   </PropertyGroup>
 
-  <!--
-  ********************************************************************************
-  * SDCC Verify Application.
-  ********************************************************************************
-  -->
+  <!--  -->
+
   <Target Name="ValidateSDCCPath">
     <Error Condition="Exists($(SDCCPath)) != true" Text="Unable to verify the path to SDCC please set the 'SDCCPath' variable."/>
   </Target>
@@ -89,8 +117,8 @@
 
         <Verbose                       Condition="'%(ClCompile.Verbose)' == ''">$(Verbose)</Verbose>
         <OutputMacros                  Condition="'%(ClCompile.OutputMacros)' == ''">$(OutputMacros)</OutputMacros>
-        <SDCCPreprocessorDefinitions   Condition="'%(ClCompile.SDCCPreprocessorDefinitions)' == ''">$(PreprocessorDefinitions)</SDCCPreprocessorDefinitions>
-        <SDCCAdditionalIncludeDirectories  Condition="'%(ClCompile.SDCCAdditionalIncludeDirectories)' == ''">$(AdditionalIncludeDirectories)</SDCCAdditionalIncludeDirectories>
+        <PreprocessorDefinitions       Condition="'%(ClCompile.PreprocessorDefinitions)' == ''">$(PreprocessorDefinitions)</PreprocessorDefinitions>
+        <AdditionalIncludeDirectories  Condition="'%(ClCompile.AdditionalIncludeDirectories)' == ''">$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
         <AssertAnswer                  Condition="'%(ClCompile.AssertAnswer)' == ''">$(AssertAnswer)</AssertAnswer>
         <PreprocessorUndefines         Condition="'%(ClCompile.PreprocessorUndefines)' == ''">$(PreprocessorUndefines)</PreprocessorUndefines>
         <DependencyRule                Condition="'%(ClCompile.DependencyRule)' == ''">$(DependencyRule)</DependencyRule>
@@ -230,8 +258,8 @@
 
                 Verbose                     ="%(ClCompile.Verbose)"
                 OutputMacros                ="%(ClCompile.OutputMacros)"
-                PreprocessorDefinitions     ="%(ClCompile.SDCCPreprocessorDefinitions)"
-                AdditionalIncludeDirectories="%(ClCompile.SDCCAdditionalIncludeDirectories)"
+                PreprocessorDefinitions     ="%(ClCompile.PreprocessorDefinitions)"
+                AdditionalIncludeDirectories="%(ClCompile.AdditionalIncludeDirectories)"
                 AssertAnswer                ="%(ClCompile.AssertAnswer)"
                 PreprocessorUndefines       ="%(ClCompile.PreprocessorUndefines)"
                 DependencyRule              ="%(ClCompile.DependencyRule)"
@@ -442,6 +470,19 @@
 
     <MakeDir Directories="$(OutDir)"/>
 
+    <!--
+    <PropertyGroup>
+      <AreaBaseAddress Condition="'%(ClCompile.CodeLocation)' != '' and '%(ClCompile.CodeSeg)' != ''">$(AreaBaseAddress);%(ClCompile.CodeSeg)=%(ClCompile.CodeLocation)</AreaBaseAddress>
+      <AreaBaseAddress Condition="'%(ClCompile.DataLocation)' != '' and '%(ClCompile.DataSeg)' != ''">$(AreaBaseAddress);%(ClCompile.DataSeg)=%(ClCompile.DataLocation)</AreaBaseAddress>
+      <AreaBaseAddress Condition="'%(ClCompile.XRamLocation)' != '' and '%(ClCompile.XRamSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.XRamSegmentName)=%(ClCompile.XRamLocation)</AreaBaseAddress>
+      <AreaBaseAddress Condition="'%(ClCompile.StackLocation)' != '' and '%(ClCompile.StackSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.StackSegmentName)=%(ClCompile.StackLocation)</AreaBaseAddress>
+      <AreaBaseAddress Condition="'%(ClCompile.XStackLocation)' != '' and '%(ClCompile.XStackSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.XStackSegmentName)=%(ClCompile.XStackLocation)</AreaBaseAddress>
+      <AreaBaseAddress Condition="'%(ClCompile.IDataLocation)' != '' and '%(ClCompile.IDataSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.IDataSegmentName)=%(ClCompile.IDataLocation)</AreaBaseAddress>
+      <AreaBaseAddress Condition="'%(ClCompile.BitLocation)' != '' and '%(ClCompile.BitSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.BitSegmentName)=%(ClCompile.BitLocation)</AreaBaseAddress>
+      <AreaBaseAddress Condition="'$(AdditionalAreaBaseAddress)' == ''">$(AreaBaseAddress);$(AdditionalAreaBaseAddress)</AreaBaseAddress>
+    </PropertyGroup>
+    -->
+
     <Message Condition="'$(BuildFormat)' != 'Library'" Importance="High" Text="Linking Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
     <SDCCLink Condition="'$(BuildFormat)' != 'Library'"
 
@@ -455,8 +496,8 @@
               ExternalLinker               ="$(ExternalLinker)"
               PortType                     ="$(PortType)"
 
-              LibraryPaths                 ="$(LibraryPaths)"
-              LibraryFiles                 ="$(LibraryFiles)"
+              LibraryPaths                 ="$(AdditionalLibraryPath)"
+              LibraryFiles                 ="$(IncludeLibraries)"
 
               AreaBaseAddress              ="$(AreaBaseAddress)"
               GlobalSymbols                ="$(GlobalSymbols)"
@@ -507,6 +548,7 @@
     <Message Condition="'$(BuildFormat)' == 'Library'" Importance="High" Text="Building Library From Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
     <SDCCLib Condition="'$(BuildFormat)' == 'Library'"
 
+             Sources                        ="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"
              AdditionalOptions              ="$(LibAdditionalOptions)"
 
              SourceInput                    ="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"

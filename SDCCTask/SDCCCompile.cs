@@ -1033,7 +1033,7 @@ namespace SDCCTask
                 this.ActiveToolSwitches.Remove(nameof(DataSeg));
                 ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.String);
                 switchToAdd.DisplayName = "Data Segment Name";
-                switchToAdd.Description = "Use this name for the data segment.     (--codeseg <name>)";
+                switchToAdd.Description = "Use this name for the data segment.     (--dataseg <name>)";
                 switchToAdd.ArgumentRelationList = new ArrayList();
                 switchToAdd.SwitchValue = "--dataseg ";
                 switchToAdd.Name = nameof(DataSeg);

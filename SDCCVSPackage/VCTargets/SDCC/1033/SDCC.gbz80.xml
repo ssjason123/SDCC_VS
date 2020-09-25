@@ -65,7 +65,15 @@ Special options for the gbz80 port:
     Description="Use this name for the code segment.     (--codeseg &lt;name&gt;)"
     Category="gbz80"
     Switch="-codeseg"
-    F1Keyword="VC.Project.SDCCCompilerTool.CodeSeg"/>
+    F1Keyword="VC.Project.SDCCCompilerTool.CodeSeg">
+    <StringProperty.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        HasConfigurationCondition="true"
+        ItemType=""/>
+    </StringProperty.DataSource>
+  </StringProperty>
   <!--
       - -constseg            <name> use this name for the const segment
   -->
@@ -75,7 +83,15 @@ Special options for the gbz80 port:
     Description="Use this name for the const segment.     (--constseg &lt;name&gt;)"
     Category="gbz80"
     Switch="-constseg"
-    F1Keyword="VC.Project.SDCCCompilerTool.ConstSeg"/>
+    F1Keyword="VC.Project.SDCCCompilerTool.ConstSeg">
+    <StringProperty.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        HasConfigurationCondition="true"
+        ItemType=""/>
+    </StringProperty.DataSource>
+  </StringProperty>
   <!--
       - -dataseg             <name> use this name for the data segment
   -->
@@ -85,7 +101,15 @@ Special options for the gbz80 port:
     Description="Use this name for the data segment.     (--dataseg &lt;name&gt;)"
     Category="gbz80"
     Switch="-dataseg"
-    F1Keyword="VC.Project.SDCCCompilerTool.DataSeg"/>
+    F1Keyword="VC.Project.SDCCCompilerTool.DataSeg">
+    <StringProperty.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        HasConfigurationCondition="true"
+        ItemType=""/>
+    </StringProperty.DataSource>
+  </StringProperty>
   <!--
     - -no-std-crt0         For the z80/gbz80 do not link default crt0.rel
   -->
@@ -96,5 +120,6 @@ Special options for the gbz80 port:
     Category="gbz80"
     Switch="-no-std-crt0"
     F1Keyword="VC.Project.SDCCCompilerTool.NoStdCRT"/>
+
 
 </Rule>

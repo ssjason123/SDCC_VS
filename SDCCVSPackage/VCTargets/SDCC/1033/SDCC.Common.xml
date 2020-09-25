@@ -22,9 +22,6 @@
       Name="CDebugging"
       DisplayName="C Debugging"/>
     <Category
-      Name="Assembler"
-      DisplayName="Assembler"/>
-    <Category
       Name="Linker"
       DisplayName="Linker"/>
   </Rule.Categories>
@@ -68,24 +65,40 @@
   <!--
   -D                        Define macro as in -Dmacro
   -->
-  <StringListProperty 
-    Name="SDCCPreprocessorDefinitions" 
-    DisplayName="Preprocessor Definitions" 
+  <StringListProperty
+    Name="PreprocessorDefinitions"
+    DisplayName="Preprocessor Definitions"
     Description="Command line definition of macros. Passed to the preprocessor.    (-D&lt;macro[=value]&gt;)"
-    Category="General" 
-    Switch="D " 
-    F1Keyword="VC.Project.SDCCCompilerTool.PreprocessorDefinitions"/>
+    Category="General"
+    Switch="D "
+    F1Keyword="VC.Project.SDCCCompilerTool.PreprocessorDefinitions">
+    <StringListProperty.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        ItemType=""
+        HasConfigurationCondition="true"/>
+    </StringListProperty.DataSource>
+  </StringListProperty>
   <!--
   -I                        Add to the include (*.h) path, as in -Ipath
   -->
   <StringListProperty 
     Subtype="folder" 
-    Name="SDCCAdditionalIncludeDirectories"
+    Name="AdditionalIncludeDirectories"
     DisplayName="Additional Include Directories"
     Description="The additional location where the preprocessor will look for &lt;..h&gt; or &quot;..h&quot; files.    (-I&lt;path&gt;)"
     Category="General" 
-    Switch="I" 
-    F1Keyword="VC.Project.SDCCCompilerTool.AdditionalIncludeDirectories"/>
+    Switch="I"
+    F1Keyword="VC.Project.SDCCCompilerTool.AdditionalIncludeDirectories">
+    <StringListProperty.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        ItemType=""
+        HasConfigurationCondition="true"/>
+    </StringListProperty.DataSource>
+  </StringListProperty>
   <!--
   -A
   -->
@@ -352,7 +365,7 @@ Code generation options:
     Category="CCodeGen" 
     F1Keyword="VC.Project.SDCCCompilerTool.PortType">
     <EnumProperty.DataSource>
-      <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      <DataSource Persistence="ProjectFile" ItemType="" Label="Globals" SourceOfDefaultValue="AfterContext" HasConfigurationCondition="false" />
     </EnumProperty.DataSource>
     <EnumValue 
       Switch="mmcs51" 
@@ -461,7 +474,7 @@ Code generation options:
     Switch="p"
     F1Keyword="VC.Project.SDCCCompilerTool.ProcessorType">
     <StringProperty.DataSource>
-      <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      <DataSource Persistence="ProjectFile" ItemType="" Label="Globals" HasConfigurationCondition="false" />
     </StringProperty.DataSource>
   </StringProperty>
   <!--
@@ -603,7 +616,8 @@ Code generation options:
     Description="Use this name for the code segment.     (--codeseg &lt;name&gt;)"
     Category="CCodeGen"
     Switch="-codeseg"
-    F1Keyword="VC.Project.SDCCCompilerTool.CodeSeg"/>
+    F1Keyword="VC.Project.SDCCCompilerTool.CodeSeg">
+  </StringProperty>
   <!--
       - -constseg            <name> use this name for the const segment
   -->
@@ -1073,7 +1087,6 @@ Linker options:
     Category="Linker"
     Switch="-no-optsdcc-in-asm"
     F1Keyword="VC.Project.SDCCCompilerTool.NoOptSdccInAsm"/>
-
 
 
 </Rule>

@@ -132,7 +132,7 @@ namespace SDCCTask
                 switchToAdd.DisplayName = "Library Path Include Directories";
                 switchToAdd.Description = "Library path specification, one per -k";
                 switchToAdd.ArgumentRelationList = new ArrayList();
-                switchToAdd.SwitchValue = "-k";
+                switchToAdd.SwitchValue = "-k ";
                 switchToAdd.Name = nameof(LibraryPaths);
                 switchToAdd.StringList = value;
                 this.ActiveToolSwitches.Add(nameof(LibraryPaths), switchToAdd);
@@ -154,7 +154,7 @@ namespace SDCCTask
                 switchToAdd.DisplayName = "Libraries to Link";
                 switchToAdd.Description = "Library file specification, one per -l";
                 switchToAdd.ArgumentRelationList = new ArrayList();
-                switchToAdd.SwitchValue = "-l";
+                switchToAdd.SwitchValue = "-l ";
                 switchToAdd.Name = nameof(LibraryFiles);
                 switchToAdd.StringList = value;
                 this.ActiveToolSwitches.Add(nameof(LibraryFiles), switchToAdd);
@@ -203,7 +203,7 @@ namespace SDCCTask
                 switchToAdd.DisplayName = "Global Symbol Expressions";
                 switchToAdd.Description = "global symbol = expression";
                 switchToAdd.ArgumentRelationList = new ArrayList();
-                switchToAdd.SwitchValue = "-g";
+                switchToAdd.SwitchValue = "-g ";
                 switchToAdd.Name = nameof(GlobalSymbols);
                 switchToAdd.StringList = value;
                 this.ActiveToolSwitches.Add(nameof(GlobalSymbols), switchToAdd);
@@ -492,7 +492,7 @@ namespace SDCCTask
                 var intConverter = new Int32Converter();
                 switchToAdd.IsValid = this.ValidateInteger(nameof(IRamSize), int.MinValue, int.MaxValue,
                     (int)intConverter.ConvertFromString(value));
-                switchToAdd.SwitchValue = "-I";
+                switchToAdd.SwitchValue = "-I ";
                 switchToAdd.Name = nameof(IRamSize);
                 switchToAdd.Value = value;
                 this.ActiveToolSwitches.Add(nameof(IRamSize), switchToAdd);
@@ -518,7 +518,7 @@ namespace SDCCTask
                 var intConverter = new Int32Converter();
                 switchToAdd.IsValid = this.ValidateInteger(nameof(XRamSize), int.MinValue, int.MaxValue,
                     (int)intConverter.ConvertFromString(value));
-                switchToAdd.SwitchValue = "-X";
+                switchToAdd.SwitchValue = "-X ";
                 switchToAdd.Name = nameof(XRamSize);
                 switchToAdd.Value = value;
                 this.ActiveToolSwitches.Add(nameof(XRamSize), switchToAdd);
@@ -544,7 +544,7 @@ namespace SDCCTask
                 var intConverter = new Int32Converter();
                 switchToAdd.IsValid = this.ValidateInteger(nameof(CodeSize), int.MinValue, int.MaxValue,
                     (int)intConverter.ConvertFromString(value));
-                switchToAdd.SwitchValue = "-C";
+                switchToAdd.SwitchValue = "-C ";
                 switchToAdd.Name = nameof(CodeSize);
                 switchToAdd.Value = value;
                 this.ActiveToolSwitches.Add(nameof(CodeSize), switchToAdd);
@@ -614,7 +614,7 @@ namespace SDCCTask
                 var intConverter = new Int32Converter();
                 switchToAdd.IsValid = this.ValidateInteger(nameof(StackSize), int.MinValue, int.MaxValue, 
                     (int)intConverter.ConvertFromString(value));
-                switchToAdd.SwitchValue = "-S";
+                switchToAdd.SwitchValue = "-S ";
                 switchToAdd.Name = nameof(StackSize);
                 switchToAdd.Value = value;
                 this.ActiveToolSwitches.Add(nameof(StackSize), switchToAdd);
@@ -698,11 +698,6 @@ namespace SDCCTask
         {
             SwitchList = new ArrayList();
             SwitchList.Add(nameof(EchoMode));
-            SwitchList.Add(nameof(LibraryPaths));
-            SwitchList.Add(nameof(LibraryFiles));
-
-            SwitchList.Add(nameof(AreaBaseAddress));
-            SwitchList.Add(nameof(GlobalSymbols));
 
             SwitchList.Add(nameof(GenerateMapFile));
             SwitchList.Add(nameof(WideListMapFormatEnabled));
@@ -716,10 +711,18 @@ namespace SDCCTask
 
             SwitchList.Add(nameof(DisableSymbolCaseSensitivity));
 
+            SwitchList.Add(nameof(GenerateMemSummaryFile));
+
+            SwitchList.Add(nameof(LibraryPaths));
+            SwitchList.Add(nameof(LibraryFiles));
+
+            SwitchList.Add(nameof(AreaBaseAddress));
+            SwitchList.Add(nameof(GlobalSymbols));
+
             SwitchList.Add(nameof(IRamSize));
             SwitchList.Add(nameof(XRamSize));
             SwitchList.Add(nameof(CodeSize));
-            SwitchList.Add(nameof(GenerateMemSummaryFile));
+
             SwitchList.Add(nameof(PackInternalRam));
             SwitchList.Add(nameof(StackSize));
 

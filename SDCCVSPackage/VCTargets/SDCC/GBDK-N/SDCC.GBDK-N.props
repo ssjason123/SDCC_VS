@@ -1,0 +1,26 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <GBDKSupported Condition="'$(GBDKSupported)' == ''">True</GBDKSupported>
+    <GBDKPath Condition="'$(GBDKPath)' == ''">$(GBDK_HOME)</GBDKPath>
+    <GBDKIncludePath>$([System.IO.Path]::Combine($(GBDKPath),"include"))</GBDKIncludePath>
+    <GBDKAsmIncludePath>$([System.IO.Path]::Combine($(GBDKIncludePath),"asm"))</GBDKAsmIncludePath>
+    <GBDKLibCPath>$([System.IO.Path]::Combine($(GBDKPath),"libc"))</GBDKLibCPath>
+    <GBDKLibPath>$([System.IO.Path]::Combine($(GBDKPath),"lib"))</GBDKLibPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GBDKSupported)' != 'False'">
+    <!-- Update properties for default GBDK options. -->
+    <AdditionalIncludeDirectories>$(AdditionalIncludeDirectories);$(GBDKIncludePath);$(GBDKAsmIncludePath);$(GBDKLibCPath)</AdditionalIncludeDirectories>
+    <AdditionalLibraryPath>$(AdditionalLibraryPath);$(GBDKLibPath)</AdditionalLibraryPath>
+    <IncludeLibraries>$(IncludeLibraries);crt0.rel;gb.lib</IncludeLibraries>
+    <DataLocation>0xc0a0</DataLocation>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <NoStdCRT>true</NoStdCRT>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+</Project>

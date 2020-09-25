@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Rule
+    Name="GBDK-N"
+    PageTemplate="tool"
+    DisplayName="GBDK-N"
+    SwitchPrefix="-"
+    Order="4"
+    xmlns="http://schemas.microsoft.com/build/2009/properties"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule.Categories>
+    <Category
+        Name="General"
+        DisplayName="General"/>
+  </Rule.Categories>
+  <Rule.DataSource>
+    <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        HasConfigurationCondition="true"
+        ItemType=""/>
+  </Rule.DataSource>
+
+  <!--
+  **************************************
+  * GBDK-N Specific rules
+  **************************************
+  -->
+
+  <BoolProperty
+    Name="GBDKSupported"
+    DisplayName="Supported"
+    Description="Enable/Disable GBDK-N Support."
+    Category="General"
+    F1Keyword="VC.Project.GBDK-N.GBDKSupported"/>
+  <StringProperty
+    Name="GBDKPath"
+    DisplayName="GBDK Install Path"
+    Description="Path to the GBDK installation."
+    Subtype="folder"
+    Category="General"
+    F1Keyword="VC.Project.GBDK-N.GBDKPath"/>
+
+</Rule>

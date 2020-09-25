@@ -1,25 +1,12 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <!-- SDCC GBZ80 Overrides -->
+  <PropertyGroup Label="Globals" Condition="'$(PortType)' == 'gbz80'">
+    <Extension Condition="'$(BuildFormat)' != 'Library'">.gb</Extension>
+    <Extension Condition="'$(BuildFormat)' == 'Library'">.lib</Extension>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(PortType)' == 'gbz80'">
-
-    <Extension Condition="'$(Extension)' == ''">.gb</Extension>
-
-    <CodeSegmentName Condition="'$(CodeSegmentName)' == ''">_CODE</CodeSegmentName>
-    <DataSegmentName Condition="'$(DataSegmentName)' == ''">_DATA</DataSegmentName>
-
-    <!-- SDCC Compiler Overrides -->
-    <CodeLocation Condition="'$(CodeLocation)' == ''">0x200</CodeLocation>
-    <DataLocation Condition="'$(DataLocation)' == ''">0xC000</DataLocation>
-
-    <!-- SDCC Assembler Overrides -->
-    <DisableAutoListingPagination Condition="'$(DisableAutoListingPagination)' == ''">true</DisableAutoListingPagination>
-    <CreateListFile Condition="'$(CreateListFile)' == ''">true</CreateListFile>
-    <CreateSymbolFile Condition="'$(CreateSymbolFile)' == ''">true</CreateSymbolFile>
-    <AllUserSymbolsMadeGlobal Condition="'$(AllUserSymbolsMadeGlobal)' == ''">true</AllUserSymbolsMadeGlobal>
-    <RelocatableReferenceMode Condition="'$(RelocatableReferenceMode)' == ''">Flag by mode</RelocatableReferenceMode>
-    <UseWideListingFormat Condition="'$(UseWideListingFormat)' == ''">true</UseWideListingFormat>
-    <EnableSDCCDebugSymbols Condition="'$(EnableSDCCDebugSymbols)' == '' and '$(Configuration)' == 'Debug'">true</EnableSDCCDebugSymbols>
 
     <!-- SDCC Linker Overrides -->
     <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">true</GenerateMapFile>
@@ -31,6 +18,26 @@
     <!-- SDCC MakeBin Overrides -->
     <GenerateGameBoyBinary Condition="'$(GenerateGameBoyBinary)' == ''">true</GenerateGameBoyBinary>
 
+    <!-- SDCC Compiler Overrides -->
+    <CodeLocation Condition="'$(CodeLocation)' == ''">0x200</CodeLocation>
+    <DataLocation Condition="'$(DataLocation)' == ''">0xC000</DataLocation>
+
+    <CodeSeg Condition="'$(CodeSeg)' == ''">CODE</CodeSeg>
+    <DataSeg Condition="'$(DataSeg)' == ''">DATA</DataSeg>
+
   </PropertyGroup>
+
+  <ItemDefinitionGroup Condition="'$(PortType)' == 'gbz80'">
+    <!-- SDCC Assembler Overrides -->
+    <AsmCompile>
+      <DisableAutoListingPagination Condition="'%(AsmCompile.DisableAutoListingPagination)' == ''">true</DisableAutoListingPagination>
+      <CreateListFile Condition="'%(AsmCompile.CreateListFile)' == ''">true</CreateListFile>
+      <CreateSymbolFile Condition="'%(AsmCompile.CreateSymbolFile)' == ''">true</CreateSymbolFile>
+      <AllUserSymbolsMadeGlobal Condition="'%(AsmCompile.AllUserSymbolsMadeGlobal)' == ''">true</AllUserSymbolsMadeGlobal>
+      <RelocatableReferenceMode Condition="'%(AsmCompile.RelocatableReferenceMode)' == ''">Flag by mode</RelocatableReferenceMode>
+      <UseWideListingFormat Condition="'%(AsmCompile.UseWideListingFormat)' == ''">true</UseWideListingFormat>
+      <EnableSDCCDebugSymbols Condition="'%(AsmCompile.EnableSDCCDebugSymbols)' == '' and '$(Configuration)' == 'Debug'">true</EnableSDCCDebugSymbols>
+    </AsmCompile>
+  </ItemDefinitionGroup>
 
 </Project>
