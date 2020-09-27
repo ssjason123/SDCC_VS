@@ -29,6 +29,20 @@
     Category="Project"
     F1Keyword="VC.Project.SDCCGeneral.ProjectName"/>
   <StringProperty
+    Name="IntDir"
+    DisplayName="Intermediate File Path"
+    Description="The path to store intermediate build files."
+    Subtype="folder"
+    Category="Project"
+    F1Keyword="VC.Project.SDCCGeneral.IntDir"/>
+  <StringProperty
+    Name="OutDir"
+    DisplayName="Output File Path"
+    Description="The path to store output build files."
+    Subtype="folder"
+    Category="Project"
+    F1Keyword="VC.Project.SDCCGeneral.OutDir"/>
+  <StringProperty
     Name="Extension"
     DisplayName="Output File Extension"
     Description="The extension appended to the Project Name for file output."

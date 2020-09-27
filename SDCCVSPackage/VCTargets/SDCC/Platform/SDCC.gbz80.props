@@ -11,12 +11,12 @@
     <!-- SDCC Linker Overrides -->
     <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">true</GenerateMapFile>
     <NoIceDebugOutput Condition="'$(NoIceDebugOutput)' == ''">true</NoIceDebugOutput>
-    <WideListMapFormatEnabled Condition="'$(WideListMapFormatEnabled)' == ''">true</WideListMapFormatEnabled>
     <MapNumberFormat Condition="'$(MapNumberFormat)' == ''">Hexadecimal</MapNumberFormat>
     <SDCDBDebugOutput Condition="'$(SDCDBDebugOutput )' == '' and '$(Configuration)' == 'Debug'">true</SDCDBDebugOutput>
 
     <!-- SDCC MakeBin Overrides -->
     <GenerateGameBoyBinary Condition="'$(GenerateGameBoyBinary)' == ''">true</GenerateGameBoyBinary>
+    <GameBoyCartridgeName Condition="'$(GameBoyCartridgeName)' == ''">$(ProjectName)</GameBoyCartridgeName>
 
     <!-- SDCC Compiler Overrides -->
     <CodeLocation Condition="'$(CodeLocation)' == ''">0x200</CodeLocation>
@@ -33,9 +33,8 @@
       <DisableAutoListingPagination Condition="'%(AsmCompile.DisableAutoListingPagination)' == ''">true</DisableAutoListingPagination>
       <CreateListFile Condition="'%(AsmCompile.CreateListFile)' == ''">true</CreateListFile>
       <CreateSymbolFile Condition="'%(AsmCompile.CreateSymbolFile)' == ''">true</CreateSymbolFile>
-      <AllUserSymbolsMadeGlobal Condition="'%(AsmCompile.AllUserSymbolsMadeGlobal)' == ''">true</AllUserSymbolsMadeGlobal>
+      <UndefinedSymbolsMadeGlobal Condition="'%(AsmCompile.UndefinedSymbolsMadeGlobal)' == ''">true</UndefinedSymbolsMadeGlobal>
       <RelocatableReferenceMode Condition="'%(AsmCompile.RelocatableReferenceMode)' == ''">Flag by mode</RelocatableReferenceMode>
-      <UseWideListingFormat Condition="'%(AsmCompile.UseWideListingFormat)' == ''">true</UseWideListingFormat>
       <EnableSDCCDebugSymbols Condition="'%(AsmCompile.EnableSDCCDebugSymbols)' == '' and '$(Configuration)' == 'Debug'">true</EnableSDCCDebugSymbols>
     </AsmCompile>
   </ItemDefinitionGroup>

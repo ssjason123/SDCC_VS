@@ -624,6 +624,32 @@ namespace SDCCTask
 
         #endregion
 
+        #region Custom CRT0
+
+        public string CustomCrt
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(CustomCrt)))
+                    return this.ActiveToolSwitches[nameof(CustomCrt)].Value;
+                return (string)null;
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(CustomCrt));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.String);
+                switchToAdd.DisplayName = "CustomCrt0";
+                switchToAdd.Description = "Custom CRT0";
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "";
+                switchToAdd.Name = nameof(CustomCrt);
+                switchToAdd.Value = value;
+                this.ActiveToolSwitches.Add(nameof(CustomCrt), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+        #endregion
+
 
         public string ExternalLinker
         {
@@ -729,6 +755,7 @@ namespace SDCCTask
             SwitchList.Add(nameof(AdditionalOptions));
 
             SwitchList.Add(nameof(OutputFile));
+            SwitchList.Add(nameof(CustomCrt));
             SwitchList.Add(nameof(SourceInput));
         }
 

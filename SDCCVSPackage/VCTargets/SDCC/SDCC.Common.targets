@@ -66,6 +66,9 @@
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDLD.Common.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/MakeBin.Common.xml">
+      <Context>Project</Context>
+    </PropertyPageSchema>
 
     <!-- Import the Port specific Property sheet data. -->
     <PropertyPageSchema Condition="'$(PortType)' == 'gbz80'" Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.gbz80.xml">
@@ -105,12 +108,12 @@
   ********************************************************************************
   -->
   <Target Name="ClCompile" Inputs="@(ClCompile);@(ClInclude)"
-          Outputs="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')">
+          Outputs="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)')">
     <Message Importance="High" Text="Compiling C Source Files:"/>
 
     <ItemGroup>
       <ClCompile>
-        <OutputFile>$(IntDir)%(ClCompile.RelativeDir)%(ClCompile.Filename)$(ObjectExtension)</OutputFile>
+        <OutputFile>$(IntDir)%(ClCompile.Filename)$(ObjectExtension)</OutputFile>
 
         <PortType                      Condition="'%(ClCompile.PortType)' == ''">$(PortType)</PortType>
         <ProcessorType                 Condition="'%(ClCompile.ProcessorType)' == ''">$(ProcessorType)</ProcessorType>
@@ -246,7 +249,7 @@
       </ClCompile>
     </ItemGroup>
 
-    <MakeDir Directories="$(IntDir)%(ClCompile.RelativeDir)"/>
+    <MakeDir Directories="$(IntDir)"/>
 
     <SDCCCompile Sources="@(ClCompile)"
 
@@ -396,12 +399,12 @@
   ********************************************************************************
   -->
   <Target Name="AsmCompile" Inputs="@(AsmCompile)"
-          Outputs="@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')">
+          Outputs="@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')">
     <Message Importance="High" Text="Compiling Assembly Source Files:"/>
 
     <ItemGroup>
       <AsmCompile>
-        <OutputFile>$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)</OutputFile>
+        <OutputFile>$(IntDir)%(Filename)$(ObjectExtension)</OutputFile>
         <AdditionalOptions                      Condition="'%(AsmCompile.AdditionalOptions)' == ''">$(AssembleAdditionalOptions)</AdditionalOptions>
         <PortType                               Condition="'%(AsmCompile.PortType)' == ''">$(PortType)</PortType>
         <ExternalAssembler                      Condition="'%(AsmCompile.ExternalAssembler)' == ''">$(ExternalAssembler)</ExternalAssembler>
@@ -423,7 +426,7 @@
       </AsmCompile>
     </ItemGroup>
 
-    <MakeDir Directories="$(IntDir)%(AsmCompile.RelativeDir)"/>
+    <MakeDir Directories="$(IntDir)"/>
 
     <SDCCAssemble Sources                  ="@(AsmCompile)"
 
@@ -465,7 +468,7 @@
   ********************************************************************************
   -->
   <Target Name="ClLink" DependsOnTargets="PreLinkEvent"
-          Inputs="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"
+          Inputs="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
           Outputs="$(OutDir)$(ProjectName)$(Extension)">
 
     <MakeDir Directories="$(OutDir)"/>
@@ -486,9 +489,9 @@
     <Message Condition="'$(BuildFormat)' != 'Library'" Importance="High" Text="Linking Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
     <SDCCLink Condition="'$(BuildFormat)' != 'Library'"
 
-              Sources                      ="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"
+              Sources                      ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
 
-              SourceInput                  ="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"
+              SourceInput                  ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
               OutputFile                   ="$(OutDir)$(ProjectName)$(IntBinaryExtension)"
 
               EchoMode                     ="$(EchoMode)"
@@ -521,6 +524,8 @@
               PackInternalRam              ="$(PackInternalRam)"
               StackSize                    ="$(StackSize)"
 
+              CustomCrt                    ="$(CustomCrt)"
+
               AdditionalOptions            ="$(LinkAdditionalOptions)"
 
               ToolPath                     ="$(SDCCBinPath)"
@@ -537,7 +542,7 @@
                  GameBoyRomBankCount        ="$(GameBoyRomBankCount)"
                  GameBoyRamBankCount        ="$(GameBoyRamBankCount)"
                  GameBoyMemoryBankController="$(GameBoyMemoryBankController)"
-                 GameBoyCartridgeName       ="$(ProjectName)"
+                 GameBoyCartridgeName       ="$(GameBoyCartridgeName)"
                  GameBoyColor               ="$(GameBoyColor)"
 
                  AdditionalOptions          ="$(MakeBinAdditionalOptions)"
@@ -548,10 +553,10 @@
     <Message Condition="'$(BuildFormat)' == 'Library'" Importance="High" Text="Building Library From Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
     <SDCCLib Condition="'$(BuildFormat)' == 'Library'"
 
-             Sources                        ="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"
+             Sources                        ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
              AdditionalOptions              ="$(LibAdditionalOptions)"
 
-             SourceInput                    ="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"
+             SourceInput                    ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
              OutputFile                     ="$(OutDir)$(ProjectName)$(Extension)"
 
              ToolPath                       ="$(SDCCBinPath)"
@@ -569,14 +574,14 @@
     <!--
     <VCMessage Code="MSBXXXX" Type="Warning" Arguments="Testing NMakeCleanCommandLine"/>
     -->
-    <Delete Files="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"/>
-    <Delete Files="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename).lst')"/>
-    <Delete Files="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename).sym')"/>
-    <Delete Files="@(ClCompile->'$(IntDir)%(RelativeDir)%(Filename).asm')"/>
+    <Delete Files="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"/>
+    <Delete Files="@(ClCompile->'$(IntDir)%(Filename).lst')"/>
+    <Delete Files="@(ClCompile->'$(IntDir)%(Filename).sym')"/>
+    <Delete Files="@(ClCompile->'$(IntDir)%(Filename).asm')"/>
 
-    <Delete Files="@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename)$(ObjectExtension)')"/>
-    <Delete Files="@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename).sym')"/>
-    <Delete Files="@(AsmCompile->'$(IntDir)%(RelativeDir)%(Filename).lst')"/>
+    <Delete Files="@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"/>
+    <Delete Files="@(AsmCompile->'$(IntDir)%(Filename).sym')"/>
+    <Delete Files="@(AsmCompile->'$(IntDir)%(Filename).lst')"/>
 
     <Delete Files="$(OutDir)$(ProjectName)$(Extension)"/>
     <Delete Files="$(OutDir)$(ProjectName)$(MapExtension)"/>

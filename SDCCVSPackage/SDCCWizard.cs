@@ -46,7 +46,8 @@ namespace SDCCVSPackage
         /// <inheritdoc />
         public bool ShouldAddProjectItem(string filePath)
         {
-            return !ConfigForm.EmptyCheck.Checked;
+            // Always allow the filters item to be created.
+            return (!ConfigForm.EmptyCheck.Checked || filePath.EndsWith(".filters"));
         }
 
         /// <inheritdoc />

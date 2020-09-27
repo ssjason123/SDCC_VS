@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Rule 
     Name="SDAS" 
-    PageTemplate="tool" 
+    PageTemplate="generic" 
     DisplayName="SDAS" 
     SwitchPrefix="-" 
     Order="11" 

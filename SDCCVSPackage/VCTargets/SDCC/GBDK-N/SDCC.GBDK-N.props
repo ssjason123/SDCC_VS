@@ -1,7 +1,10 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <PropertyGroup Label="Globals">
+    <GBDKSupported Condition="'$(GBDKSupported)' == ''">true</GBDKSupported>
+  </PropertyGroup>
+
   <PropertyGroup>
-    <GBDKSupported Condition="'$(GBDKSupported)' == ''">True</GBDKSupported>
     <GBDKPath Condition="'$(GBDKPath)' == ''">$(GBDK_HOME)</GBDKPath>
     <GBDKIncludePath>$([System.IO.Path]::Combine($(GBDKPath),"include"))</GBDKIncludePath>
     <GBDKAsmIncludePath>$([System.IO.Path]::Combine($(GBDKIncludePath),"asm"))</GBDKAsmIncludePath>
@@ -9,15 +12,16 @@
     <GBDKLibPath>$([System.IO.Path]::Combine($(GBDKPath),"lib"))</GBDKLibPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(GBDKSupported)' != 'False'">
+  <PropertyGroup Condition="'$(GBDKSupported)' == 'true'">
     <!-- Update properties for default GBDK options. -->
     <AdditionalIncludeDirectories>$(AdditionalIncludeDirectories);$(GBDKIncludePath);$(GBDKAsmIncludePath);$(GBDKLibCPath)</AdditionalIncludeDirectories>
     <AdditionalLibraryPath>$(AdditionalLibraryPath);$(GBDKLibPath)</AdditionalLibraryPath>
-    <IncludeLibraries>$(IncludeLibraries);crt0.rel;gb.lib</IncludeLibraries>
+    <IncludeLibraries>gb.lib</IncludeLibraries>
     <DataLocation>0xc0a0</DataLocation>
+    <CustomCrt>$(GBDKLibPath)/crt0.rel</CustomCrt>
   </PropertyGroup>
 
-  <ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(GBDKSupported)' == 'true'">
     <ClCompile>
       <NoStdCRT>true</NoStdCRT>
     </ClCompile>

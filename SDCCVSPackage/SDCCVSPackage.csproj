@@ -126,11 +126,23 @@
     <Content Include="SDCC.pkgdef">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="VCTargets\SDCC\1033\SDCC.General.xml" />
+    <Content Include="VCTargets\SDCC\1033\MakeBin.Common.xml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <InstallRoot>VCTargets</InstallRoot>
+      <VSIXSubPath>SDCC/1033</VSIXSubPath>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VCTargets\SDCC\1033\SDCC.General.xml">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>SDCC/1033</VSIXSubPath>
+      <InstallRoot>VCTargets</InstallRoot>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="VCTargets\SDCC\GBDK-N\SDCC.GBDK-N.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>VCTargets</InstallRoot>
       <VSIXSubPath>SDCC/GBDK-N</VSIXSubPath>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="VCTargets\SDCC\Platform\SDCC.ds390.props">
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -151,6 +163,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>VCTargets</InstallRoot>
       <VSIXSubPath>SDCC/Platform</VSIXSubPath>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="VCTargets\SDCC\Platform\SDCC.hc08.props">
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -253,6 +266,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>VCTargets</InstallRoot>
       <VSIXSubPath>SDCC/GBDK-N</VSIXSubPath>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +275,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>VCTargets</InstallRoot>
       <VSIXSubPath>SDCC/1033</VSIXSubPath>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="VCTargets\SDCC\1033\SDAS.Common.xml">
       <IncludeInVSIX>true</IncludeInVSIX>

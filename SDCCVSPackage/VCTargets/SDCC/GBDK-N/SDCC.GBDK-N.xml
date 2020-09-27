@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Rule
     Name="GBDK-N"
-    PageTemplate="tool"
+    PageTemplate="generic"
     DisplayName="GBDK-N"
     SwitchPrefix="-"
     Order="4"
@@ -32,7 +32,16 @@
     DisplayName="Supported"
     Description="Enable/Disable GBDK-N Support."
     Category="General"
-    F1Keyword="VC.Project.GBDK-N.GBDKSupported"/>
+    F1Keyword="VC.Project.GBDK-N.GBDKSupported">
+    <BoolProperty.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        Label="Globals"
+        HasConfigurationCondition="true"
+        SourceOfDefaultValue="AfterContext" 
+        ItemType=""/>
+    </BoolProperty.DataSource>
+  </BoolProperty>
   <StringProperty
     Name="GBDKPath"
     DisplayName="GBDK Install Path"

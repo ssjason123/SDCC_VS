@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rule
+    Name="Makebin"
+    PageTemplate="generic"
+    DisplayName="Makebin"
+    SwitchPrefix="-"
+    Order="14"
+    xmlns="http://schemas.microsoft.com/build/2009/properties"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule.Categories>
+    <Category
+      Name="General"
+      DisplayName="General"/>
+    <Category
+      Name="Gameboy"
+      DisplayName="Gameboy"/>
+  </Rule.Categories>
+  <Rule.DataSource>
+    <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        ItemType=""
+        HasConfigurationCondition="true" />
+  </Rule.DataSource>
+
+<!--
+  **************************************
+  * General Rules
+  **************************************
+
+Options:
+  -p             pack mode: the binary file size will be truncated to the last occupied byte
+-->
+  <BoolProperty
+    Name="PackBinary"
+    DisplayName="Pack Mode"
+    Description="Pack mode: the binary file size will be truncated to the last occupied byte.     (-p)"
+    Category="General"
+    Switch="p"
+    F1Keyword="VC.Project.Makebin.PackBinary"/>
+<!--
+  
+  -s romsize     size of the binary file (default: 32768)
+-->
+  <StringProperty
+    Name="BinarySize"
+    DisplayName="Rom Size"
+    Description="size of the binary file (default: 32768).    (-s &lt;size&gt;)"
+    Category="General"
+    Switch="s "
+    F1Keyword="VC.Project.SDLDLinkerTool.RomSize"/>
+<!--
+  -Z             genarate GameBoy format binary file
+-->
+  <BoolProperty
+    Name="GenerateGameBoyBinary"
+    DisplayName="Pack Mode"
+    Description="Generate GameBoy format binary file.     (-Z)"
+    Category="Gameboy"
+    Switch="Z"
+    F1Keyword="VC.Project.Makebin.GenerateGameBoyBinary"/>
+<!--
+GameBoy format options (applicable only with -Z option):
+  -yo n          number of rom banks (default: 2)
+-->
+  <StringProperty
+    Name="GameBoyRomBankCount"
+    DisplayName="Rom Bank Count"
+    Description="Number of rom banks (default: 2).    (-yo &lt;size&gt;)"
+    Category="Gameboys"
+    Switch="yo "
+    F1Keyword="VC.Project.SDLDLinkerTool.GameBoyRomBankCount"/>
+<!--
+  -ya n          number of ram banks (default: 0)
+-->
+  <StringProperty
+    Name="GameBoyRamBankCount"
+    DisplayName="Ram Bank Count"
+    Description="Number of ram banks (default: 0).    (-ya &lt;size&gt;)"
+    Category="Gameboy"
+    Switch="ya "
+    F1Keyword="VC.Project.SDLDLinkerTool.GameBoyRomBankCount"/>
+<!--
+  -yt n          MBC type (default: no MBC)
+-->
+  <StringProperty
+    Name="GameBoyMemoryBankController"
+    DisplayName="Memory Bank Controller Type"
+    Description="MBC type (default: no MBC).    (-yt &lt;type&gt;)"
+    Category="Gameboy"
+    Switch="ya "
+    F1Keyword="VC.Project.SDLDLinkerTool.GameBoyRomBankCount"/>
+      <!--
+  -yn name       cartridge name (default: none)
+-->
+  <StringProperty
+    Name="GameBoyCartridgeName"
+    DisplayName="GameBoy Cartridge Name"
+    Description="cartridge name (default: none).    (-yn &lt;name&gt;)"
+    Category="Gameboy"
+    Switch="yn "
+    F1Keyword="VC.Project.SDLDLinkerTool.GlobalSymbols"/>
+<!--
+  -yc            GameBoy Color
+  -->
+  <BoolProperty
+    Name="GameBoyColor"
+    DisplayName="GameBoy Color"
+    Description="Generate a gameboy color binary.     (-ycs)"
+    Category="Gameboy"
+    Switch="yc"
+    F1Keyword="VC.Project.Makebin.GameBoyColor"/>
+
+</Rule>
