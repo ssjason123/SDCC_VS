@@ -35,7 +35,6 @@
       <CreateSymbolFile Condition="'%(AsmCompile.CreateSymbolFile)' == ''">true</CreateSymbolFile>
       <UndefinedSymbolsMadeGlobal Condition="'%(AsmCompile.UndefinedSymbolsMadeGlobal)' == ''">true</UndefinedSymbolsMadeGlobal>
       <RelocatableReferenceMode Condition="'%(AsmCompile.RelocatableReferenceMode)' == ''">Flag by mode</RelocatableReferenceMode>
-      <EnableSDCCDebugSymbols Condition="'%(AsmCompile.EnableSDCCDebugSymbols)' == '' and '$(Configuration)' == 'Debug'">true</EnableSDCCDebugSymbols>
     </AsmCompile>
   </ItemDefinitionGroup>
 
