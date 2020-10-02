@@ -89,6 +89,8 @@
     <OutputFormat Condition="'$(OutputFormat)' == ''">Intel</OutputFormat>
     <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">true</GenerateMapFile>
     <EchoMode Condition="'$(EchoMode)' == ''">NoEcho</EchoMode>
+    <WideListMapFormatEnabled Condition="'$(WideListMapFormatEnabled)' == ''">true</WideListMapFormatEnabled>
+    <SDCDBDebugOutput Condition="'$(SDCDBDebugOutput )' == ''">true</SDCDBDebugOutput >
 
     <!--
     <ExternalLinker Condition="'$(ExternalLinker)' == ''">$(ExternalLinker)</ExternalLinker>
@@ -157,7 +159,7 @@
   <Import Condition="'$(PortType)' == 'pdk15'" Project="$(MSBuildThisFileDirectory)Platform/SDCC.pdk15.props"/>
 
 
-  <Import Condition="'$(PortType)' == 'gbz80'" Project="$(MSBuildThisFileDirectory)GBDK-N/SDCC.GBDK-N.props"/>
+  <Import Condition="'$(PortType)' == 'gbz80'" Project="$(MSBuildThisFileDirectory)GBDK/SDCC.GBDK.props"/>
 
   <!-- General SDCC general override settings. -->
   <!--

@@ -121,5 +121,19 @@ Special options for the gbz80 port:
     Switch="-no-std-crt0"
     F1Keyword="VC.Project.SDCCCompilerTool.NoStdCRT"/>
 
+  <StringProperty
+    Name="CustomCrt"
+    DisplayName="Custom CRT"
+    Description="Path to the custom CRT."
+    Category="gbz80"
+    F1Keyword="VC.Project.SDCCCompilerTool.CustomCrt">
+    <StringProperty.DataSource>
+      <DataSource
+        Persistence="ProjectFile"
+        Label=""
+        HasConfigurationCondition="true"
+        ItemType=""/>
+    </StringProperty.DataSource>
+  </StringProperty>
 
 </Rule>

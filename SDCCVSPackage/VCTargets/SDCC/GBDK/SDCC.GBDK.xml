@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Rule
-    Name="GBDK-N"
+    Name="GBDK"
     PageTemplate="generic"
-    DisplayName="GBDK-N"
+    DisplayName="GBDK"
     SwitchPrefix="-"
     Order="4"
     xmlns="http://schemas.microsoft.com/build/2009/properties"
@@ -32,7 +32,7 @@
     DisplayName="Supported"
     Description="Enable/Disable GBDK-N Support."
     Category="General"
-    F1Keyword="VC.Project.GBDK-N.GBDKSupported">
+    F1Keyword="VC.Project.GBDK.GBDKSupported">
     <BoolProperty.DataSource>
       <DataSource
         Persistence="ProjectFile"
@@ -42,12 +42,39 @@
         ItemType=""/>
     </BoolProperty.DataSource>
   </BoolProperty>
+
+  <EnumProperty
+      Name="GBDKType"
+      DisplayName="GBDK Type"
+      Description="Type of GBDK to support (N/2020)."
+      Category="General"
+      F1Keyword="VC.Project.GBDK.GBDKType">
+      <EnumValue
+          Name="GBDK-N"
+          Switch=""
+          DisplayName="GBDK-N"
+          Description="Use GBDK-N support (https://github.com/andreasjhkarlsson/gbdk-n)."/>
+      <EnumValue
+          Name="GBDK-2020"
+          Switch=""
+          DisplayName="GBDK-2020"
+          Description="Use GBDK-2020 support (https://github.com/Zal0/gbdk-2020)."
+          IsDefault="true"/>
+      <EnumProperty.DataSource>
+          <DataSource
+              Persistence="ProjectFile"
+              Label="Globals"
+              HasConfigurationCondition="true"
+              SourceOfDefaultValue="AfterContext"
+              ItemType=""/>
+      </EnumProperty.DataSource>
+  </EnumProperty>
   <StringProperty
     Name="GBDKPath"
     DisplayName="GBDK Install Path"
     Description="Path to the GBDK installation."
     Subtype="folder"
     Category="General"
-    F1Keyword="VC.Project.GBDK-N.GBDKPath"/>
+    F1Keyword="VC.Project.GBDK.GBDKPath"/>
 
 </Rule>

@@ -138,10 +138,10 @@
       <InstallRoot>VCTargets</InstallRoot>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="VCTargets\SDCC\GBDK-N\SDCC.GBDK-N.xml">
+    <Content Include="VCTargets\SDCC\GBDK\SDCC.GBDK.xml">
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>VCTargets</InstallRoot>
-      <VSIXSubPath>SDCC/GBDK-N</VSIXSubPath>
+      <VSIXSubPath>SDCC/GBDK</VSIXSubPath>
       <SubType>Designer</SubType>
     </Content>
     <Content Include="VCTargets\SDCC\Platform\SDCC.ds390.props">
@@ -262,10 +262,10 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="VCTargets\SDCC\GBDK-N\SDCC.GBDK-N.props">
+    <Content Include="VCTargets\SDCC\GBDK\SDCC.GBDK.props">
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>VCTargets</InstallRoot>
-      <VSIXSubPath>SDCC/GBDK-N</VSIXSubPath>
+      <VSIXSubPath>SDCC/GBDK</VSIXSubPath>
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
@@ -281,6 +281,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <InstallRoot>VCTargets</InstallRoot>
       <VSIXSubPath>SDCC/1033</VSIXSubPath>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="VCTargets\SDCC\1033\SDCC.Common.xml">
       <IncludeInVSIX>true</IncludeInVSIX>

@@ -80,6 +80,7 @@
 
     <FileExtension Name=".asm" ContentType="ASMCode"/>
     <FileExtension Name=".s" ContentType="ASMCode"/>
+    <FileExtension Name=".rasm" ContentType="ASMCode"/>
 
     <FileExtension Name=".cpp" ContentType="CppCode"/>
     <FileExtension Name=".cc" ContentType="CppCode"/>

@@ -75,7 +75,7 @@
       <Context>PropertySheet;Project;File</Context>
     </PropertyPageSchema>
 
-    <PropertyPageSchema Condition="'$(PortType)' == 'gbz80'" Include="$(MSBuildThisFileDirectory)GBDK-N/SDCC.GBDK-N.xml">
+    <PropertyPageSchema Condition="'$(PortType)' == 'gbz80'" Include="$(MSBuildThisFileDirectory)GBDK/SDCC.GBDK.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
 
@@ -587,6 +587,7 @@
     <Delete Files="$(OutDir)$(ProjectName)$(MapExtension)"/>
     <Delete Files="$(OutDir)$(ProjectName)$(IntBinaryExtension)"/>
     <Delete Files="$(OutDir)$(ProjectName).noi"/>
+    <Delete Files="$(OutDir)$(ProjectName).cdb"/>
   </Target>
 
   <Target Name="Build" DependsOnTargets="ValidateSDCCPath;PreBuildEvent;ClCompile;AsmCompile;ClLink">
