@@ -9,6 +9,10 @@
   <UsingTask TaskName="SDCCLib" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
   <UsingTask TaskName="SDCCMakeBin" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
 
+  <PropertyGroup>
+    <DetermineProjectTypeTargets>ResolvePreprocessorDefs</DetermineProjectTypeTargets>
+  </PropertyGroup>
+
   <PropertyGroup Label="Configuration">
     <_ApplicableDebuggers>Desktop</_ApplicableDebuggers>
   </PropertyGroup>
@@ -90,7 +94,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PreprocessorDefinitions>$(PreprocessorDefinitions)</PreprocessorDefinitions>
+    <PreprocessorDefinitions>$(PreprocessorDefinitions);$(SDCCIntellisenseDefinitions);$(SDCCPreprocessorDefinitions)</PreprocessorDefinitions>
     <AdditionalIncludeDirectories>$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     <IncludePath>$(AdditionalIncludeDirectories)</IncludePath>
     <LibraryPath>$(AdditionalLibraryPath)</LibraryPath>
@@ -100,6 +104,14 @@
 
   <Target Name="ValidateSDCCPath">
     <Error Condition="Exists($(SDCCPath)) != true" Text="Unable to verify the path to SDCC please set the 'SDCCPath' variable."/>
+  </Target>
+
+  <Target Name="ResolvePreprocessorDefs">
+    <ItemGroup>
+      <ClCompile>
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);%(ClCompile.SDCCPreprocessorDefinitions);</PreprocessorDefinitions>
+      </ClCompile>
+    </ItemGroup>
   </Target>
 
   <!-- 
@@ -121,6 +133,7 @@
         <Verbose                       Condition="'%(ClCompile.Verbose)' == ''">$(Verbose)</Verbose>
         <OutputMacros                  Condition="'%(ClCompile.OutputMacros)' == ''">$(OutputMacros)</OutputMacros>
         <PreprocessorDefinitions       Condition="'%(ClCompile.PreprocessorDefinitions)' == ''">$(PreprocessorDefinitions)</PreprocessorDefinitions>
+        <SDCCPreprocessorDefinitions   Condition="'%(ClCompile.SDCCPreprocessorDefinitions)' == ''">$(SDCCPreprocessorDefinitions)</SDCCPreprocessorDefinitions>
         <AdditionalIncludeDirectories  Condition="'%(ClCompile.AdditionalIncludeDirectories)' == ''">$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
         <AssertAnswer                  Condition="'%(ClCompile.AssertAnswer)' == ''">$(AssertAnswer)</AssertAnswer>
         <PreprocessorUndefines         Condition="'%(ClCompile.PreprocessorUndefines)' == ''">$(PreprocessorUndefines)</PreprocessorUndefines>
@@ -261,7 +274,7 @@
 
                 Verbose                     ="%(ClCompile.Verbose)"
                 OutputMacros                ="%(ClCompile.OutputMacros)"
-                PreprocessorDefinitions     ="%(ClCompile.PreprocessorDefinitions)"
+                PreprocessorDefinitions     ="%(ClCompile.SDCCPreprocessorDefinitions)"
                 AdditionalIncludeDirectories="%(ClCompile.AdditionalIncludeDirectories)"
                 AssertAnswer                ="%(ClCompile.AssertAnswer)"
                 PreprocessorUndefines       ="%(ClCompile.PreprocessorUndefines)"

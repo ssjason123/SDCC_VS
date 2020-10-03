@@ -23,7 +23,7 @@
   <PropertyGroup>
     <!--
     <AdditionalIncludeDirectories   Condition="'$(AdditionalIncludeDirectories)' == ''">$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    <PreprocessorDefinitions        Condition="'$(PreprocessorDefinitions)' == ''">$(PreprocessorDefinitions)</PreprocessorDefinitions>
+    <SDCCPreprocessorDefinitions        Condition="'$(SDCCCPreprocessorDefinitions)' == ''">$(SDCCCPreprocessorDefinitions)</SDCCPreprocessorDefinitions>
     <DependencyRule                 Condition="'$(DependencyRule)' == ''">$(DependencyRule)</DependencyRule>
     <KeepComments                   Condition="'$(KeepComments)' == ''">$(KeepComments)</KeepComments>
     <AssertAnswer                   Condition="'$(AssertAnswer)' == ''">$(AssertAnswer)</AssertAnswer>
@@ -198,5 +198,17 @@
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <PropertyGroup>
+    <!-- SDCC Preprocessor definitions to expose for intellisense support. -->
+    <SDCCIntellisenseDefinitions>__idata=;__data=;__xdata=;__pdata=;__code=;__bit=;__at(address)=;__reenterant=;__preserves_regs(...)=;__interrupt=;__critical=;__using(index)=;__trap=;__asm=;__endasm=;__asm__(assembly)=;__near=;__far=;__naked=;__wparam=;__shadowregs=;__addressmod=;__sfr=;__sfr16=;__sfr32=;__sbit=;__banked=;</SDCCIntellisenseDefinitions>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <SDCCPreprocessorDefinitions>$(SDCCPreprocessorDefinitions);%(SDCCPreprocessorDefinitions)</SDCCPreprocessorDefinitions>
+      <PreprocessorDefinitions>$(SDCCIntellisenseDefinitions);$(SDCCPreprocessorDefinitions);%(SDCCPreprocessorDefinitions);%(PreprocessorDefinitions);</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
 
 </Project>

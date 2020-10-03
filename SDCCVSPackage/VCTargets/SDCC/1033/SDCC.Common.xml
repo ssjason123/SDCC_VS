@@ -66,19 +66,12 @@
   -D                        Define macro as in -Dmacro
   -->
   <StringListProperty
-    Name="PreprocessorDefinitions"
+    Name="SDCCPreprocessorDefinitions"
     DisplayName="Preprocessor Definitions"
     Description="Command line definition of macros. Passed to the preprocessor.    (-D&lt;macro[=value]&gt;)"
     Category="General"
     Switch="D "
-    F1Keyword="VC.Project.SDCCCompilerTool.PreprocessorDefinitions">
-    <StringListProperty.DataSource>
-      <DataSource
-        Persistence="ProjectFile"
-        Label=""
-        ItemType=""
-        HasConfigurationCondition="true"/>
-    </StringListProperty.DataSource>
+    F1Keyword="VC.Project.SDCCCompilerTool.SDCCPreprocessorDefinitions">
   </StringListProperty>
   <!--
   -I                        Add to the include (*.h) path, as in -Ipath
