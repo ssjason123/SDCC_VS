@@ -206,7 +206,7 @@
 
   <ItemDefinitionGroup>
     <ClCompile>
-      <SDCCPreprocessorDefinitions>$(SDCCPreprocessorDefinitions);%(SDCCPreprocessorDefinitions)</SDCCPreprocessorDefinitions>
+      <SDCCPreprocessorDefinitions>$(SDCCPreprocessorDefinitions)</SDCCPreprocessorDefinitions>
       <PreprocessorDefinitions>$(SDCCIntellisenseDefinitions);$(SDCCPreprocessorDefinitions);%(SDCCPreprocessorDefinitions);%(PreprocessorDefinitions);</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
