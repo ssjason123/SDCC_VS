@@ -201,7 +201,7 @@
 
   <PropertyGroup>
     <!-- SDCC Preprocessor definitions to expose for intellisense support. -->
-    <SDCCIntellisenseDefinitions>__idata=;__data=;__xdata=;__pdata=;__code=;__bit=;__at(address)=;__reenterant=;__preserves_regs(...)=;__interrupt=;__critical=;__using(index)=;__trap=;__asm=;__endasm=;__asm__(assembly)=;__near=;__far=;__naked=;__wparam=;__shadowregs=;__addressmod=;__sfr=;__sfr16=;__sfr32=;__sbit=;__banked=;</SDCCIntellisenseDefinitions>
+    <SDCCIntellisenseDefinitions>__idata=;__data=;__xdata=;__pdata=;__code=;__bit=unsigned char;__at(address)=;__reenterant=;__preserves_regs(...)=;__interrupt=;__critical=;__using(index)=;__trap=;__asm=;__endasm=;__asm__(assembly)=;__near=;__far=;__naked=;__wparam=;__shadowregs=;__addressmod=;__sfr=unsigned char;__sfr16=unsigned short;__sfr32=unsigned int;__sbit=unsigned char;__banked=;__nonbanked=;</SDCCIntellisenseDefinitions>
   </PropertyGroup>
 
   <ItemDefinitionGroup>

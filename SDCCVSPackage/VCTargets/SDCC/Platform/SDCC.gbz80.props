@@ -12,7 +12,13 @@
     <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">true</GenerateMapFile>
     <NoIceDebugOutput Condition="'$(NoIceDebugOutput)' == ''">true</NoIceDebugOutput>
     <MapNumberFormat Condition="'$(MapNumberFormat)' == ''">Hexadecimal</MapNumberFormat>
-    <SDCDBDebugOutput Condition="'$(SDCDBDebugOutput )' == '' and '$(Configuration)' == 'Debug'">true</SDCDBDebugOutput>
+
+    <!--
+    NOTE: SDAR errors when building with debug. See error:
+    See details at: https://sourceforge.net/p/sdcc/bugs/2970/
+    
+    <SDCDBDebugOutput Condition="'$(SDCDBDebugOutput)' == '' and '$(Configuration)' == 'Debug'">true</SDCDBDebugOutput>
+    -->
 
     <!-- SDCC MakeBin Overrides -->
     <GenerateGameBoyBinary Condition="'$(GenerateGameBoyBinary)' == ''">true</GenerateGameBoyBinary>

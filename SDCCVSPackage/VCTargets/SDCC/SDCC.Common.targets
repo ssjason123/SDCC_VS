@@ -8,6 +8,7 @@
   <UsingTask TaskName="SDCCLink" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
   <UsingTask TaskName="SDCCLib" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
   <UsingTask TaskName="SDCCMakeBin" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCVersion" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
 
   <PropertyGroup>
     <DetermineProjectTypeTargets>ResolvePreprocessorDefs</DetermineProjectTypeTargets>
@@ -107,9 +108,62 @@
   </Target>
 
   <Target Name="ResolvePreprocessorDefs">
+    <SDCCVersion 
+      Condition="'$(SDCCCompilerDefinitions)' == ''"
+      SDCCExecutable="$(SDCCBinPath)sdcc.exe">
+      <Output TaskParameter="Version" PropertyName="SDCCVersion"/>
+      <Output TaskParameter="MajorVersion" PropertyName="SDCCMajorVersion"/>
+      <Output TaskParameter="MinorVersion" PropertyName="SDCCMinorVersion"/>
+      <Output TaskParameter="PatchVersion" PropertyName="SDCCPatchVersion"/>
+      <Output TaskParameter="Revision" PropertyName="SDCCRevision"/>
+    </SDCCVersion>
+    <PropertyGroup Condition="'$(SDCCCompilerDefinitions)' == ''">
+      <SDCCCompilerDefinitions>__SDCC=$(SDCCVersion.Replace(".", "_"));__SDCC_$(PortType)=;__SDCC_VERSION_MAJOR=$(SDCCMajorVersion);__SDCC_VERSION_MINOR=$(SDCCMinorVersion);__SDCC_VERSION_PATCH=$(SDCCPatchVersion);__SDCC_REVISION=$(SDCCRevision);</SDCCCompilerDefinitions>
+      <SDCCCompilerDefinitions Condition="'$(PortType)'=='ds390'">$(SDCCCompilerDefinitions);__SDCC_STACK_TENBIT=;</SDCCCompilerDefinitions>
+      <SDCCCompilerDefinitions Condition="'$(PortType)'=='ds390'">$(SDCCCompilerDefinitions);__SDCC_MODEL_FLAT24=;</SDCCCompilerDefinitions>
+
+    </PropertyGroup>
     <ItemGroup>
       <ClCompile>
-        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);%(ClCompile.SDCCPreprocessorDefinitions);</PreprocessorDefinitions>
+        <PreprocessorDefinitions>
+          $(SDCCCompilerDefinitions);
+          %(ClCompile.SDCCCompilerDefinitions);
+          %(ClCompile.PreprocessorDefinitions);
+          %(ClCompile.SDCCPreprocessorDefinitions);
+        </PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.StackAuto)'=='true'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_STACK_AUTO=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.MemoryModel)'=='Small'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_MODEL_SMALL=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.MemoryModel)'=='Medium'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_MODEL_MEDIUM=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.MemoryModel)'=='Large'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_MODEL_LARGE=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.MemoryModel)'=='Huge'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_MODEL_HUGE=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.ParamsInBank1)'=='true'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);SDCC_PARMS_IN_BANK1=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.AllCalleeSaves)'=='true'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_ALL_CALLEE_SAVES=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.FloatReent)'=='true'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_FLOAT_REENT=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.IntLongReent)'=='true'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_INT_LONG_REENT=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.OptimizeCode)'=='CodeSpeed'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_OPTIMIZE_SPEED=</PreprocessorDefinitions>
+      </ClCompile>
+      <ClCompile Condition="'%(ClCompile.OptimizeCode)'=='CodeSize'">
+        <PreprocessorDefinitions>%(ClCompile.PreprocessorDefinitions);__SDCC_OPTIMIZE_SIZE=</PreprocessorDefinitions>
       </ClCompile>
     </ItemGroup>
   </Target>
