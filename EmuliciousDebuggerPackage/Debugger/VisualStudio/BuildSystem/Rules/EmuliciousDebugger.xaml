@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright, Microsoft Corporation, All rights reserved.-->
+        
+<!--TODO: Update the following files with the specified content
+
+    *BuildSystem\DeployedBuildSystem\CustomProject.props* - update the value of the existing DebuggerFlavor element to use the new debugger
+    <PropertyGroup>
+      <DebuggerFlavor>EmuliciousDebugger</DebuggerFlavor>
+    </PropertyGroup>
+-->
+<Rule
+	Name="EmuliciousDebugger"
+	DisplayName="Emulicious Debugger"
+	PageTemplate="debugger"
+	Description="Emulicious Debugger options"
+	xmlns="http://schemas.microsoft.com/build/2009/properties">
+    <Rule.DataSource>
+        <DataSource Persistence="UserFileWithXamlDefaults" />
+    </Rule.DataSource>
+
+    <StringProperty Name="EmuliciousDebuggerExecutable" DisplayName="Command"
+                Default="$(EmuliciousExecutable)"
+                Description="The path to the Emulicious Executable.">
+        <StringProperty.ValueEditors>
+            <ValueEditor EditorType="DefaultFindFullPathPropertyEditor" DisplayName="&lt;regsvr32.exe&gt;">
+                <ValueEditor.Metadata>
+                    <NameValuePair Name="Exename" Value="regsvr32.exe" />
+                </ValueEditor.Metadata>
+            </ValueEditor>
+            <ValueEditor EditorType="DefaultStringPropertyEditor" DisplayName="&lt;Edit...&gt;"/>
+            <ValueEditor EditorType="DefaultFilePropertyEditor" DisplayName="&lt;Browse...&gt;">
+                <ValueEditor.Metadata>
+                    <NameValuePair Name="Filters" Value="Executables (*.exe)|*.exe" />
+                </ValueEditor.Metadata>
+            </ValueEditor>
+        </StringProperty.ValueEditors>
+    </StringProperty>
+
+    <StringProperty Name="EmuliciousLaunchRom" DisplayName="Rom File"
+                    Default="$(OutDir)$(ProjectName)$(Extension)"
+                Description="The full path to the emulicious rom.">
+    </StringProperty>
+    <BoolProperty Name="EmuliciousDebuggerDebuggerAttach" DisplayName="Attach"
+                Default="False"
+                Description="Specifies whether the debugger should attempt to attach to an existing process when debugging starts." />
+    <BoolProperty Name="EmuliciousDebuggerDebuggerStopOnEntry" DisplayName="Stop On Entry"
+                  Default="True"
+                  Description="Specifies if the debugger will break on startup." />
+    <IntProperty Name="EmuliciousDebuggerPort" DisplayName="Port" Default="58870" 
+                 Description="Emulicious debugger communication port." Visible="False"/>
+    <IntProperty Name="EmuliciousDebuggerStartDelay" DisplayName="Launch Delay" Default="1000"
+                 Description="Emulicious debugger startup launch delay port."/>
+    <StringProperty Name="EmuliciousDebugLogPath" DisplayName="Debug Folder Path"
+                    Default=""
+                    Subtype="folder"
+                    Description="Path to save the debugger communication log file.">
+    </StringProperty>
+</Rule>

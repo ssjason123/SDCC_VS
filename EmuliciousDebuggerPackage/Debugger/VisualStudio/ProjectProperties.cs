@@ -1,14 +1,17 @@
-namespace SDCCVSPackage
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.Composition;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Microsoft.VisualStudio.ProjectSystem;
-    using Microsoft.VisualStudio.ProjectSystem.Properties;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.ProjectSystem;
+using Microsoft.VisualStudio.ProjectSystem.Properties;
 
+namespace EmuliciousDebuggerPackage
+{
+    /// <summary>
+    /// Strongly typed properties, for use with xaml rules
+    /// </summary>
     [Export]
     internal partial class ProjectProperties : StronglyTypedPropertyAccess
     {

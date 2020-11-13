@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="SDCCVSPackage.f6cd54c2-74fa-40a3-be7d-757263815399" Version="1.8" Language="en-US" Publisher="Jason Matson" />
+        <Identity Id="SDCCVSPackage.f6cd54c2-74fa-40a3-be7d-757263815399" Version="1.9" Language="en-US" Publisher="Jason Matson" />
         <DisplayName>SDCCVSPackage</DisplayName>
         <Description xml:space="preserve">SDCC Project Support for Visual Studio.</Description>
     </Metadata>
@@ -13,6 +13,7 @@
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
         <Dependency Id="Microsoft.VisualStudio.MPF.15.0" DisplayName="Visual Studio MPF 15.0" d:Source="Installed" Version="[15.0]" />
+        <Dependency d:Source="Project" d:ProjectName="EmuliciousDebuggerPackage" Version="[1.0,2.0)" d:InstallSource="Embed" Location="|EmuliciousDebuggerPackage;VSIXContainerProjectOutputGroup|" DisplayName="|EmuliciousDebuggerPackage;VSIXNameProjectOutputGroup|" Id="|EmuliciousDebuggerPackage;VSIXIdentifierProjectOutputGroup|" />
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="SDCCTask" Path="|SDCCTask|" AssemblyName="|SDCCTask;AssemblyName|" d:VsixSubPath="$VCTargets" />

@@ -41,16 +41,10 @@
     <!-- Make sure the following debugger schemas are explicitly included, to allow CPS to search for them
          in the alternative locations. To avoid duplicate schemas, we don't include them
          if they already exist in $(VCTargetsPath)$(LangID)\debugger_*.xml -->
+    <DesktopDebuggerPages Condition="Exists('$(MSBuildThisFileDirectory)\Debuggers\Emulicious\EmuliciousDebugger.xaml')" Include="$(MSBuildThisFileDirectory)\Debuggers\Emulicious\EmuliciousDebugger.xaml" />
 
+    <!-- Include the local debugger to allow developers to use start/start debugging to launch their desired debugger.-->
     <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_local_windows.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_local_windows.xml" />
-    <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_remote_windows.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_remote_windows.xml" />
-    <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_web_browser.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_web_browser.xml" />
-    <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_web_service.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_web_service.xml" />
-
-    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\AppHostDebugger_Local.xml" />
-    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\AppHostDebugger_Simulator.xml" />
-    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\AppHostDebugger_Remote.xml" />
-    <AppHostDebuggerPages Include="$(VCTargetsPath)$(LangID)\WindowsAppEmulatorDebugger.xaml" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false'">
@@ -85,8 +79,7 @@
     </PropertyPageSchema>
 
     <!-- Debuggers -->
-    <DebuggerPages Condition="'$(_ApplicableDebuggers)' == 'Desktop'" Include="@(DesktopDebuggerPages)" />
-    <DebuggerPages Condition="'$(_ApplicableDebuggers)' == 'AppHost'" Include="@(AppHostDebuggerPages)" />
+    <DebuggerPages Include="@(DesktopDebuggerPages)" />
 
     <!-- We always need debuggers general page as soon as we have at least one debugger -->
     <PropertyPageSchema Condition="'@(DebuggerPages)' != ''" Include="$(VCTargetsPath)$(LangID)\debugger_general.xml" />
@@ -539,19 +532,6 @@
           Outputs="$(OutDir)$(ProjectName)$(Extension)">
 
     <MakeDir Directories="$(OutDir)"/>
-
-    <!--
-    <PropertyGroup>
-      <AreaBaseAddress Condition="'%(ClCompile.CodeLocation)' != '' and '%(ClCompile.CodeSeg)' != ''">$(AreaBaseAddress);%(ClCompile.CodeSeg)=%(ClCompile.CodeLocation)</AreaBaseAddress>
-      <AreaBaseAddress Condition="'%(ClCompile.DataLocation)' != '' and '%(ClCompile.DataSeg)' != ''">$(AreaBaseAddress);%(ClCompile.DataSeg)=%(ClCompile.DataLocation)</AreaBaseAddress>
-      <AreaBaseAddress Condition="'%(ClCompile.XRamLocation)' != '' and '%(ClCompile.XRamSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.XRamSegmentName)=%(ClCompile.XRamLocation)</AreaBaseAddress>
-      <AreaBaseAddress Condition="'%(ClCompile.StackLocation)' != '' and '%(ClCompile.StackSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.StackSegmentName)=%(ClCompile.StackLocation)</AreaBaseAddress>
-      <AreaBaseAddress Condition="'%(ClCompile.XStackLocation)' != '' and '%(ClCompile.XStackSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.XStackSegmentName)=%(ClCompile.XStackLocation)</AreaBaseAddress>
-      <AreaBaseAddress Condition="'%(ClCompile.IDataLocation)' != '' and '%(ClCompile.IDataSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.IDataSegmentName)=%(ClCompile.IDataLocation)</AreaBaseAddress>
-      <AreaBaseAddress Condition="'%(ClCompile.BitLocation)' != '' and '%(ClCompile.BitSegmentName)' != ''">$(AreaBaseAddress);%(ClCompile.BitSegmentName)=%(ClCompile.BitLocation)</AreaBaseAddress>
-      <AreaBaseAddress Condition="'$(AdditionalAreaBaseAddress)' == ''">$(AreaBaseAddress);$(AdditionalAreaBaseAddress)</AreaBaseAddress>
-    </PropertyGroup>
-    -->
 
     <Message Condition="'$(BuildFormat)' != 'Library'" Importance="High" Text="Linking Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
     <SDCCLink Condition="'$(BuildFormat)' != 'Library'"

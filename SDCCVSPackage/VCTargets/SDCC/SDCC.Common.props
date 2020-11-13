@@ -211,4 +211,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
 
+  <PropertyGroup>
+    <DebuggerFlavor>EmuliciousDebugger</DebuggerFlavor>
+  </PropertyGroup>
+
 </Project>
