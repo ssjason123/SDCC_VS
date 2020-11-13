@@ -4,6 +4,8 @@ Visual Studio package to add SDCC toolchain support. SDCC is not included in the
 # Notes
 Initial development on the package has been focused on GameBoy support. Future support will extend to other platforms as requested.
 
+**The SDCC_VS package was built for Visual Studio 2017. It allows installation on Visual Studio 2019 but has not been tested.**
+
 # SDCC Configuration
 By default the SDCC_VS plugin looks for SDCC installation using the "SDCC_HOME" environment variable. This can be overrriden per project by going to the project properties and updating the property under "General -> SDCC -> Path to SDCC". The latest version of SDCC can be installed from: http://sdcc.sourceforge.net/
 
