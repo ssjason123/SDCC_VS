@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms.PropertyGridInternal;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ProjectSystem;
@@ -16,6 +19,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Threading;
 using Newtonsoft.Json;
 using Task = System.Threading.Tasks.Task;
+using Thread = System.Threading.Thread;
 
 namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
 {
@@ -46,6 +50,10 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         /// Attach mode flag, true to attach, false to launch.
         /// </summary>
         public static bool EmuliciousAttach = false;
+        /// <summary>
+        /// Path to the mapping file.
+        /// </summary>
+        public static string EmuliciousMappingPath = "";
 
         /// <summary>
         /// Task factory for the main thread synchronization.
@@ -87,7 +95,7 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         public override async Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
         {
             var properties = await this.DebuggerProperties.GetEmuliciousDebuggerPropertiesAsync();
-            string commandValue = await properties.EmuliciousDebuggerExecutable.GetEvaluatedValueAtEndAsync();
+            var commandValue = (await properties.EmuliciousDebuggerExecutable.GetValueAsync()).ToString();
             return !string.IsNullOrEmpty(commandValue) && File.Exists(commandValue);
         }
 
@@ -109,14 +117,26 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
 
             await TaskFactory.SwitchToMainThreadAsync();
 
+            // Collect the source folders to map.
+            var properties = await DebuggerProperties.GetEmuliciousDebuggerPropertiesAsync();
+            var sourcePaths = (IReadOnlyCollection<string>)await properties.EmuliciousSourcePaths.GetValueAsync();
+
             // Get the projects for folder mapping.
             var projectPairs = new Dictionary<string, string>();
-            foreach (Project project in VisualStudio.Solution.Projects)
+
+            if (sourcePaths == null || sourcePaths.Count == 0)
             {
-                var fullName = project.FullName;
-                if (!string.IsNullOrEmpty(fullName))
+                // Bind every project.
+                await RecurseProjectsAsync(VisualStudio.Solution.Projects, projectPairs);
+            }
+            else
+            {
+                var index = 0;
+                foreach (var path in sourcePaths.Distinct())
                 {
-                    projectPairs.Add(project.Name, Path.GetDirectoryName(fullName));
+                    projectPairs.Add(string.Format("SourcePath{0}", index),
+                        Path.GetFullPath(path).TrimEnd('/', '\\'));
+                    ++index;
                 }
             }
 
@@ -127,7 +147,6 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
                 JsonConvert.SerializeObject(projectPairs.ToDictionary(
                     pair => pair.Value, pair => Path.Combine(debugDir, "ProjectDirs", pair.Key)), Formatting.Indented));
 
-            var properties = await DebuggerProperties.GetEmuliciousDebuggerPropertiesAsync();
             var executable = (string) await properties.EmuliciousDebuggerExecutable.GetValueAsync();
             var romName = (string) await properties.EmuliciousLaunchRom.GetValueAsync();
             var attach = (bool) await properties.EmuliciousDebuggerDebuggerAttach.GetValueAsync();
@@ -142,6 +161,21 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
             EmuliciousAttach = attach;
             EmuliciousLaunchDelay = startDelay;
             EmuliciousDebugFolder = debugPath;
+            EmuliciousMappingPath = debugDir;
+
+            /*
+            File.WriteAllLines(Path.Combine(EmuliciousMappingPath, "LaunchProps.log"),
+                new []
+                {
+                    EmuliciousExecutable.ToString(),
+                    EmuliciousPort.ToString(),
+                    EmuliciousAttach.ToString(),
+                    EmuliciousLaunchDelay.ToString(),
+                    EmuliciousDebugFolder.ToString(),
+                    EmuliciousMappingPath.ToString(),
+                    EmuliciousPackage.DebugAdapterPath.ToString()
+                });
+                */
 
             // Generate the launch.json file for emulicious.
             var jsonFile = Path.Combine(debugDir, "launch.json");
@@ -150,10 +184,56 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
                 stopOnEntry, 
                 debuggerPort);
 
+            Task.WaitAll();
+
             // Launch the debug host adapter with our JSON file.
             var launchArgs = "/EngineGuid:{BE99C8E2-969A-450C-8FAB-73BECCC53DF4} " + string.Format("/LaunchJson:\"{0}\"",
                 jsonFile);
             VisualStudio.ExecuteCommand("DebugAdapterHost.Launch", launchArgs);
+        }
+
+        /// <summary>
+        /// Get the collection of projects.
+        /// </summary>
+        /// <param name="projects">The projects to iterate.</param>
+        /// <param name="mappings">The resulting project mappings.</param>
+        protected async Task RecurseProjectsAsync(Projects projects, Dictionary<string, string> mappings)
+        {
+            if (projects != null)
+            {
+                foreach (Project project in projects)
+                {
+                    await ProcessProjectAsync(project, mappings);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Process the projects folder.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="mappings">The mappings.</param>
+        /// <returns>The async tasks.</returns>
+        protected async Task ProcessProjectAsync(Project project, Dictionary<string, string> mappings)
+        {
+            await TaskFactory.SwitchToMainThreadAsync();
+
+            if (project != null)
+            {
+                var fullName = project.FullName;
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    mappings.Add(project.Name, Path.GetDirectoryName(fullName));
+                }
+
+                if (project.Kind == EnvDTE.Constants.vsProjectKindSolutionItems)
+                {
+                    foreach (ProjectItem item in project.ProjectItems)
+                    {
+                        await ProcessProjectAsync((Project)item.Object, mappings);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -184,13 +264,35 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
             var rootFolder = Path.Combine(junctionRoot, "ProjectDirs");
             if (!Directory.Exists(rootFolder))
             {
+                // Clean up the folder and create new links.
                 Directory.CreateDirectory(rootFolder);
+            }
 
-                // Create a junction for each project dir.
-                foreach (var projectDir in projectDirs)
+            // Create a junction for each project dir.
+            foreach (var projectDir in projectDirs)
+            {
+                // Clean up junctions and apply new ones.
+                var junctionName = Path.Combine(rootFolder, projectDir.Key);
+                var fileInfo = new DirectoryInfo(junctionName);
+                if (fileInfo.Exists)
                 {
-                    var junctionName = Path.Combine(rootFolder, projectDir.Key);
-                    CreateSolutionJunction(projectDir.Value, junctionName);
+                    fileInfo.Delete();
+                    fileInfo.Refresh();
+                    while (fileInfo.Exists)
+                    {
+                        Thread.Sleep(100);
+                        fileInfo.Refresh();
+                    }
+                }
+
+                CreateSolutionJunction(projectDir.Value, junctionName);
+
+                // Wait for the junction to become available.
+                fileInfo = new DirectoryInfo(junctionName);
+                while (!fileInfo.Exists)
+                {
+                    Thread.Sleep(100);
+                    fileInfo.Refresh();
                 }
             }
         }

@@ -14,7 +14,7 @@ namespace EmuliciousDebuggerPackage.Debugger
         /// <summary>
         /// The emulicious process id.
         /// </summary>
-        private int processId;
+        private int processId = -1;
         /// <summary>
         /// Flag to stop the process on exit.
         /// </summary>

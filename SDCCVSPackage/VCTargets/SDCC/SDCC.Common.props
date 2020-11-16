@@ -90,7 +90,13 @@
     <GenerateMapFile Condition="'$(GenerateMapFile)' == ''">true</GenerateMapFile>
     <EchoMode Condition="'$(EchoMode)' == ''">NoEcho</EchoMode>
     <WideListMapFormatEnabled Condition="'$(WideListMapFormatEnabled)' == ''">true</WideListMapFormatEnabled>
-    <SDCDBDebugOutput Condition="'$(SDCDBDebugOutput )' == ''">true</SDCDBDebugOutput >
+
+    <!--
+    NOTE: SDAR errors when building with debug. See error:
+    See details at: https://sourceforge.net/p/sdcc/bugs/2970/
+    -->
+    <SDCDBDebugOutput Condition="'$(BuildFormat)' != 'Library' and '$(Configuration)' == 'Debug'">true</SDCDBDebugOutput>
+
 
     <!--
     <ExternalLinker Condition="'$(ExternalLinker)' == ''">$(ExternalLinker)</ExternalLinker>
@@ -208,8 +214,13 @@
     <ClCompile>
       <SDCCPreprocessorDefinitions>$(SDCCPreprocessorDefinitions)</SDCCPreprocessorDefinitions>
       <PreprocessorDefinitions>$(SDCCIntellisenseDefinitions);$(SDCCPreprocessorDefinitions);%(SDCCPreprocessorDefinitions);%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <Debug Condition="'$(BuildFormat)' != 'Library' and '%(ClCompile.Debug)' == '' and '$(Configuration)' == 'Debug'">true</Debug>
     </ClCompile>
   </ItemDefinitionGroup>
+
+  <PropertyGroup>
+    <EmuliciousSourcePaths Condition="'$(EmuliciousSourcePaths)' == ''">$(ProjectDir)</EmuliciousSourcePaths>
+  </PropertyGroup>
 
   <PropertyGroup>
     <DebuggerFlavor>EmuliciousDebugger</DebuggerFlavor>

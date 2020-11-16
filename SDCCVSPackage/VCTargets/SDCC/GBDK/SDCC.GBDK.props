@@ -38,4 +38,11 @@
     </ClCompile>
   </ItemDefinitionGroup>
 
+
+  <ItemDefinitionGroup Condition="'$(GBDKSupported)' == 'true'">
+    <ClCompile>
+      <NoStdCRT>true</NoStdCRT>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
 </Project>

@@ -22,7 +22,8 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)SDCC/SDCC.Common.props" />
   <PropertyGroup Label="UserMacros" />
-$if$ ($emptyproj$ != True)  <ItemGroup>
+  <ItemGroup>
+$if$ ($emptyproj$ != True)
     <ClCompile Include="main.c" />
 $endif$  </ItemGroup>
   <Import Project="$(VCTargetsPath)SDCC/SDCC.Common.targets" />

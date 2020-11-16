@@ -65,10 +65,6 @@
     <Compile Include="SDCCWizard.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AdapterRegistration.pkgdef">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="ItemTemplates\VC\SDCC\1033\SDCC.ASMItem\ASMFile.asm">
       <IncludeInVSIX>true</IncludeInVSIX>
       <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.ASMItem</VSIXSubPath>
@@ -312,6 +308,7 @@
       <Project>{E3320CEA-3AFB-4304-964B-C57FD988B822}</Project>
       <Name>EmuliciousDebuggerPackage</Name>
       <IncludeOutputGroupsInVSIX>VSIXContainerProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\SDCCTask\SDCCTask.csproj">
       <Project>{DE1F931E-2E63-4171-96F8-2AF286353B9A}</Project>

@@ -1,6 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace SDCCVSPackage.Package
 {
@@ -22,6 +24,23 @@ namespace SDCCVSPackage.Package
         public SDCCPackage()
         {
 
+        }
+
+        /// <inheritdoc />
+        protected override void Initialize()
+        {
+            base.Initialize();
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            // Force load the emulicious debugging package.
+            IVsShell shell = GetService(typeof(SVsShell)) as IVsShell;
+            if (shell != null)
+            {
+                IVsPackage package = null;
+                var packageToBeLoadedGuid = new Guid("efed050d-270a-4a5a-a28c-d008bda32b8e");
+                shell.LoadPackage(ref packageToBeLoadedGuid, out package);
+            }
         }
     }
 }

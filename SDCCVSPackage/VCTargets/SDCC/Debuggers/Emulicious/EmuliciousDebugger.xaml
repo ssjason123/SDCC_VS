@@ -55,4 +55,12 @@
                     Subtype="folder"
                     Description="Path to save the debugger communication log file.">
     </StringProperty>
+    <StringListProperty Name="EmuliciousSourcePaths" DisplayName="Source Folder Paths"
+                    Default="$(ProjectDir)"
+                    Subtype="folder"
+                    Description="Paths to expose to emulicious for debugging source files.">
+        <StringListProperty.DataSource>
+            <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+        </StringListProperty.DataSource>
+    </StringListProperty>
 </Rule>

@@ -65,54 +65,29 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         {
             base.Initialize();
 
-            // Attempt to query the registry for info.
             try
-            {
-                AppendLogText("Application Root: " + ApplicationRegistryRoot.Name);
-                var regInfo =
+            { 
+                var regInfo1 =
                     ApplicationRegistryRoot.OpenSubKey(@"AD7Metrics\Engine\{BE99C8E2-969A-450C-8FAB-73BECCC53DF4}");
-
-                if (regInfo != null)
+                if (regInfo1 != null)
                 {
-                    AppendLogText("SubKey: " + regInfo.Name);
-                    DebugAdapterPath = regInfo.GetValue("Adapter").ToString();
+                    DebugAdapterPath = regInfo1.GetValue("Adapter").ToString();
 
-                    AppendLogText("Adapter: " + DebugAdapterPath);
+                    /*
+                    File.AppendAllText(
+                        @"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\PackageLog.log",
+                        "App Reg: " + regInfo1.GetValue("Adapter").ToString() + "\n" + regInfo1.Name);
+                    */
                 }
             }
             catch (Exception err)
             {
-
-                AppendLogText("Applciation Path Exception:\n" + err.ToString());
+                /*
+                File.AppendAllText(
+                    @"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\PackageLog.log",
+                    "App Ex: " + err.ToString());
+                */
             }
-
-            // Attempt to query the registry for info.
-            if (string.IsNullOrEmpty(DebugAdapterPath))
-            {
-                try
-                {
-                    AppendLogText("User Root: " + UserRegistryRoot.Name);
-                    var regInfo =
-                        UserRegistryRoot.OpenSubKey(@"AD7Metrics\Engine\{BE99C8E2-969A-450C-8FAB-73BECCC53DF4}");
-
-                    if (regInfo != null)
-                    {
-                        AppendLogText("SubKey: " + regInfo.Name);
-                        DebugAdapterPath = regInfo.GetValue("Adapter").ToString();
-
-                        AppendLogText("Adapter: " + DebugAdapterPath);
-                    }
-                }
-                catch (Exception err)
-                {
-                    AppendLogText("User Path Exception:\n" + err.ToString());
-                }
-            }
-        }
-
-        private void AppendLogText(string text)
-        {
-            File.AppendAllText(@"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\Package.log", text + "\n");
         }
     }
 }

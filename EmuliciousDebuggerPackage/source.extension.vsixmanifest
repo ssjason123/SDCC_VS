@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="EmuliciousDebuggerPackage.deeec8dd-f6ab-489c-9d56-9a9070fbf128" Version="1.0" Language="en-US" Publisher="Jason Matson" />
+        <Identity Id="EmuliciousDebuggerPackage.deeec8dd-f6ab-489c-9d56-9a9070fbf128" Version="1.1" Language="en-US" Publisher="Jason Matson" />
         <DisplayName>EmuliciousDebuggerPackage</DisplayName>
         <Description xml:space="preserve">Emulicious VSCode Debugger</Description>
     </Metadata>

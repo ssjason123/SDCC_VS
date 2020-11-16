@@ -41,77 +41,99 @@ namespace EmuliciousDebuggerPackage.Debugger
         /// <inheritdoc />
         public ITargetHostProcess LaunchAdapter(IAdapterLaunchInfo launchInfo, ITargetHostInterop targetInterop)
         {
-            ITargetHostProcess runningProcess = null;
-            
-            // Check if an emulicious process is running and reuse it.
-            var processId = 0;
-            var emuliciousProcess =  Process.GetProcesses().Where(process => process.ProcessName.Contains("java") && process.MainWindowTitle == "Emulicious").ToList();
+            ITargetHostProcess resultProcess = null;
 
-            if (emuliciousProcess.Count > 0)
+            try
             {
-                // use the process and capture it in an ITargetHostProcess.
-                runningProcess = new ExistingTargetHostProcess(emuliciousProcess[0]);
-                processId = emuliciousProcess[0].Id;
-            }
+                ITargetHostProcess runningProcess = null;
+                
+                // Check if an emulicious process is running and reuse it.
+                var emuliciousProcess =  Process.GetProcesses().Where(process => process.ProcessName.Contains("java") && process.MainWindowTitle == "Emulicious").ToList();
 
-            // Check if an instance of Emulicious is already running.
-            // If so capture it as the instance to debug.
-            // Otherwise launch a new instance.
-            // If launching an instance. Wait to connect.
-            if (runningProcess == null)
-            {
-                var emuliciousPath = EmuliciousDebuggerLaunchProvider.EmuliciousExecutable;
-
-                // Launch emulicious.
-                var startProcess = targetInterop.ExecuteCommandAsync(emuliciousPath, "");
-
-                // Launch a new process, delay before sending the initialize event.
-                Thread.Sleep(EmuliciousDebuggerLaunchProvider.EmuliciousLaunchDelay);
-
-                // Capture the emulicious process id for destruction if not attaching.
-                emuliciousProcess = Process.GetProcesses().Where(process =>
-                    process.ProcessName.Contains("java") && process.MainWindowTitle == "Emulicious").ToList();
-
+                var processId = -1;
                 if (emuliciousProcess.Count > 0)
                 {
-                    // Update process id for debugger disconnection.
-                    processId = emuliciousProcess[0].Id;
+                    // use the process and capture it in an ITargetHostProcess.
+                    runningProcess = new ExistingTargetHostProcess(emuliciousProcess[0]);
+                    processId = emuliciousProcess.First().Id;
                 }
-            }
 
-            // Get the path to the adapter executable.
-            /*
-            var hive = GetHiveInstance();
-            var adapterPath = @"SOFTWARE\Microsoft\VisualStudio\"
-                       + hive
-                       + @"_Config\AD7Metrics\Engine\{BE99C8E2-969A-450C-8FAB-73BECCC53DF4}";
-                       */
-
-
-
-            // Get the adapter value.
-            //RegistryKey registryKey = Registry.LocalMachine.GetValue(adapterPath) as RegistryKey;
-            /*
-            var adapterInfo = "Invalid no registry key";
-            if (registryKey != null)
-            {
-                adapterInfo = registryKey.GetValue("Adapter").ToString();
-            }
-
-            File.WriteAllLines(@"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\adapter.info",
-                new []
+                // Check if an instance of Emulicious is already running.
+                // If so capture it as the instance to debug.
+                // Otherwise launch a new instance.
+                // If launching an instance. Wait to connect.
+                if (runningProcess == null)
                 {
-                    registryKey == null ? "No registry key found...." : registryKey.ToString(),
-                    adapterInfo,
-                });
-            */
+                    // Launch emulicious.
 
-            return new EmuliciousTargetHostProcessWrapper(targetInterop.ExecuteCommandAsync(
-                    EmuliciousPackage.DebugAdapterPath,
-                    string.Format("{0} \"{1}\"",
-                        EmuliciousDebuggerLaunchProvider.EmuliciousPort,
-                        EmuliciousDebuggerLaunchProvider.EmuliciousDebugFolder)), processId,
-                !EmuliciousDebuggerLaunchProvider.EmuliciousAttach);
+                    var emuliciousExec = EmuliciousDebuggerLaunchProvider.EmuliciousExecutable;
+                    /*
+                    File.WriteAllLines(Path.Combine(EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath, "Properties.log"),
+                        new []
+                        {
+                            emuliciousExec,
+                            EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath,
+                            EmuliciousDebuggerLaunchProvider.EmuliciousDebugFolder,
+                            EmuliciousDebuggerLaunchProvider.EmuliciousAttach.ToString(),
+                            EmuliciousDebuggerLaunchProvider.EmuliciousLaunchDelay.ToString(),
+                            EmuliciousDebuggerLaunchProvider.EmuliciousPort.ToString(),
+                            EmuliciousPackage.DebugAdapterPath
+                        });
+                    */
+
+                    try
+                    {
+                        var process = Process.Start(emuliciousExec);
+                        if (process != null)
+                        {
+                            process.WaitForExit();
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        File.WriteAllLines(Path.Combine(EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath, "LaunchProcess.log"),
+                            new[]
+                            {
+                                emuliciousExec,
+                                err.ToString()
+                            });
+                    }
+
+                    Thread.Sleep(EmuliciousDebuggerLaunchProvider.EmuliciousLaunchDelay);
+
+                    // Capture the emulicious process id for destruction if not attaching.
+                    emuliciousProcess = Process.GetProcesses().Where(process =>
+                        process.ProcessName.Contains("java") && process.MainWindowTitle == "Emulicious").ToList();
+
+                    if (emuliciousProcess.Count > 0)
+                    {
+                        // Update process id for debugger disconnection.
+                        processId = emuliciousProcess.First().Id;
+                    }
+                    else
+                    {
+                        // No process was found, this is a failure.
+                        processId = -1;
+                    }
+                }
+
+                resultProcess = new EmuliciousTargetHostProcessWrapper(targetInterop.ExecuteCommandAsync(
+                        EmuliciousPackage.DebugAdapterPath,
+                        string.Format("{0} \"{1}\" \"{2}\"",
+                            EmuliciousDebuggerLaunchProvider.EmuliciousPort,
+                            EmuliciousDebuggerLaunchProvider.EmuliciousDebugFolder,
+                            EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath)), processId,
+                    !EmuliciousDebuggerLaunchProvider.EmuliciousAttach);
+            }
+            catch (Exception e)
+            {
+                // Capture any exceptions and save them for research.
+                File.WriteAllText(Path.Combine(EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath, "Exception.log"),
+                    e.ToString());
+                throw;
+            }
+
+            return resultProcess;
         }
 
         /// <summary>
@@ -122,18 +144,6 @@ namespace EmuliciousDebuggerPackage.Debugger
         {
             var config = new SetupConfiguration();
             var instance = config.GetInstanceForCurrentProcess();
-
-            File.WriteAllLines(@"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\install.info",
-                new[]
-                {
-                    instance.GetInstallationVersion(),
-                    instance.GetInstanceId(),
-                    instance.GetDescription(),
-                    instance.GetInstallationPath(),
-                    instance.GetDisplayName(),
-                    instance.GetInstallationName()
-                });
-
 
             // Get the first value from the install version.
             var installVersion = instance.GetInstallationVersion();

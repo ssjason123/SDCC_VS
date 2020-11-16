@@ -21,9 +21,11 @@ namespace EmuliciousPassThroughAdapter
             var port = int.Parse(args[0]);
             // Path to write communication logs to.
             var debugPath = args[1].Trim('"');
+            // Mapping file path.
+            var mappingPath = args[2].Trim('"');
 
             // Path to the project mapping file.
-            var projectMapping = Path.Combine(debugPath, "ProjectMapping.json");
+            var projectMapping = Path.Combine(mappingPath, "ProjectMapping.json");
             var mapping = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(projectMapping));
 
             // Start capturing STD In/Out so we dont lose any 
