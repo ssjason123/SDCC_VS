@@ -9,6 +9,9 @@
   <UsingTask TaskName="SDCCLib" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
   <UsingTask TaskName="SDCCMakeBin" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
   <UsingTask TaskName="SDCCVersion" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCResolveLibraries" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCRelEolUpdater" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCLibCdbGenerator" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
 
   <PropertyGroup>
     <DetermineProjectTypeTargets>ResolvePreprocessorDefs</DetermineProjectTypeTargets>
@@ -451,6 +454,9 @@
                 TrackerLogDirectory         ="$(IntDir)$(TLogLocation)"
                 ContinueOnError             ="ErrorAndContinue"
                 />
+
+      <!-- Convert the EOL for lib linking. -->
+      <SDCCRelEolUpdater SourceFile         ="%(ClCompile.OutputFile)"/>
   </Target>
 
   <!-- 
@@ -520,6 +526,9 @@
                TrackerLogDirectory         ="$(IntDir)$(TLogLocation)"
                ContinueOnError             ="ErrorAndContinue"
                />
+
+    <!-- Convert the EOL for lib linking. -->
+    <SDCCRelEolUpdater SourceFile         ="%(AsmCompile.OutputFile)"/>
   </Target>
 
   <!-- 
@@ -527,15 +536,48 @@
   * SDCC Specific Link
   ********************************************************************************
   -->
-  <Target Name="ClLink" DependsOnTargets="PreLinkEvent"
-          Inputs="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
-          Outputs="$(OutDir)$(ProjectName)$(Extension)">
+  <Target Name="ResolveLibraryReferences">
+    <SDCCResolveLibraries 
+        Libraries           ="$(IncludeLibraries)"
+        Directories         ="$(AdditionalLibraryPath)">
+      <Output TaskParameter="FullLibraries" PropertyName="FullLibraryInfo"/>
+    </SDCCResolveLibraries>
+
+    <ItemGroup>
+      <ResolvedLibraries Include="$(FullLibraryInfo)"/>
+    </ItemGroup>
+    <PropertyGroup>
+      <ResolvedLibraries>$(FullLibraryInfo)</ResolvedLibraries>
+    </PropertyGroup>
+  </Target>
+          
+
+  <Target Name="ClLink" DependsOnTargets="PreLinkEvent;ResolveLibraryReferences"
+          Inputs="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(ResolvedLibraries)"
+          Outputs="$(OutDir)$(ProjectName)$(IntBinaryExtension)">
+
+    <PropertyGroup Condition="'$(BuildFormat)' == 'Library'">
+      <LibraryLinkFiles>@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')</LibraryLinkFiles>
+      <LibraryCdbSource>@(ClCompile->'$(IntDir)%(Filename).adb');@(AsmCompile->'$(IntDir)%(Filename).adb')</LibraryCdbSource>
+    </PropertyGroup>
+
+    <!-- Collect debug items -->
+    <ItemGroup Condition="'$(BuildFormat)' != 'Library'">
+      <CdbSourceFiles Include="$(OutDir)$(ProjectName).source.cdb;@(ResolvedLibraries->'%(RootDir)%(Directory)%(Filename).cdb')"/>
+    </ItemGroup>
 
     <MakeDir Directories="$(OutDir)"/>
 
-    <Message Condition="'$(BuildFormat)' != 'Library'" Importance="High" Text="Linking Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
-    <SDCCLink Condition="'$(BuildFormat)' != 'Library'"
+  </Target>
 
+  <Target Name="ClLinkBinary"
+          AfterTargets="ClLink"
+          Condition="'$(BuildFormat)' != 'Library'"
+          Inputs="$(LibraryLinkFiles);@(ResolvedLibraries)"
+          Outputs="$(OutDir)$(ProjectName)$(IntBinaryExtension)">
+
+    <Message Importance="High" Text="Linking Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
+    <SDCCLink 
               Sources                      ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
 
               SourceInput                  ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
@@ -577,8 +619,44 @@
 
               ToolPath                     ="$(SDCCBinPath)"
               />
-    <SDCCMakeBin Condition                  ="'$(BuildFormat)' != 'Library'"
-                 OutputFile                 ="$(OutDir)$(ProjectName)$(Extension)"
+    <Copy Condition="'$(UseCustomCdbGeneration)' == 'true' and '$(SDCDBDebugOutput)' == 'true' and Exists('$(OutDir)$(ProjectName).cdb')" SourceFiles="$(OutDir)$(ProjectName).cdb" DestinationFiles="$(OutDir)$(ProjectName).source.cdb"
+          SkipUnchangedFiles="true"/>
+    <SDCCLibCdbGenerator Condition="'$(UseCustomCdbGeneration)' == 'true' and '$(SDCDBDebugOutput)' == 'true'"
+                         InputFiles="@(CdbSourceFiles)"
+                         OutputFile="$(OutDir)$(ProjectName).cdb"
+                         />
+  </Target>
+
+  <Target Name="ClLinkLibrary"
+          AfterTargets="ClLink"
+          Condition="'$(BuildFormat)' == 'Library'"
+          Inputs="$(LibraryLinkFiles)"
+          Outputs="$(OutDir)$(ProjectName)$(Extension)">
+
+    <Message Importance="High" Text="Building Library From Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
+    <SDCCLib
+             Sources                        ="$(LibraryLinkFiles)"
+             AdditionalOptions              ="$(LibAdditionalOptions)"
+
+             SourceInput                    ="$(LibraryLinkFiles)"
+             OutputFile                     ="$(OutDir)$(ProjectName)$(Extension)"
+
+             ToolPath                       ="$(SDCCBinPath)"
+             />
+    <SDCCLibCdbGenerator Condition="'$(UseCustomCdbGeneration)' == 'true' and '$(SDCDBDebugOutput)' == 'true'"
+                         InputFiles="$(LibraryCdbSource)"
+                         OutputFile="$(OutDir)$(ProjectName).cdb"/>
+  </Target>
+
+  <!-- TODO: Add GBDK specific target to validate the IHX file. -->
+
+  <Target Name="GenerateBinary"
+          AfterTargets="ClLinkBinary"
+          Condition="'$(BuildFormat)' != 'Library'"
+          Inputs="$(OutDir)$(ProjectName)$(IntBinaryExtension)"
+          Outputs="$(OutDir)$(ProjectName)$(Extension)">
+
+    <SDCCMakeBin OutputFile                 ="$(OutDir)$(ProjectName)$(Extension)"
                  Sources                    ="$(OutDir)$(ProjectName)$(IntBinaryExtension)"
                  SourceInput                ="$(OutDir)$(ProjectName)$(IntBinaryExtension)"
 
@@ -595,19 +673,7 @@
                  AdditionalOptions          ="$(MakeBinAdditionalOptions)"
 
                  ToolPath                   ="$(SDCCBinPath)"
-                 />
-
-    <Message Condition="'$(BuildFormat)' == 'Library'" Importance="High" Text="Building Library From Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
-    <SDCCLib Condition="'$(BuildFormat)' == 'Library'"
-
-             Sources                        ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
-             AdditionalOptions              ="$(LibAdditionalOptions)"
-
-             SourceInput                    ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
-             OutputFile                     ="$(OutDir)$(ProjectName)$(Extension)"
-
-             ToolPath                       ="$(SDCCBinPath)"
-             />
+    />
   </Target>
 
 
@@ -635,15 +701,16 @@
     <Delete Files="$(OutDir)$(ProjectName)$(IntBinaryExtension)"/>
     <Delete Files="$(OutDir)$(ProjectName).noi"/>
     <Delete Files="$(OutDir)$(ProjectName).cdb"/>
+    <Delete Files="$(OutDir)$(ProjectName).source.cdb"/>
   </Target>
 
-  <Target Name="Build" DependsOnTargets="ValidateSDCCPath;PreBuildEvent;ClCompile;AsmCompile;ClLink">
+  <Target Name="Build" DependsOnTargets="ValidateSDCCPath;PreBuildEvent;ClCompile;AsmCompile;ClLink;PostBuildEvent">
     <!--
     <VCMessage Code="MSBXXXX" Type="Warning" Arguments="Testing NMakeBuildCommandLine" />
     -->
   </Target>
 
-  <Target Name="Rebuild" DependsOnTargets="CoreClean;Build;PostBuildEvent">
+  <Target Name="Rebuild" DependsOnTargets="CoreClean;Build">
     <!--
     <VCMessage Code="MSBXXXX" Type="Warning" Arguments="Testing NMakeReBuildCommandLine"/>
     -->

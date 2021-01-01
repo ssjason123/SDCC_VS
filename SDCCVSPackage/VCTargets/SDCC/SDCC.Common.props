@@ -94,8 +94,10 @@
     <!--
     NOTE: SDAR errors when building with debug. See error:
     See details at: https://sourceforge.net/p/sdcc/bugs/2970/
+    
+    The new build steps perform an EOL conversion to resolve this for libraries.
     -->
-    <SDCDBDebugOutput Condition="'$(BuildFormat)' != 'Library' and '$(Configuration)' == 'Debug'">true</SDCDBDebugOutput>
+    <SDCDBDebugOutput Condition="'$(Configuration)' == 'Debug'">true</SDCDBDebugOutput>
 
 
     <!--
@@ -193,6 +195,7 @@
     <ConfigurationType>Makefile</ConfigurationType>
     <UseDefaultPropertyPageSchemas>false</UseDefaultPropertyPageSchemas>
     <UseSDCCPropertyPageSchemas>true</UseSDCCPropertyPageSchemas>
+    <UseCustomCdbGeneration>true</UseCustomCdbGeneration>
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)Microsoft.Cpp.Default.props"/>
@@ -214,7 +217,7 @@
     <ClCompile>
       <SDCCPreprocessorDefinitions>$(SDCCPreprocessorDefinitions)</SDCCPreprocessorDefinitions>
       <PreprocessorDefinitions>$(SDCCIntellisenseDefinitions);$(SDCCPreprocessorDefinitions);%(SDCCPreprocessorDefinitions);%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <Debug Condition="'$(BuildFormat)' != 'Library' and '%(ClCompile.Debug)' == '' and '$(Configuration)' == 'Debug'">true</Debug>
+      <Debug Condition="'%(ClCompile.Debug)' == '' and '$(Configuration)' == 'Debug'">true</Debug>
     </ClCompile>
   </ItemDefinitionGroup>
 

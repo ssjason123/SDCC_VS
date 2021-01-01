@@ -72,9 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SDCCAssemble.cs" />
+    <Compile Include="SDCCLibCdbGenerator.cs" />
     <Compile Include="SDCCLink.cs" />
     <Compile Include="SDCCLib.cs" />
     <Compile Include="SDCCMakeBin.cs" />
+    <Compile Include="SDCCRelEolUpdater.cs" />
+    <Compile Include="SDCCResolveLibraries.cs" />
     <Compile Include="SDCCToolBase.cs" />
     <Compile Include="SDCCVersion.cs" />
     <Compile Include="Strings.Designer.cs">
