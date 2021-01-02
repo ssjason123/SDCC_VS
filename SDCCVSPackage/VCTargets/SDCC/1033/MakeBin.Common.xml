@@ -68,7 +68,7 @@ GameBoy format options (applicable only with -Z option):
     Name="GameBoyRomBankCount"
     DisplayName="Rom Bank Count"
     Description="Number of rom banks (default: 2).    (-yo &lt;size&gt;)"
-    Category="Gameboys"
+    Category="Gameboy"
     Switch="yo "
     F1Keyword="VC.Project.SDLDLinkerTool.GameBoyRomBankCount"/>
 <!--

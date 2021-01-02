@@ -307,6 +307,9 @@
         <UseCRT                        Condition="'%(ClCompile.UseCRT)' == ''">$(UseCRT)</UseCRT>
         <ExtendedInstructionSet        Condition="'%(ClCompile.ExtendedInstructionSet)' == ''">$(ExtendedInstructionSet)</ExtendedInstructionSet>
 
+        <CodeBank                     Condition="'%(ClCompile.CodeBank)' == ''">$(CodeBank)</CodeBank>
+        <DataBank                     Condition="'%(ClCompile.DataBank)' == ''">$(DataBank)</DataBank>
+
         <AdditionalOptions             Condition="'%(ClCompile.AdditionalOptions)' == ''">$(AdditionalOptions)</AdditionalOptions>
 
       </ClCompile>
@@ -446,6 +449,9 @@
                 UseAccelerator              ="%(ClCompile.UseAccelerator)"
                 UseCRT                      ="%(ClCompile.UseCRT)"
                 ExtendedInstructionSet      ="%(ClCompile.ExtendedInstructionSet)"
+
+                CodeBank                    ="%(ClCompile.CodeBank)"
+                DataBank                    ="%(ClCompile.DataBank)"
 
                 AdditionalOptions           ="%(ClCompile.AdditionalOptions)"
 
