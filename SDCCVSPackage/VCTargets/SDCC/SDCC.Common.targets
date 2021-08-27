@@ -62,7 +62,7 @@
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.General.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
-    
+
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.Common.xml"/>
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDAS.Common.xml"/>
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDLD.Common.xml">
@@ -104,7 +104,7 @@
   </Target>
 
   <Target Name="ResolvePreprocessorDefs">
-    <SDCCVersion 
+    <SDCCVersion
       Condition="'$(SDCCCompilerDefinitions)' == ''"
       SDCCExecutable="$(SDCCBinPath)sdcc.exe">
       <Output TaskParameter="Version" PropertyName="SDCCVersion"/>
@@ -461,8 +461,8 @@
                 ContinueOnError             ="ErrorAndContinue"
                 />
 
-      <!-- Convert the EOL for lib linking. -->
-      <SDCCRelEolUpdater SourceFile         ="%(ClCompile.OutputFile)"/>
+    <!-- Convert the EOL for lib linking. -->
+    <SDCCRelEolUpdater SourceFile         ="%(ClCompile.OutputFile)"/>
   </Target>
 
   <!-- 
@@ -543,7 +543,7 @@
   ********************************************************************************
   -->
   <Target Name="ResolveLibraryReferences">
-    <SDCCResolveLibraries 
+    <SDCCResolveLibraries
         Libraries           ="$(IncludeLibraries)"
         Directories         ="$(AdditionalLibraryPath)">
       <Output TaskParameter="FullLibraries" PropertyName="FullLibraryInfo"/>
@@ -556,14 +556,17 @@
       <ResolvedLibraries>$(FullLibraryInfo)</ResolvedLibraries>
     </PropertyGroup>
   </Target>
-          
+
 
   <Target Name="ClLink" DependsOnTargets="PreLinkEvent;ResolveLibraryReferences"
           Inputs="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(ResolvedLibraries)"
           Outputs="$(OutDir)$(ProjectName)$(IntBinaryExtension)">
 
-    <PropertyGroup Condition="'$(BuildFormat)' == 'Library'">
+    <PropertyGroup>
       <LibraryLinkFiles>@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')</LibraryLinkFiles>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(BuildFormat)' == 'Library'">
       <LibraryCdbSource>@(ClCompile->'$(IntDir)%(Filename).adb');@(AsmCompile->'$(IntDir)%(Filename).adb')</LibraryCdbSource>
     </PropertyGroup>
 
@@ -583,7 +586,7 @@
           Outputs="$(OutDir)$(ProjectName)$(IntBinaryExtension)">
 
     <Message Importance="High" Text="Linking Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
-    <SDCCLink 
+    <SDCCLink
               Sources                      ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
 
               SourceInput                  ="@(ClCompile->'$(IntDir)%(Filename)$(ObjectExtension)');@(AsmCompile->'$(IntDir)%(Filename)$(ObjectExtension)')"
