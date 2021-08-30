@@ -1,40 +1,34 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Task = System.Threading.Tasks.Task;
 
 namespace SDCCVSPackage.Package
 {
-
-    [PackageRegistration(UseManagedResourcesOnly = false)]
+    [PackageRegistration(UseManagedResourcesOnly = false, AllowsBackgroundLoading = true)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionExistsAndNotBuildingAndNotDebugging, PackageAutoLoadFlags.BackgroundLoad)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public class SDCCPackage : Microsoft.VisualStudio.Shell.Package
+    public class SDCCPackage : AsyncPackage
     {
         /// <summary>
         /// Package guid
         /// </summary>
         public const string PackageGuidString = "95B086A0-DD9C-4AE8-AC45-543F69548856";
 
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public SDCCPackage()
-        {
-
-        }
-
         /// <inheritdoc />
-        protected override void Initialize()
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            await base.InitializeAsync(cancellationToken, progress);
 
-            ThreadHelper.ThrowIfNotOnUIThread();
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             // Force load the emulicious debugging package.
-            IVsShell shell = GetService(typeof(SVsShell)) as IVsShell;
+            var shell = await GetServiceAsync(typeof(SVsShell)) as IVsShell;
             if (shell != null)
             {
                 IVsPackage package = null;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using EmuliciousDebuggerPackage.Debugger.VisualStudio;
 using Microsoft.VisualStudio.Debugger.DebugAdapterHost.Interfaces;
 
 namespace EmuliciousDebuggerPackage.Debugger
@@ -33,6 +34,7 @@ namespace EmuliciousDebuggerPackage.Debugger
             this.processId = processId;
             stopProcessOnClose = stopProcess;
 
+            srcProcess.ErrorDataReceived += OnErrorReceived;
             srcProcess.Exited += OnExited;
         }
 
@@ -45,7 +47,8 @@ namespace EmuliciousDebuggerPackage.Debugger
         /// <inheritdoc />
         public IntPtr Handle
         {
-            get { return srcProcess.Handle; }
+            get { return srcProcess.Handle; 
+            }
         }
 
         /// <inheritdoc />
@@ -80,6 +83,12 @@ namespace EmuliciousDebuggerPackage.Debugger
             remove { srcProcess.ErrorDataReceived -= value; }
         }
 
+        private void OnErrorReceived(object sender, DataReceivedEventArgs args)
+        {
+            File.AppendAllLines(Path.Combine(EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath, "Exception.log"),
+                new[] { " OnErrorReceived:", args.Data});
+        }
+
         /// <summary>
         /// Handle the process exit request.
         /// </summary>
@@ -88,6 +97,7 @@ namespace EmuliciousDebuggerPackage.Debugger
         private void OnExited(object sender, EventArgs args)
         {
             srcProcess.Exited -= OnExited;
+            srcProcess.ErrorDataReceived -= OnErrorReceived;
 
             if (stopProcessOnClose)
             {

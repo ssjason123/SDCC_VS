@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using EmuliciousDebuggerPackage.Debugger.VisualStudio;
-using EnvDTE80;
 using Microsoft.VisualStudio.Debugger.DebugAdapterHost.Interfaces;
-using Microsoft.VisualStudio.Debugger.Interop;
 using Microsoft.VisualStudio.Setup.Configuration;
-using Microsoft.Win32;
-using Newtonsoft.Json;
 using Process = System.Diagnostics.Process;
 
 namespace EmuliciousDebuggerPackage.Debugger
@@ -124,6 +116,11 @@ namespace EmuliciousDebuggerPackage.Debugger
                             EmuliciousDebuggerLaunchProvider.EmuliciousDebugFolder,
                             EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath)), processId,
                     !EmuliciousDebuggerLaunchProvider.EmuliciousAttach);
+
+#if __ADAPTER_LOG__
+                File.AppendAllLines(Path.Combine(EmuliciousDebuggerLaunchProvider.EmuliciousMappingPath, "AdapterLog.log"),
+                    new []{ "Process result: " + resultProcess + " Proc id: " + processId});
+#endif
             }
             catch (Exception e)
             {
@@ -149,6 +146,6 @@ namespace EmuliciousDebuggerPackage.Debugger
             var installVersion = instance.GetInstallationVersion();
             return string.Format("{0}.0_{1}", installVersion.Substring(0, installVersion.IndexOf('.')), instance.GetInstanceId());
         }
-        #endregion
+#endregion
     }
 }

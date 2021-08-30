@@ -186,6 +186,9 @@ namespace EmuliciousPassThroughAdapter
                 var message = Encoding.UTF8.GetString(inputBuffer.Take(readSize.Value).ToArray());
                 JToken jsonParse = JsonConvert.DeserializeObject(message) as JToken;
 
+                // TODO: Remove this, fixes emulicious breakpoints in setBreakpointResponse.
+                ResolveSetBreakpoints(jsonParse);
+
                 ProcessJsonFilePaths(jsonParse);
 
                 // Send the message.
@@ -291,5 +294,66 @@ namespace EmuliciousPassThroughAdapter
                 }
             }
         }
+
+        #region setBreakpointsRequest/Response fix.
+
+        private static object dictLock = new object();
+        private static Dictionary<int, JToken> breakpointDictionary = new Dictionary<int, JToken>();
+
+        private void ResolveSetBreakpoints(JToken currentNode)
+        {
+            if (currentNode != null)
+            {
+                var command = currentNode.SelectToken("$.command")?.Value<string>();
+                if (command == "setBreakpoints")
+                {
+                    var type = currentNode.SelectToken("$.type")?.Value<string>();
+                    if (type == "request")
+                    {
+                        // Request
+                        var sequence = currentNode.SelectToken("$.seq").Value<int>();
+
+                        lock (dictLock)
+                        {
+                            breakpointDictionary[sequence] = currentNode;
+                        }
+                    }
+                    else
+                    {
+                        // Response
+                        var request_seq = currentNode.SelectToken("$.request_seq").Value<int>();
+
+                        JToken requestEvent;
+                        if (breakpointDictionary.TryGetValue(request_seq, out requestEvent))
+                        {
+                            // Overwrite the body.breakpoints with arguments.breakpoints.
+                            var requestBreakpoints = requestEvent.SelectToken("$.arguments.breakpoints");
+                            var respBreakpoints = currentNode.SelectToken("$.body.breakpoints");
+                            if (requestBreakpoints != null && respBreakpoints != null)
+                            {
+                                var reqParent = requestBreakpoints as JContainer;
+                                var respParent = respBreakpoints as JContainer;
+
+                                if (reqParent != null && respParent != null)
+                                {
+                                    respParent.Merge(reqParent,
+                                        new JsonMergeSettings()
+                                        {
+                                            MergeArrayHandling = MergeArrayHandling.Merge
+                                        });
+                                }
+                            }
+                        }
+
+                        lock (dictLock)
+                        {
+                            breakpointDictionary.Remove(request_seq);
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }

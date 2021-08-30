@@ -3,15 +3,15 @@
   <UsingTask TaskName="VCMessage" AssemblyFile="$(VCTargetsPath)Microsoft.Build.CppTasks.Common.dll" />
   <UsingTask TaskName="CustomBuild" AssemblyFile="$(VCTargetsPath)Microsoft.Build.CppTasks.Common.dll"/>
 
-  <UsingTask TaskName="SDCCCompile" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCAssemble" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCLink" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCLib" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCMakeBin" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCVersion" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCResolveLibraries" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCRelEolUpdater" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
-  <UsingTask TaskName="SDCCLibCdbGenerator" AssemblyFile="$(MsBuildThisFileDirectory)../SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCCompile" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCAssemble" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCLink" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCLib" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCMakeBin" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCVersion" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCResolveLibraries" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCRelEolUpdater" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
+  <UsingTask TaskName="SDCCLibCdbGenerator" AssemblyFile="$(MsBuildThisFileDirectory)SDCCTask.dll"/>
 
   <PropertyGroup>
     <DetermineProjectTypeTargets>ResolvePreprocessorDefs</DetermineProjectTypeTargets>

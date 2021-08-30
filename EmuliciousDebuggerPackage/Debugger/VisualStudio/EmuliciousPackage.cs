@@ -1,18 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.ProjectSystem;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
 
 namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
@@ -34,13 +26,12 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
     /// To get loaded into VS, the package must be referred by &lt;Asset Type="Microsoft.VisualStudio.VsPackage" ...&gt; in .vsixmanifest file.
     /// </para>
     /// </remarks>
-    // [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [PackageRegistration(UseManagedResourcesOnly = false)]
+    [PackageRegistration(UseManagedResourcesOnly = false, AllowsBackgroundLoading = true)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(EmuliciousPackage.PackageGuidString)]
-    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class EmuliciousPackage : Package
+    public sealed class EmuliciousPackage : AsyncPackage
     {
         public static string DebugAdapterPath { get; set; }
 
@@ -49,24 +40,15 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         /// </summary>
         public const string PackageGuidString = "efed050d-270a-4a5a-a28c-d008bda32b8e";
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EmuliciousPackage"/> class.
-        /// </summary>
-        public EmuliciousPackage()
-        {
-            // Inside this method you can place any initialization code that does not require
-            // any Visual Studio service because at this point the package object is created but
-            // not sited yet inside Visual Studio environment. The place to do all the other
-            // initialization is the Initialize method.
-        }
-
         /// <inheritdoc />
-        protected override void Initialize()
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            await base.InitializeAsync(cancellationToken, progress);
+
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             try
-            { 
+            {
                 var regInfo1 =
                     ApplicationRegistryRoot.OpenSubKey(@"AD7Metrics\Engine\{BE99C8E2-969A-450C-8FAB-73BECCC53DF4}");
                 if (regInfo1 != null)
@@ -74,18 +56,18 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
                     DebugAdapterPath = regInfo1.GetValue("Adapter").ToString();
 
                     /*
+                    */
                     File.AppendAllText(
                         @"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\PackageLog.log",
-                        "App Reg: " + regInfo1.GetValue("Adapter").ToString() + "\n" + regInfo1.Name);
-                    */
+                        "App Reg: " + DebugAdapterPath + "\n" + regInfo1.Name);
                 }
             }
             catch (Exception err)
             {
-                /*
                 File.AppendAllText(
                     @"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\PackageLog.log",
                     "App Ex: " + err.ToString());
+                /*
                 */
             }
         }
