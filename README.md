@@ -5,11 +5,14 @@ Visual Studio package to add SDCC toolchain support. SDCC is not included in the
 # Version 2.0
 This version breaks compatibility with past versions of the plugin. To repair the issue you will need to update the SDCC paths to use MSBuild paths:
 * Original
-**   <Import Project="$(VCTargetsPath)SDCC/SDCC.Common.props" />
-**   <Import Project="$(VCTargetsPath)SDCC/SDCC.Common.targets" />
+
+  * ```<Import Project="$(VCTargetsPath)SDCC/SDCC.Common.props" />```
+
+  * ```<Import Project="$(VCTargetsPath)SDCC/SDCC.Common.targets" />```
+
 * Updated
-**   <Import Project="$(MSBuildExtensionsPath)\SDCC\SDCC.Common.props" />
-**   <Import Project="$(MSBuildExtensionsPath)\SDCC\SDCC.Common.targets" />
+  * ```<Import Project="$(MSBuildExtensionsPath)\SDCC\SDCC.Common.props" />```
+  * ```<Import Project="$(MSBuildExtensionsPath)\SDCC\SDCC.Common.targets" />```
 
 # Version 1.0
 Initial development on the package has been focused on GameBoy support. Future support will extend to other platforms as requested.
