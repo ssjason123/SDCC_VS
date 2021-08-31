@@ -13,7 +13,7 @@ namespace EmuliciousPassThroughAdapter
             bool loop = true;
             while (loop)
             {
-                Thread.Sleep(1);
+                Thread.Sleep(1);De
             }
 #endif
 

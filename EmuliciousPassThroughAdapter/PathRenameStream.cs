@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.Shared.VSCodeDebugProtocol.Messages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -297,9 +296,22 @@ namespace EmuliciousPassThroughAdapter
 
         #region setBreakpointsRequest/Response fix.
 
+        /// <summary>
+        /// Create a variable to manage locking around the breakpointDictionary.
+        /// </summary>
         private static object dictLock = new object();
+
+        /// <summary>
+        /// Dictionary of breakpoints for 'line' remapping.
+        /// </summary>
         private static Dictionary<int, JToken> breakpointDictionary = new Dictionary<int, JToken>();
 
+        /// <summary>
+        /// Capture line info from the requests and fill in response line info.
+        /// </summary>
+        /// <param name="currentNode">
+        /// The json to resolve breakpoints for.
+        /// </param>
         private void ResolveSetBreakpoints(JToken currentNode)
         {
             if (currentNode != null)

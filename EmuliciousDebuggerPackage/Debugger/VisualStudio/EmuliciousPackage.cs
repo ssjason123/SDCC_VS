@@ -56,18 +56,18 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
                     DebugAdapterPath = regInfo1.GetValue("Adapter").ToString();
 
                     /*
-                    */
                     File.AppendAllText(
                         @"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\PackageLog.log",
                         "App Reg: " + DebugAdapterPath + "\n" + regInfo1.Name);
+                    */
                 }
             }
             catch (Exception err)
             {
+                /*
                 File.AppendAllText(
                     @"C:\Development\Development\Projects\GBDKProjects\GBDKEngine\Debug\PackageLog.log",
                     "App Ex: " + err.ToString());
-                /*
                 */
             }
         }
