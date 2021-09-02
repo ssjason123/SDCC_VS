@@ -63,9 +63,18 @@
       <Visible>true</Visible>
     </XamlPropertyRule>
   </ItemGroup>
+  <!--
   <Target Name="IncludeNuGetPackageReferences" AfterTargets="GetVsixSourceItems">
     <ItemGroup>
       <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Newtonsoft.Json'" />
+    </ItemGroup>
+  </Target>
+  -->
+
+  <Target Name="IncludeNuGetPackageReferences" AfterTargets="GetVsixSourceItems">
+    <ItemGroup>
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.NuGetPackageId)' == 'Newtonsoft.Json'" />
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.NuGetPackageId)').StartsWith('Microsoft.VisualStudio'))" />
     </ItemGroup>
   </Target>
 </Project>
