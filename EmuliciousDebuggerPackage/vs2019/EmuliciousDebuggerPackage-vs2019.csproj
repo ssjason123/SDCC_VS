@@ -7,6 +7,8 @@
     </NuGetPackageImportStamp>
     <UseCodebase>true</UseCodebase>
     <TargetFrameworkProfile />
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -54,13 +56,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="../EmuliciousDebuggerPackage.proj" />
   <ItemGroup>
+    <PackageReference Include="envdte">
+      <Version>8.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="envdte80">
+      <Version>8.0.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Debugger.DebugAdapterHost.Interfaces">
       <Version>16.6.40406.1</Version>
     </PackageReference>
@@ -71,10 +78,10 @@
       <Version>16.2.133-pre</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0">
-      <Version>16.10.31321.278</Version>
+      <Version>16.0.28729</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
+      <Version>12.0.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
