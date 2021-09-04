@@ -50,30 +50,37 @@
     <DesktopDebuggerPages Condition="!Exists('$(VCTargetsPath)$(LangID)\debugger_local_windows.xml')" Include="$(VCTargetsPath)$(LangID)\debugger_local_windows.xml" />
   </ItemGroup>
 
+  <!-- Language ID Selection-->
+  <PropertyGroup>
+    <GBDKLangID Condition="exists('$(MSBuildThisFileDirectory)$(LangID)')">$(LangID)</GBDKLangID>
+    <GBDKLangID Condition="'$(GBDKLangID)' == ''">1033</GBDKLangID>
+  </PropertyGroup>
+
+
   <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false'">
     <PropertyPageSchema Include="
-        $(MSBuildThisFileDirectory)$(LangID)/ProjectItemsSchema.xml;
+        $(MSBuildThisFileDirectory)$(GBDKLangID)/ProjectItemsSchema.xml;
         $(VCTargetsPath)$(LangID)\build_events.xml;
         $(VCTargetsPath)$(LangID)\custom_build_tool.xml;
         $(VCTargetsPath)$(LangID)\custom_build_step.xml;
         "/>
 
     <!-- Import the tool specific property sheet data. -->
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.General.xml">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(GBDKLangID)/SDCC.General.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
 
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.Common.xml"/>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDAS.Common.xml"/>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/SDLD.Common.xml">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(GBDKLangID)/SDCC.Common.xml"/>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(GBDKLangID)/SDAS.Common.xml"/>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(GBDKLangID)/SDLD.Common.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(LangID)/MakeBin.Common.xml">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(GBDKLangID)/MakeBin.Common.xml">
       <Context>Project</Context>
     </PropertyPageSchema>
 
     <!-- Import the Port specific Property sheet data. -->
-    <PropertyPageSchema Condition="'$(PortType)' == 'gbz80'" Include="$(MSBuildThisFileDirectory)$(LangID)/SDCC.gbz80.xml">
+    <PropertyPageSchema Condition="'$(PortType)' == 'gbz80'" Include="$(MSBuildThisFileDirectory)$(GBDKLangID)/SDCC.gbz80.xml">
       <Context>PropertySheet;Project;File</Context>
     </PropertyPageSchema>
 
