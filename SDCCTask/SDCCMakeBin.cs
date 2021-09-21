@@ -130,26 +130,25 @@ namespace SDCCTask
 
         #region GameBoy Options
 
-        public int GameBoyRomBankCount
+        public string GameBoyRomBankCount
         {
             get
             {
                 if (this.IsPropertySet(nameof(GameBoyRomBankCount)))
-                    return this.ActiveToolSwitches[nameof(GameBoyRomBankCount)].Number;
-                return 0;
+                    return this.ActiveToolSwitches[nameof(GameBoyRomBankCount)].Value;
+                return "";
             }
             set
             {
                 this.ActiveToolSwitches.Remove(nameof(GameBoyRomBankCount));
-                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.Integer);
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.String);
                 switchToAdd.DisplayName = "Number of Rom Banks";
-                switchToAdd.Description = "number of rom banks (default: 2)";
+                switchToAdd.Description = "number of rom banks (default: 2) (autosize: A)";
                 //switchToAdd.Parents.AddLast("");
                 switchToAdd.ArgumentRelationList = new ArrayList();
-                switchToAdd.IsValid = this.ValidateInteger(nameof(GameBoyRomBankCount), int.MinValue, int.MaxValue, value);
                 switchToAdd.SwitchValue = "-yo ";
                 switchToAdd.Name = nameof(GameBoyRomBankCount);
-                switchToAdd.Number = value;
+                switchToAdd.Value = value;
                 this.ActiveToolSwitches.Add(nameof(GameBoyRomBankCount), switchToAdd);
                 this.AddActiveSwitchToolValue(switchToAdd);
             }
@@ -191,7 +190,7 @@ namespace SDCCTask
                 this.ActiveToolSwitches.Remove(nameof(GameBoyMemoryBankController));
                 ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.Integer);
                 switchToAdd.DisplayName = "Memory Bank Controller";
-                switchToAdd.Description = "MMemory Bank Controller type (default: no MBC)";
+                switchToAdd.Description = "Memory Bank Controller type (default: no MBC)";
                 //switchToAdd.Parents.AddLast("");
                 switchToAdd.ArgumentRelationList = new ArrayList();
                 switchToAdd.IsValid = this.ValidateInteger(nameof(GameBoyMemoryBankController), int.MinValue, int.MaxValue, value);
@@ -199,6 +198,53 @@ namespace SDCCTask
                 switchToAdd.Name = nameof(GameBoyMemoryBankController);
                 switchToAdd.Number = value;
                 this.ActiveToolSwitches.Add(nameof(GameBoyMemoryBankController), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+
+        public string OldLicenseeCode
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(OldLicenseeCode)))
+                    return this.ActiveToolSwitches[nameof(OldLicenseeCode)].Value;
+                return "";
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(OldLicenseeCode));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.String);
+                switchToAdd.DisplayName = "Old Licensee Code";
+                switchToAdd.Description = "Old licensee code (default: 0x33)";
+                //switchToAdd.Parents.AddLast("");
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "-yl ";
+                switchToAdd.Name = nameof(OldLicenseeCode);
+                switchToAdd.Value = value;
+                this.ActiveToolSwitches.Add(nameof(OldLicenseeCode), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+        public string NewLicenseeString
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(NewLicenseeString)))
+                    return this.ActiveToolSwitches[nameof(NewLicenseeString)].Value;
+                return "";
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(NewLicenseeString));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.String);
+                switchToAdd.DisplayName = "New Licensee String";
+                switchToAdd.Description = "new licensee string (default: 00)";
+                //switchToAdd.Parents.AddLast("");
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "-yk ";
+                switchToAdd.Name = nameof(NewLicenseeString);
+                switchToAdd.Value = value;
+                this.ActiveToolSwitches.Add(nameof(NewLicenseeString), switchToAdd);
                 this.AddActiveSwitchToolValue(switchToAdd);
             }
         }
@@ -237,8 +283,8 @@ namespace SDCCTask
             {
                 this.ActiveToolSwitches.Remove(nameof(GameBoyColor));
                 ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.Boolean);
-                switchToAdd.DisplayName = "Gameboy Color";
-                switchToAdd.Description = "Flag to indicate if the binary is built for Gameboy Color";
+                switchToAdd.DisplayName = "Gameboy Color compatible";
+                switchToAdd.Description = "Flag to indicate if the binary is compatible with Gameboy Color";
                 switchToAdd.ArgumentRelationList = new ArrayList();
                 switchToAdd.SwitchValue = "-yc";
                 switchToAdd.Name = nameof(GameBoyColor);
@@ -247,6 +293,121 @@ namespace SDCCTask
                 this.AddActiveSwitchToolValue(switchToAdd);
             }
         }
+
+
+        public bool GameBoyColorOnly
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(GameBoyColorOnly)))
+                    return this.ActiveToolSwitches[nameof(GameBoyColorOnly)].BooleanValue;
+                return false;
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(GameBoyColorOnly));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.Boolean);
+                switchToAdd.DisplayName = "Gameboy Color only";
+                switchToAdd.Description = "Flag to indicate if the binary only supports Gameboy Color";
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "-yC";
+                switchToAdd.Name = nameof(GameBoyColor);
+                switchToAdd.BooleanValue = value;
+                this.ActiveToolSwitches.Add(nameof(GameBoyColor), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+        public bool SuperGameBoy
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(SuperGameBoy)))
+                    return this.ActiveToolSwitches[nameof(SuperGameBoy)].BooleanValue;
+                return false;
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(SuperGameBoy));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.Boolean);
+                switchToAdd.DisplayName = "Super GameBoy";
+                switchToAdd.Description = "Flag to indicate if the binary  supports Super GameBoy.";
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "-ys";
+                switchToAdd.Name = nameof(SuperGameBoy);
+                switchToAdd.BooleanValue = value;
+                this.ActiveToolSwitches.Add(nameof(SuperGameBoy), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+        public bool NoiToSym
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(NoiToSym)))
+                    return this.ActiveToolSwitches[nameof(NoiToSym)].BooleanValue;
+                return false;
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(NoiToSym));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.Boolean);
+                switchToAdd.DisplayName = ".Noi to .Sym";
+                switchToAdd.Description = "Convert .noi file named like input file to .sym.";
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "-yS";
+                switchToAdd.Name = nameof(NoiToSym);
+                switchToAdd.BooleanValue = value;
+                this.ActiveToolSwitches.Add(nameof(NoiToSym), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+        public bool NonJapaneseRegion
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(NonJapaneseRegion)))
+                    return this.ActiveToolSwitches[nameof(NonJapaneseRegion)].BooleanValue;
+                return false;
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(NonJapaneseRegion));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.Boolean);
+                switchToAdd.DisplayName = "Non-Japanese Region";
+                switchToAdd.Description = "Set non-Japanese region flag.";
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "-yj";
+                switchToAdd.Name = nameof(NonJapaneseRegion);
+                switchToAdd.BooleanValue = value;
+                this.ActiveToolSwitches.Add(nameof(NonJapaneseRegion), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+
+        public string[] SetAddrInRom
+        {
+            get
+            {
+                if (this.IsPropertySet(nameof(SetAddrInRom)))
+                    return this.ActiveToolSwitches[nameof(SetAddrInRom)].StringList;
+                return new string []{};
+            }
+            set
+            {
+                this.ActiveToolSwitches.Remove(nameof(SetAddrInRom));
+                ToolSwitch switchToAdd = new ToolSwitch(ToolSwitchType.StringArray);
+                switchToAdd.DisplayName = "Set Address to Value";
+                switchToAdd.Description = "Set address in ROM to given value (address 0x100-0x1FE) (addr=value)";
+                switchToAdd.ArgumentRelationList = new ArrayList();
+                switchToAdd.SwitchValue = "-yp ";
+                switchToAdd.Name = nameof(SetAddrInRom);
+                switchToAdd.StringList = value;
+                this.ActiveToolSwitches.Add(nameof(SetAddrInRom), switchToAdd);
+                this.AddActiveSwitchToolValue(switchToAdd);
+            }
+        }
+
+
 
         #endregion
 
@@ -260,8 +421,15 @@ namespace SDCCTask
             SwitchList.Add(nameof(GameBoyRomBankCount));
             SwitchList.Add(nameof(GameBoyRamBankCount));
             SwitchList.Add(nameof(GameBoyMemoryBankController));
+            SwitchList.Add(nameof(OldLicenseeCode));
+            SwitchList.Add(nameof(NewLicenseeString));
             SwitchList.Add(nameof(GameBoyCartridgeName));
             SwitchList.Add(nameof(GameBoyColor));
+            SwitchList.Add(nameof(GameBoyColorOnly));
+            SwitchList.Add(nameof(SuperGameBoy));
+            SwitchList.Add(nameof(NoiToSym));
+            SwitchList.Add(nameof(NonJapaneseRegion));
+            SwitchList.Add(nameof(SetAddrInRom));
 
             SwitchList.Add(nameof(SourceInput));
             SwitchList.Add(nameof(OutputFile));

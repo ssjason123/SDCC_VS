@@ -67,10 +67,10 @@ GameBoy format options (applicable only with -Z option):
   <StringProperty
     Name="GameBoyRomBankCount"
     DisplayName="Rom Bank Count"
-    Description="Number of rom banks (default: 2).    (-yo &lt;size&gt;)"
+    Description="Number of rom banks (default: 2) (autosize: A).    (-yo &lt;size&gt;)"
     Category="Gameboy"
     Switch="yo "
-    F1Keyword="VC.Project.SDLDLinkerTool.GameBoyRomBankCount"/>
+    F1Keyword="VC.Project.Makebin.GameBoyRomBankCount"/>
 <!--
   -ya n          number of ram banks (default: 0)
 -->
@@ -80,18 +80,38 @@ GameBoy format options (applicable only with -Z option):
     Description="Number of ram banks (default: 0).    (-ya &lt;size&gt;)"
     Category="Gameboy"
     Switch="ya "
-    F1Keyword="VC.Project.SDLDLinkerTool.GameBoyRomBankCount"/>
+    F1Keyword="VC.Project.Makebin.GameBoyRomBankCount"/>
+<!--
+   -yl n          old licensee code (default: 0x33)
+-->
+  <StringProperty
+    Name="OldLicenseeCode"
+    DisplayName="Old Licensee Code"
+    Description="Old licensee code (default: 0x33).    (-yl &lt;code&gt;)"
+    Category="Gameboy"
+    Switch="yl "
+    F1Keyword="VC.Project.Makebin.OldLicenseeCode"/>
+<!--
+   -yk cc         new licensee string (default: 00)
+-->
+<StringProperty
+  Name="NewLicenseeString"
+  DisplayName="New Licensee string"
+  Description="New licensee string (default: 00).    (-yl &lt;code&gt;)"
+  Category="Gameboy"
+  Switch="yk "
+  F1Keyword="VC.Project.Makebin.NewLicenseeString"/>
 <!--
   -yt n          MBC type (default: no MBC)
 -->
-  <StringProperty
-    Name="GameBoyMemoryBankController"
-    DisplayName="Memory Bank Controller Type"
-    Description="MBC type (default: no MBC).    (-yt &lt;type&gt;)"
-    Category="Gameboy"
-    Switch="ya "
-    F1Keyword="VC.Project.SDLDLinkerTool.GameBoyRomBankCount"/>
-      <!--
+<StringProperty
+  Name="GameBoyMemoryBankController"
+  DisplayName="Memory Bank Controller Type"
+  Description="MBC type (default: no MBC).    (-yt &lt;type&gt;)"
+  Category="Gameboy"
+  Switch="ya "
+  F1Keyword="VC.Project.Makebin.GameBoyRomBankCount"/>
+<!--
   -yn name       cartridge name (default: none)
 -->
   <StringProperty
@@ -100,16 +120,66 @@ GameBoy format options (applicable only with -Z option):
     Description="cartridge name (default: none).    (-yn &lt;name&gt;)"
     Category="Gameboy"
     Switch="yn "
-    F1Keyword="VC.Project.SDLDLinkerTool.GlobalSymbols"/>
+    F1Keyword="VC.Project.Makebin.GlobalSymbols"/>
 <!--
-  -yc            GameBoy Color
+  -yc            GameBoy Color Compatible
   -->
   <BoolProperty
     Name="GameBoyColor"
-    DisplayName="GameBoy Color"
-    Description="Generate a gameboy color binary.     (-ycs)"
+    DisplayName="GameBoy Color Compatible"
+    Description="Generate a gameboy color compatible binary.     (-yc)"
     Category="Gameboy"
     Switch="yc"
     F1Keyword="VC.Project.Makebin.GameBoyColor"/>
+<!--
+  -yC            GameBoy Color only
+  -->
+<BoolProperty
+  Name="GameBoyColorOnly"
+  DisplayName="GameBoy Color Only"
+  Description="Generate a gameboy color only binary.     (-yC)"
+  Category="Gameboy"
+  Switch="yC"
+  F1Keyword="VC.Project.Makebin.GameBoyColorOnly"/>
+<!--
+  -ys            Super GameBoy
+  -->
+<BoolProperty
+  Name="SuperGameBoy"
+  DisplayName="Super GameBoy"
+  Description="Support Super GameBoy.     (-ys)"
+  Category="Gameboy"
+  Switch="ys"
+  F1Keyword="VC.Project.Makebin.SuperGameBoy"/>
+<!--
+  -yS            Convert .noi file named like input file to .sym.
+  -->
+<BoolProperty
+  Name="NoiToSym"
+  DisplayName=".Noi To .Sym"
+  Description="Convert .noi file named like input file to .sym.     (-yS)"
+  Category="Gameboy"
+  Switch="yS"
+  F1Keyword="VC.Project.Makebin.NoiToSym"/>
+<!--
+  -yj            set non-Japanese region flag.
+  -->
+<BoolProperty
+  Name="NonJapaneseRegion"
+  DisplayName="Non-Japanese Region"
+  Description="Set non-Japanese region flag     (-yS)"
+  Category="Gameboy"
+  Switch="yj"
+  F1Keyword="VC.Project.Makebin.NonJapaneseRegion"/>
+<!--
+  -yj            set non-Japanese region flag.
+  -->
+<BoolProperty
+  Name="SetAddrInRom"
+  DisplayName="Set Address In ROM"
+  Description="Set address in ROM to given value (address 0x100-0x1FE).     (-yp addr=value)"
+  Category="Gameboy"
+  Switch="yp "
+  F1Keyword="VC.Project.Makebin.SetAddrInRom"/>
 
 </Rule>

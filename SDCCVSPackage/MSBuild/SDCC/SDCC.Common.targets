@@ -682,9 +682,16 @@
 
                  GameBoyRomBankCount        ="$(GameBoyRomBankCount)"
                  GameBoyRamBankCount        ="$(GameBoyRamBankCount)"
+                 OldLicenseeCode            ="$(OldLicenseeCode)"
+                 NewLicenseeString          ="$(NewLicenseeString)"
                  GameBoyMemoryBankController="$(GameBoyMemoryBankController)"
                  GameBoyCartridgeName       ="$(GameBoyCartridgeName)"
                  GameBoyColor               ="$(GameBoyColor)"
+                 GameBoyColorOnly           ="$(GameBoyColorOnly)"
+                 SuperGameBoy               ="$(SuperGameBoy)"
+                 NoiToSym                   ="$(NoiToSym)"
+                 NonJapaneseRegion          ="$(NonJapaneseRegion)"
+                 SetAddrInRom               ="$(SetAddrInRom)"
 
                  AdditionalOptions          ="$(MakeBinAdditionalOptions)"
 
