@@ -6,18 +6,39 @@ using Task = Microsoft.Build.Utilities.Task;
 
 namespace SDCCTask
 {
+    /// <summary>
+    ///     SDCC Version command.
+    /// </summary>
     public class SDCCVersion : Task
     {
+        /// <summary>
+        ///     The SDCC executable location.
+        /// </summary>
         public string SDCCExecutable { get; set; }
 
+        /// <summary>
+        ///     The major version.
+        /// </summary>
         [Output]
         public uint MajorVersion { get; set; }
+        /// <summary>
+        ///     The minor version.
+        /// </summary>
         [Output]
         public uint MinorVersion { get; set; }
+        /// <summary>
+        ///     The patch version.
+        /// </summary>
         [Output]
         public uint PatchVersion { get; set; }
+        /// <summary>
+        ///     The full combined version string.
+        /// </summary>
         [Output]
         public string Version { get; set; }
+        /// <summary>
+        ///     The build revision.
+        /// </summary>
         [Output]
         public uint Revision { get; set; }
 

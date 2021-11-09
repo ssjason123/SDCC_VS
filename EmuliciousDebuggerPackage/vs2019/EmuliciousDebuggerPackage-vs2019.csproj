@@ -7,6 +7,8 @@
     </NuGetPackageImportStamp>
     <UseCodebase>true</UseCodebase>
     <TargetFrameworkProfile />
+    <!--
+    -->
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -80,14 +82,17 @@
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0">
       <Version>16.0.28729</Version>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.2</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\EmuliciousPassThroughAdapter\EmuliciousPassThroughAdapter.csproj">
       <Project>{81b53fb4-e6dd-4658-9a7d-25a3f1dc6a52}</Project>
       <Name>EmuliciousPassThroughAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EmuliciousShared\EmuliciousShared.csproj">
+      <Project>{f47f88b7-2cc7-42d5-b2a6-4fb1cf66264e}</Project>
+      <Name>EmuliciousShared</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

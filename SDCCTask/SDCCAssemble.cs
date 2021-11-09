@@ -1,13 +1,18 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.Build.CPPTasks;
 
 namespace SDCCTask
 {
+    /// <summary>
+    ///     The SDCC Assembler tool.
+    /// </summary>
     public class SDCCAssemble : SDCCToolBase
     {
+        /// <summary>
+        ///     Mapping of assembler to executable names.
+        /// </summary>
         public static readonly Dictionary<string, string> AssemblerFile = new Dictionary<string, string>
         {
             {"avr", "asavr.exe"},
@@ -460,6 +465,9 @@ namespace SDCCTask
 
         #endregion
 
+        /// <summary>
+        ///     Name of an external assembler to use.
+        /// </summary>
         public string ExternalAssembler
         {
             get
@@ -483,6 +491,9 @@ namespace SDCCTask
             }
         }
 
+        /// <summary>
+        ///     The assembler port.
+        /// </summary>
         public string PortType
         {
             get
@@ -529,6 +540,9 @@ namespace SDCCTask
             }
         }
 
+        /// <summary>
+        ///     Default constructor.
+        /// </summary>
         public SDCCAssemble()
         {
             this.EnableErrorListRegex = true;
@@ -562,6 +576,7 @@ namespace SDCCTask
             SwitchList.Add(nameof(SourceInput));
         }
 
+        /// <inheritdoc/>
         protected override string ToolName
         {
             get

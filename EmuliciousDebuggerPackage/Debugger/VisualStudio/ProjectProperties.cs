@@ -5,13 +5,13 @@ using Microsoft.VisualStudio.ProjectSystem.Properties;
 namespace EmuliciousDebuggerPackage
 {
     /// <summary>
-    /// Strongly typed properties, for use with xaml rules
+    ///     Strongly typed properties, for use with xaml rules
     /// </summary>
     [Export]
     internal partial class ProjectProperties : StronglyTypedPropertyAccess
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectProperties"/> class.
+        ///     Initializes a new instance of the <see cref="ProjectProperties"/> class.
         /// </summary>
         [ImportingConstructor]
         public ProjectProperties(ConfiguredProject configuredProject)
@@ -20,7 +20,7 @@ namespace EmuliciousDebuggerPackage
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectProperties"/> class.
+        ///     Initializes a new instance of the <see cref="ProjectProperties"/> class.
         /// </summary>
         public ProjectProperties(ConfiguredProject configuredProject, string file, string itemType, string itemName)
             : base(configuredProject, file, itemType, itemName)
@@ -28,7 +28,7 @@ namespace EmuliciousDebuggerPackage
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectProperties"/> class.
+        ///     Initializes a new instance of the <see cref="ProjectProperties"/> class.
         /// </summary>
         public ProjectProperties(ConfiguredProject configuredProject, IProjectPropertiesContext projectPropertiesContext)
             : base(configuredProject, projectPropertiesContext)
@@ -36,7 +36,7 @@ namespace EmuliciousDebuggerPackage
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProjectProperties"/> class.
+        ///     Initializes a new instance of the <see cref="ProjectProperties"/> class.
         /// </summary>
         public ProjectProperties(ConfiguredProject configuredProject, UnconfiguredProject unconfiguredProject)
             : base(configuredProject, unconfiguredProject)

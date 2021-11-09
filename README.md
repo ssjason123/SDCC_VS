@@ -2,6 +2,11 @@
 Visual Studio package to add SDCC toolchain support. SDCC is not included in the package but can be downloaded from: http://sdcc.sourceforge.net/.
 
 # Release Notes
+# Version 2.5
+Update to add support for the emulcious "additionalSrcFolders" option.
+Major code cleanup.
+Rework Json modification and make several fixes legacy.
+
 # Version 2.1
 Update vsix build projects to include Microsoft.VisualStudio transitive dependencies.
 

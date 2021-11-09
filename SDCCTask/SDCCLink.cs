@@ -5,8 +5,14 @@ using Microsoft.Build.CPPTasks;
 
 namespace SDCCTask
 {
+    /// <summary>
+    ///     SDCC Linker ccommand.
+    /// </summary>
     public class SDCCLink : SDCCToolBase
     {
+        /// <summary>
+        ///     The port to application mapping.
+        /// </summary>
         public static readonly Dictionary<string, string> LinkApplicationMapping = new Dictionary<string, string>
         {
             {"avr", "linkavr.exe"},
@@ -650,7 +656,9 @@ namespace SDCCTask
         }
         #endregion
 
-
+        /// <summary>
+        ///     External linker application name.
+        /// </summary>
         public string ExternalLinker
         {
             get
@@ -674,6 +682,9 @@ namespace SDCCTask
             }
         }
 
+        /// <summary>
+        ///     The port type to use.
+        /// </summary>
         public string PortType
         {
             get
@@ -720,6 +731,9 @@ namespace SDCCTask
             }
         }
 
+        /// <summary>
+        ///     Default constructor.
+        /// </summary>
         public SDCCLink()
         {
             SwitchList = new ArrayList();
@@ -759,6 +773,7 @@ namespace SDCCTask
             SwitchList.Add(nameof(SourceInput));
         }
 
+        /// <inheritdoc/>
         protected override string ToolName
         {
             get

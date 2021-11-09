@@ -6,27 +6,36 @@ using Microsoft.VisualStudio.Debugger.DebugAdapterHost.Interfaces;
 
 namespace EmuliciousDebuggerPackage.Debugger
 {
+    /// <summary>
+    ///     <see cref="ITargetHostProcess"/> implementation for the emulicious process.
+    /// </summary>
     public class EmuliciousTargetHostProcessWrapper : ITargetHostProcess
     {
         /// <summary>
-        /// The base adapter process.
+        ///     The base adapter process.
         /// </summary>
         private ITargetHostProcess srcProcess;
         /// <summary>
-        /// The emulicious process id.
+        ///     The emulicious process id.
         /// </summary>
         private int processId = -1;
         /// <summary>
-        /// Flag to stop the process on exit.
+        ///     Flag to stop the process on exit.
         /// </summary>
         private bool stopProcessOnClose;
 
         /// <summary>
-        /// Default constructor.
+        ///     Default constructor.
         /// </summary>
-        /// <param name="adapterProcess">The emulicious process adapter.</param>
-        /// <param name="processId">The emulicious process id.</param>
-        /// <param name="stopProcess">The flag to stop the process on exit.</param>
+        /// <param name="adapterProcess">
+        ///     The emulicious process adapter.
+        /// </param>
+        /// <param name="processId">
+        ///     The emulicious process id.
+        /// </param>
+        /// <param name="stopProcess">
+        ///     The flag to stop the process on exit.
+        /// </param>
         public EmuliciousTargetHostProcessWrapper(ITargetHostProcess adapterProcess, int processId,
             bool stopProcess = false)
         {
@@ -90,10 +99,14 @@ namespace EmuliciousDebuggerPackage.Debugger
         }
 
         /// <summary>
-        /// Handle the process exit request.
+        ///     Handle the process exit request.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The event args.</param>
+        /// <param name="sender">
+        ///     The sender.
+        /// </param>
+        /// <param name="args">
+        ///     The event args.
+        /// </param>
         private void OnExited(object sender, EventArgs args)
         {
             srcProcess.Exited -= OnExited;

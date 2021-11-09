@@ -3,6 +3,9 @@ using Microsoft.Build.CPPTasks;
 
 namespace SDCCTask
 {
+    /// <summary>
+    ///     SDCC MakeBin tool task.
+    /// </summary>
     public class SDCCMakeBin : SDCCToolBase
     {
         #region File Input Output.
@@ -407,10 +410,11 @@ namespace SDCCTask
             }
         }
 
-
-
         #endregion
 
+        /// <summary>
+        ///     Default constructor.
+        /// </summary>
         public SDCCMakeBin()
         {
             SwitchList = new ArrayList();
@@ -435,6 +439,7 @@ namespace SDCCTask
             SwitchList.Add(nameof(OutputFile));
         }
 
+        /// <inheritdoc/>
         protected override string ToolName
         {
             get { return "makebin.exe"; }

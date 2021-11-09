@@ -3,8 +3,12 @@ using Microsoft.Build.CPPTasks;
 
 namespace SDCCTask
 {
+    /// <summary>
+    ///     SDCC library generator tool.
+    /// </summary>
     public class SDCCLib : SDCCToolBase
     {
+        /// <inheritdoc/>
         protected override string AlwaysAppend
         {
             get { return "-rc"; }
@@ -64,6 +68,9 @@ namespace SDCCTask
 
         #endregion 
 
+        /// <summary>
+        ///     Default constructor.
+        /// </summary>
         public SDCCLib()
         {
             SwitchList = new ArrayList();
@@ -75,7 +82,7 @@ namespace SDCCTask
             SwitchList.Add(nameof(SourceInput));
         }
 
-
+        /// <inheritdoc/>
         protected override string ToolName
         {
             get { return "sdar.exe"; }

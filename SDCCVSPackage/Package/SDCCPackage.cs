@@ -8,6 +8,9 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SDCCVSPackage.Package
 {
+    /// <summary>
+    ///     SDCC package plugin registration.
+    /// </summary>
     [PackageRegistration(UseManagedResourcesOnly = false, AllowsBackgroundLoading = true)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExistsAndNotBuildingAndNotDebugging, PackageAutoLoadFlags.BackgroundLoad)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
@@ -16,10 +19,12 @@ namespace SDCCVSPackage.Package
     public class SDCCPackage : AsyncPackage
     {
         /// <summary>
-        /// Package guid
+        ///     Package guid
         /// </summary>
         public const string PackageGuidString = "95B086A0-DD9C-4AE8-AC45-543F69548856";
 
+        // TODO: is this necessary? Emulicious package is set to autoload on its own.
+        /*
         /// <inheritdoc />
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
@@ -36,5 +41,6 @@ namespace SDCCVSPackage.Package
                 shell.LoadPackage(ref packageToBeLoadedGuid, out package);
             }
         }
+        */
     }
 }

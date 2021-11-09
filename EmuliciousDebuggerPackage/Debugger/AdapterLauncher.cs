@@ -11,7 +11,7 @@ using Process = System.Diagnostics.Process;
 namespace EmuliciousDebuggerPackage.Debugger
 {
     /// <summary>
-    /// Adapter launcher.
+    ///     Adapter launcher.
     /// </summary>
     [ComVisible(true)]
     [Guid("A17632B4-81DC-47F5-880F-1198CB9D4764")]
@@ -134,9 +134,11 @@ namespace EmuliciousDebuggerPackage.Debugger
         }
 
         /// <summary>
-        /// Get the visual studio hive instance.
+        ///     Get the visual studio hive instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        ///     The instance version.
+        /// </returns>
         private string GetHiveInstance()
         {
             var config = new SetupConfiguration();

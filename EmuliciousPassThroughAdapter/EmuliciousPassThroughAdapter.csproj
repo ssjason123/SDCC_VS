@@ -60,13 +60,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modifiers\IJsonModifier.cs" />
+    <Compile Include="Modifiers\LegacyBreakpointModifier.cs" />
+    <Compile Include="Modifiers\LegacySourcePathRenameModifier.cs" />
     <Compile Include="PassthroughAdapter.cs" />
     <Compile Include="PathRenameStream.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -87,6 +92,12 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmuliciousShared\EmuliciousShared.csproj">
+      <Project>{f47f88b7-2cc7-42d5-b2a6-4fb1cf66264e}</Project>
+      <Name>EmuliciousShared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

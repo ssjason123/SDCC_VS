@@ -7,10 +7,13 @@ using System.Windows.Forms;
 namespace SDCCVSPackage
 {
     /// <summary>
-    /// Basic Wizard for SDCC projects.
+    ///     Basic Wizard for SDCC projects.
     /// </summary>
     public class SDCCWizard : IWizard
     {
+        /// <summary>
+        ///     Source form to display in the wizard.
+        /// </summary>
         protected SDCCForm ConfigForm;
 
         /// <inheritdoc />

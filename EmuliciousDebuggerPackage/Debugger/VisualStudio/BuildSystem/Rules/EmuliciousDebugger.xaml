@@ -17,6 +17,11 @@
     <Rule.DataSource>
         <DataSource Persistence="UserFileWithXamlDefaults" />
     </Rule.DataSource>
+    <Rule.Categories>
+        <Category
+            Name="Legacy"
+            DisplayName="Legacy"/>
+    </Rule.Categories>
 
     <StringProperty Name="EmuliciousDebuggerExecutable" DisplayName="Command"
                 Default="$(EmuliciousExecutable)"
@@ -63,4 +68,11 @@
             <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
         </StringListProperty.DataSource>
     </StringListProperty>
+    <!-- Legacy Emulicious support -->
+    <BoolProperty Name="EmuliciousLegacySourceFolders" DisplayName="Legacy Source Folders"
+                  Default="False"
+                  Description="Uses symlink's relative to the rom path to map all the 'Source Folder Paths'." />
+    <BoolProperty Name="EmuliciousLegacyBreakpointFix" DisplayName="Legacy Breakpoint Fix"
+                  Default="False"
+                  Description="Injects breakpoint line information if it is not provided in breakpoint response messages." />
 </Rule>

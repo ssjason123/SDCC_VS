@@ -1,66 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using EmuliciousPassThroughAdapter.Modifiers;
+using EmuliciousShared;
 
 namespace EmuliciousPassThroughAdapter
 {
     /// <summary>
-    /// Create an adapter to connect to emulicious.
+    ///     Create an adapter to connect to emulicious.
     /// </summary>
     public class PassthroughAdapter : IDisposable
     {
         /// <summary>
-        /// Input stream from the VSHost process.
+        ///     Input stream from the VSHost process.
         /// </summary>
         private Stream HostIn;
         /// <summary>
-        /// Output stream to the VSHost process.
+        ///     Output stream to the VSHost process.
         /// </summary>
         private Stream HostOut;
 
         /// <summary>
-        /// Network client to communicate with emulicious.
+        ///     Network client to communicate with emulicious.
         /// </summary>
         private TcpClient AdapterClient;
 
         /// <summary>
-        /// Emulicious input stream.
+        ///     Emulicious input stream.
         /// </summary>
         private Stream ClientIn;
         /// <summary>
-        /// Emulicious output stream.
+        ///     Emulicious output stream.
         /// </summary>
         private Stream ClientOut;
 
         /// <summary>
-        /// Test debug log
+        ///     Test debug log
         /// </summary>
         private StreamWriter DebugLog;
 
         /// <summary>
-        /// Stream to talk to the host.
+        ///     Stream to talk to the host.
         /// </summary>
         private PathRenameStream ToHostStream;
 
         /// <summary>
-        /// Stream to talk to the client.
+        ///     Stream to talk to the client.
         /// </summary>
         private PathRenameStream ToClientStream;
 
         /// <summary>
-        /// Default constructor.
+        ///     Default constructor.
         /// </summary>
-        /// <param name="inStream">Input stream.</param>
-        /// <param name="outStream">Output stream.</param>
-        /// <param name="pathMapping">The project path mapping.</param>
-        /// <param name="port">Emulicious Debug port.</param>
-        /// <param name="debugPath">Path to output debug communication logs to.</param>
-        public PassthroughAdapter(Stream inStream, Stream outStream, Dictionary<string, string> pathMapping, 
-            int port = 58870, string debugPath = "")
+        /// <param name="inStream">
+        ///     Input stream.
+        /// </param>
+        /// <param name="outStream">
+        ///     Output stream.
+        /// </param>
+        /// <param name="settings">
+        ///     The passthrough project settings.
+        /// </param>
+        /// <param name="port">
+        ///     Emulicious Debug port.
+        /// </param>
+        public PassthroughAdapter(Stream inStream, Stream outStream, PassthroughSettings settings,
+                int port = 58870)
         {
+            var debugPath = settings.DevelopmentPath;
             DebugLog = null;
             if (Directory.Exists(debugPath))
             {
@@ -82,8 +94,10 @@ namespace EmuliciousPassThroughAdapter
                     ClientIn = AdapterClient.GetStream();
                     ClientOut = AdapterClient.GetStream();
 
-                    ToClientStream = new PathRenameStream(ClientIn, PathRenameStream.StreamDirection.ToClient, pathMapping){DebugStream = DebugLog};
-                    ToHostStream = new PathRenameStream(HostOut, PathRenameStream.StreamDirection.ToHost, pathMapping){DebugStream = DebugLog};
+                    ToClientStream = new PathRenameStream(ClientIn, StreamDirection.ToClient, ConfigureModifiers(settings,
+                        StreamDirection.ToClient)) {DebugStream = DebugLog};
+                    ToHostStream = new PathRenameStream(HostOut, StreamDirection.ToHost, ConfigureModifiers(settings,
+                        StreamDirection.ToHost)) {DebugStream = DebugLog};
                 }
 
                 if (DebugLog != null)
@@ -108,7 +122,41 @@ namespace EmuliciousPassThroughAdapter
         }
 
         /// <summary>
-        /// Run the adapter process.
+        ///     Configure the modifiers to run.
+        /// </summary>
+        /// <returns>
+        ///     The list of modifiers to execute.
+        /// </returns>
+        private IList<IJsonModifier> ConfigureModifiers(PassthroughSettings settings, StreamDirection direction)
+        {
+            // Configure the modifiers;
+            var modifiers = new List<IJsonModifier>();
+
+            if (settings.UseLegacySourceFolders)
+            {
+                if (direction == StreamDirection.ToClient)
+                {
+                    modifiers.Add(new LegacySourcePathRenameModifier(settings.GetLegacySourceFolders(),
+                        DebugLog));
+                }
+                else
+                {
+                    // Flip the modifier for host mapping.
+                    modifiers.Add(new LegacySourcePathRenameModifier(settings.GetLegacySourceFolders().ToDictionary((pair) => pair.Value, (pair) => pair.Key),
+                        DebugLog));
+                }
+            }
+
+            if (settings.UseLegacyBreakpointFix)
+            {
+                modifiers.Add(new LegacyBreakpointModifier());
+            }
+
+            return modifiers;
+        }
+
+        /// <summary>
+        ///     Run the adapter process.
         /// </summary>
         public void Run()
         {
@@ -143,7 +191,7 @@ namespace EmuliciousPassThroughAdapter
         }
 
         /// <summary>
-        /// Process commands from VSHost to Emulicious.
+        ///     Process commands from VSHost to Emulicious.
         /// </summary>
         private void ReadThread()
         {

@@ -5,11 +5,23 @@ using Task = Microsoft.Build.Utilities.Task;
 
 namespace SDCCTask
 {
+    /// <summary>
+    ///     Task to resolve all the SDCC lib files.
+    /// </summary>
     public class SDCCResolveLibraries : Task
     {
+        /// <summary>
+        ///     The libraries to resolve.
+        /// </summary>
         public string[] Libraries { get; set; }
+        /// <summary>
+        ///     The library source folders.
+        /// </summary>
         public string[] Directories { get; set; }
 
+        /// <summary>
+        ///     The library files resolved to their full paths.
+        /// </summary>
         [Output]
         public string[] FullLibraries { get; set; }
 

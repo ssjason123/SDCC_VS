@@ -2,18 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Build.CPPTasks;
 
 namespace SDCCTask
 {
     /// <summary>
-    /// Custom build task for SDCC command line generation.
+    ///     Custom build task for SDCC command line generation.
     /// </summary>
     public class SDCCCompile : SDCCToolBase
     {
+        /// <inheritdoc/>
         protected override string AlwaysAppend
         {
             get { return "-c"; }
@@ -2988,6 +2987,9 @@ namespace SDCCTask
 
         #endregion
 
+        /// <summary>
+        ///     Default constructor.
+        /// </summary>
         public SDCCCompile()
         {
             this.EnableErrorListRegex = true;
@@ -3135,6 +3137,7 @@ namespace SDCCTask
             SwitchList.Add(nameof(SourceInput));
         }
 
+        /// <inheritdoc/>
         protected override string ToolName
         {
             get

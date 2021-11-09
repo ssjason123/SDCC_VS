@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EmuliciousShared;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ProjectSystem;
@@ -14,57 +15,67 @@ using Microsoft.VisualStudio.ProjectSystem.VS.Debug;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Threading;
-using Newtonsoft.Json;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 
 namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
 {
     /// <summary>
-    /// Debugger launcher to start the emulicious Host Debug Adapter.
+    ///     Debugger launcher to start the emulicious Host Debug Adapter.
     /// </summary>
     [ExportDebugger(EmuliciousDebugger.SchemaName)]
     [AppliesTo(ProjectCapabilities.VisualC)]
     public class EmuliciousDebuggerLaunchProvider : DebugLaunchProviderBase
     {
         /// <summary>
-        /// The file location to the emulicious Executable.
+        ///     The file location to the emulicious Executable.
         /// </summary>
         public static string EmuliciousExecutable = "";
         /// <summary>
-        /// The emulicious port.
+        ///     The emulicious port.
         /// </summary>
         public static int EmuliciousPort = 58870;
         /// <summary>
-        /// Delay value before attempting to connect to the emulicious instance.
+        ///     Delay value before attempting to connect to the emulicious instance.
         /// </summary>
         public static int EmuliciousLaunchDelay = 1000;
         /// <summary>
-        /// The debug folder for logging output.
+        ///     The debug folder for logging output.
         /// </summary>
         public static string EmuliciousDebugFolder = "";
         /// <summary>
-        /// Attach mode flag, true to attach, false to launch.
+        ///     Attach mode flag, true to attach, false to launch.
         /// </summary>
         public static bool EmuliciousAttach = false;
         /// <summary>
-        /// Path to the mapping file.
+        ///     Path to the mapping file.
         /// </summary>
         public static string EmuliciousMappingPath = "";
+        /// <summary>
+        ///     Use Junction based source mapping and debugger pass through re-mapping.
+        /// </summary>
+        public static bool EmuliciousLegacySourceFolders = false;
+        /// <summary>
+        ///     Use Junction based source mapping and debugger pass through re-mapping.
+        /// </summary>
+        public static bool EmuliciousLegacyBreakpointFix = false;
+
 
         /// <summary>
-        /// Task factory for the main thread synchronization.
+        ///     Task factory for the main thread synchronization.
         /// </summary>
         private JoinableTaskFactory TaskFactory;
         /// <summary>
-        /// DTE instance for project details.
+        ///     DTE instance for project details.
         /// </summary>
         private DTE2 VisualStudio;
 
         /// <summary>
-        /// Default constructor.
+        ///     Default constructor.
         /// </summary>
-        /// <param name="configuredProject">The configured project instance.</param>
+        /// <param name="configuredProject">
+        ///     The configured project instance.
+        /// </param>
         [ImportingConstructor]
         public EmuliciousDebuggerLaunchProvider(ConfiguredProject configuredProject)
             : base(configuredProject)
@@ -73,22 +84,31 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
             VisualStudio = (DTE2)Package.GetGlobalService(typeof(SDTE));
         }
 
-        // TODO: Specify the assembly full name here
+        /// <summary>
+        ///     Debugger Xaml binding.
+        /// </summary>
+        /// <remarks>
+        ///     NOTE: Specify the assembly full name here
+        /// </remarks>
         [ExportPropertyXamlRuleDefinition("EmuliciousDebuggerPackage.Debugger.VisualStudio, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9be6e469bc4921f1", "XamlRuleToCode:EmuliciousDebugger.xaml", "Project")]
         [AppliesTo(ProjectCapabilities.VisualC)]
         private object DebuggerXaml { get { throw new NotImplementedException(); } }
 
         /// <summary>
-        /// Gets project properties that the debugger needs to launch.
+        ///     Gets project properties that the debugger needs to launch.
         /// </summary>
         [Import]
         private ProjectProperties DebuggerProperties { get; set; }
 
         /// <summary>
-        /// Can launch the debugger.
+        ///     Can launch the debugger.
         /// </summary>
-        /// <param name="launchOptions">The debug launch options.</param>
-        /// <returns>True to launch the debugger, false otherwise.</returns>
+        /// <param name="launchOptions">
+        ///     The debug launch options.
+        /// </param>
+        /// <returns>
+        ///     True to launch the debugger, false otherwise.
+        /// </returns>
         public override async Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
         {
             var properties = await this.DebuggerProperties.GetEmuliciousDebuggerPropertiesAsync();
@@ -136,13 +156,12 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
                     ++index;
                 }
             }
-
-            CreateProjectJunctions(projectPairs, debugDir);
-
-            // Create a ProjectMapping.json file, to map the debug -> project junction mappings.
-            File.WriteAllText(Path.Combine(debugDir, "ProjectMapping.json"),
-                JsonConvert.SerializeObject(projectPairs.ToDictionary(
-                    pair => pair.Value, pair => Path.Combine(debugDir, "ProjectDirs", pair.Key)), Formatting.Indented));
+            
+            if (EmuliciousLegacySourceFolders)
+            {
+                // Create junctions to the source files.
+                CreateProjectJunctions(projectPairs, debugDir);
+            }
 
             var executable = (string) await properties.EmuliciousDebuggerExecutable.GetValueAsync();
             var romName = (string) await properties.EmuliciousLaunchRom.GetValueAsync();
@@ -151,6 +170,8 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
             var debuggerPort = (int) await properties.EmuliciousDebuggerPort.GetValueAsync();
             var startDelay = (int) await properties.EmuliciousDebuggerStartDelay.GetValueAsync();
             var debugPath = (string) await properties.EmuliciousDebugLogPath.GetValueAsync();
+            var useLegacySrc = (bool) await properties.EmuliciousLegacySourceFolders.GetValueAsync();
+            var useLegacyBreakPointFix = (bool) await properties.EmuliciousLegacyBreakpointFix.GetValueAsync();
 
             // Cache properties used by the launch adapter.
             EmuliciousExecutable = executable;
@@ -159,6 +180,14 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
             EmuliciousLaunchDelay = startDelay;
             EmuliciousDebugFolder = debugPath;
             EmuliciousMappingPath = debugDir;
+            EmuliciousLegacySourceFolders = useLegacySrc;
+            EmuliciousLegacyBreakpointFix = useLegacyBreakPointFix;
+
+
+            // Create the PassthroughAdapter settings file.
+            var mapping = new PassthroughSettings(EmuliciousLegacySourceFolders, EmuliciousLegacyBreakpointFix, projectPairs.Values, 
+                EmuliciousMappingPath, EmuliciousDebugFolder);
+            mapping.SaveToFile(Path.Combine(debugDir, "ProjectMapping.json"));
 
             /*
             File.WriteAllLines(Path.Combine(EmuliciousMappingPath, "LaunchProps.log"),
@@ -176,10 +205,9 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
 
             // Generate the launch.json file for emulicious.
             var jsonFile = Path.Combine(debugDir, "launch.json");
-            GenerateLaunchJson(jsonFile, romName,
-                attach,
-                stopOnEntry, 
-                debuggerPort);
+            var launchSettings = new LaunchSettings((attach) ? LaunchSettings.RequestMode.Attach : LaunchSettings.RequestMode.Launch,
+                debuggerPort, romName, stopOnEntry, projectPairs.Values);
+            launchSettings.WriteToFile(jsonFile);
 
             Task.WaitAll();
 
@@ -190,10 +218,14 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         }
 
         /// <summary>
-        /// Get the collection of projects.
+        ///     Get the collection of projects.
         /// </summary>
-        /// <param name="projects">The projects to iterate.</param>
-        /// <param name="mappings">The resulting project mappings.</param>
+        /// <param name="projects">
+        ///     The projects to iterate.
+        /// </param>
+        /// <param name="mappings">
+        ///     The resulting project mappings.
+        /// </param>
         protected async Task RecurseProjectsAsync(Projects projects, Dictionary<string, string> mappings)
         {
             if (projects != null)
@@ -206,11 +238,17 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         }
 
         /// <summary>
-        /// Process the projects folder.
+        ///     Process the projects folder.
         /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="mappings">The mappings.</param>
-        /// <returns>The async tasks.</returns>
+        /// <param name="project">
+        ///     The project.
+        /// </param>
+        /// <param name="mappings">
+        ///     The mappings.
+        /// </param>
+        /// <returns>
+        ///     The async tasks.
+        /// </returns>
         protected async Task ProcessProjectAsync(Project project, Dictionary<string, string> mappings)
         {
             await TaskFactory.SwitchToMainThreadAsync();
@@ -234,10 +272,14 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         }
 
         /// <summary>
-        /// Create the debugging->project junctions for emulicious.
+        ///     Create the debugging->project junctions for emulicious.
         /// </summary>
-        /// <param name="solutionDir">The path to map the junction to.</param>
-        /// <param name="junctionPath">The junction location.</param>
+        /// <param name="solutionDir">
+        ///     The path to map the junction to.
+        /// </param>
+        /// <param name="junctionPath">
+        ///     The junction location.
+        /// </param>
         protected void CreateSolutionJunction(string solutionDir, string junctionPath)
         {
             if (!File.Exists(junctionPath))
@@ -251,10 +293,14 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         }
 
         /// <summary>
-        /// Create the junctions for the entire project.
+        ///     Create the junctions for the entire project.
         /// </summary>
-        /// <param name="projectDirs">The junction name/path mapping.</param>
-        /// <param name="junctionRoot">The root junction path.</param>
+        /// <param name="projectDirs">
+        ///     The junction name/path mapping.
+        /// </param>
+        /// <param name="junctionRoot">
+        ///     The root junction path.
+        /// </param>
         protected void CreateProjectJunctions(Dictionary<string, string> projectDirs, string junctionRoot)
         {
             // Create a junction folder for each project.
@@ -293,58 +339,5 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
                 }
             }
         }
-
-        /// <summary>
-        /// Generate the launch Json file.
-        /// </summary>
-        /// <param name="filePath">The launch.json file path.</param>
-        /// <param name="romFile">The rom file location.</param>
-        /// <param name="attach">True to attach to emulicious, false to launch a new instance.</param>
-        /// <param name="stopOnEntry">Flag to break the debugger on start when using launch mode.</param>
-        /// <param name="port">The emulicious debugger port.</param>
-        protected void GenerateLaunchJson(string filePath, string romFile, bool attach, bool stopOnEntry, int port)
-        {
-            using (var jsonFile = new JsonTextWriter(File.CreateText(filePath)))
-            {
-                jsonFile.Formatting = Formatting.Indented;
-
-                jsonFile.WriteStartObject();
-
-                // Type
-                jsonFile.WritePropertyName("type");
-                jsonFile.WriteValue("Emulicious Debugger");
-
-                // Name
-                jsonFile.WritePropertyName("name");
-                jsonFile.WriteValue("Launch Emulicious");
-
-                if (attach)
-                {
-                    // Request type
-                    jsonFile.WritePropertyName("request");
-                    jsonFile.WriteValue("attach");
-                }
-                else
-                {
-                    // Request type
-                    jsonFile.WritePropertyName("request");
-                    jsonFile.WriteValue("launch");
-
-                    // Program
-                    jsonFile.WritePropertyName("program");
-                    jsonFile.WriteValue(romFile);
-
-                    // Stop on entry.
-                    jsonFile.WritePropertyName("stopOnEntry");
-                    jsonFile.WriteValue(stopOnEntry);
-                }
-
-                // Port
-                jsonFile.WritePropertyName("port");
-                jsonFile.WriteValue(port);
-                jsonFile.WriteEndObject();
-            }
-        }
     }
-
 }

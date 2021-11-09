@@ -6,19 +6,21 @@ using Microsoft.VisualStudio.Debugger.DebugAdapterHost.Interfaces;
 namespace EmuliciousDebuggerPackage.Debugger
 {
     /// <summary>
-    /// Thin wrapper for a Process to ITargetHostProcess.
+    ///     Thin wrapper for a Process to ITargetHostProcess.
     /// </summary>
     public class ExistingTargetHostProcess : ITargetHostProcess
     {
         /// <summary>
-        /// Internal Process reference.
+        ///     Internal Process reference.
         /// </summary>
         private Process TargetProcess;
 
         /// <summary>
-        /// Default constructor.
+        ///     Default constructor.
         /// </summary>
-        /// <param name="baseProcess">The base process.</param>
+        /// <param name="baseProcess">
+        ///     The base process.
+        /// </param>
         public ExistingTargetHostProcess(Process baseProcess)
         {
             if (baseProcess == null)

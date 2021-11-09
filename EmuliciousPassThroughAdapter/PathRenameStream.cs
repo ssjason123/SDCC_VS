@@ -4,81 +4,83 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using EmuliciousPassThroughAdapter.Modifiers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace EmuliciousPassThroughAdapter
 {
     /// <summary>
-    /// Custom stream for remapping VS Debug Adapter file paths.
+    ///     Stream direction.
+    /// </summary>
+    public enum StreamDirection
+    {
+        /// <summary>
+        ///     To the client application.
+        /// </summary>
+        ToClient,
+
+        /// <summary>
+        ///     To the VS Host process.
+        /// </summary>
+        ToHost
+    }
+
+    /// <summary>
+    ///     Custom stream for remapping VS Debug Adapter file paths.
     /// </summary>
     public class PathRenameStream : Stream
     {
         /// <summary>
-        /// Stream direction.
-        /// </summary>
-        public enum StreamDirection
-        {
-            /// <summary>
-            /// To the client application.
-            /// </summary>
-            ToClient,
-
-            /// <summary>
-            /// To the VS Host process.
-            /// </summary>
-            ToHost
-        }
-
-        /// <summary>
-        /// Stream for debug output.
+        ///     Stream for debug output.
         /// </summary>
         public StreamWriter DebugStream { get; set; }
 
         /// <summary>
-        /// The stream to write to.
+        ///     The stream to write to.
         /// </summary>
         public Stream SourceStream { get; }
 
         /// <summary>
-        /// The stream write direction.
+        ///     The stream write direction.
         /// </summary>
         public StreamDirection Direction { get; }
 
         /// <summary>
-        /// Storage for input buffer.
+        ///     Storage for input buffer.
         /// </summary>
         private List<byte> inputBuffer = new List<byte>();
 
         /// <summary>
-        /// Storage for the current header read size.
+        ///     Storage for the current header read size.
         /// </summary>
         private int? readSize = null;
 
         /// <summary>
-        /// Collection of path mappings for path swapping.
+        ///     The custom modifiers to execute.
         /// </summary>
-        private List<KeyValuePair<string, string>> PathMappings = new List<KeyValuePair<string, string>>();
+        private IList<IJsonModifier> Modifiers = new List<IJsonModifier>();
 
         /// <summary>
-        /// Default constructor.
+        ///     Default constructor.
         /// </summary>
-        /// <param name="sourceStream">The source stream to write to.</param>
-        /// <param name="direction">The direction events are sent.</param>
-        /// <param name="solutionToEmuliciousMapping">The solution to emulicious folder mapping.</param>
-        public PathRenameStream(Stream sourceStream, StreamDirection direction, Dictionary<string, string> solutionToEmuliciousMapping)
+        /// <param name="sourceStream">
+        ///     The source stream to write to.
+        /// </param>
+        /// <param name="direction">
+        ///     The direction events are sent.
+        /// </param>
+        /// <param name="modifiers">
+        ///     The Json modifiers to execute.
+        /// </param>
+        public PathRenameStream(Stream sourceStream, StreamDirection direction, IList<IJsonModifier> modifiers)
         {
             SourceStream = sourceStream;
             Direction = direction;
 
-            if (direction == StreamDirection.ToClient)
+            if (modifiers != null)
             {
-                PathMappings = solutionToEmuliciousMapping.OrderBy(pair => pair.Key.Length).ToList();
-            }
-            else
-            {
-                PathMappings = solutionToEmuliciousMapping.OrderBy(pair => pair.Value.Length)
-                    .Select(pair => new KeyValuePair<string, string>(pair.Value, pair.Key)).ToList();
+                Modifiers = modifiers;
             }
         }
 
@@ -147,7 +149,7 @@ namespace EmuliciousPassThroughAdapter
         }
 
         /// <summary>
-        /// Process the write buffer.
+        ///     Process the write buffer.
         /// </summary>
         private void ProcessBuffer()
         {
@@ -185,10 +187,10 @@ namespace EmuliciousPassThroughAdapter
                 var message = Encoding.UTF8.GetString(inputBuffer.Take(readSize.Value).ToArray());
                 JToken jsonParse = JsonConvert.DeserializeObject(message) as JToken;
 
-                // TODO: Remove this, fixes emulicious breakpoints in setBreakpointResponse.
-                ResolveSetBreakpoints(jsonParse);
-
-                ProcessJsonFilePaths(jsonParse);
+                foreach (var modifier in Modifiers)
+                {
+                    modifier.ProcessJson(jsonParse, Direction);
+                }
 
                 // Send the message.
                 WriteJsonMessage(jsonParse.ToString(Formatting.None));
@@ -203,9 +205,11 @@ namespace EmuliciousPassThroughAdapter
         }
 
         /// <summary>
-        /// Write the JSON message to the output stream.
+        ///     Write the JSON message to the output stream.
         /// </summary>
-        /// <param name="message">The message to write.</param>
+        /// <param name="message">
+        ///     The message to write.
+        /// </param>
         private void WriteJsonMessage(string message)
         {
             // Build the header message.
@@ -234,138 +238,5 @@ namespace EmuliciousPassThroughAdapter
                 }
             }
         }
-
-        /// <summary>
-        /// Modify the path to the desired mapping format.
-        /// </summary>
-        /// <param name="sourcePath">The path to the source file.</param>
-        /// <returns>The updated path if a file is located elsewhere.</returns>
-        private string ApplyPathUpdate(string sourcePath)
-        {
-            var resultPath = sourcePath;
-
-            foreach (var path in PathMappings)
-            {
-                if (sourcePath.StartsWith(path.Key, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    // Replace the path.
-                    resultPath = path.Value + resultPath.Substring(path.Key.Length);
-
-                    if (DebugStream != null)
-                    {
-                        DebugStream.WriteLine("*** Replaced Path({2}): {0} -> {1}", path.Key, path.Value, Direction);
-                        DebugStream.WriteLine("*** Source Path: {0}", sourcePath);
-                        DebugStream.WriteLine("*** Target Path: {0}", resultPath);
-                    }
-                    break;
-                }
-            }
-
-            return resultPath;
-        }
-
-        /// <summary>
-        /// Process any JSON source file paths.
-        /// </summary>
-        /// <param name="currentNode">The current json node.</param>
-        private void ProcessJsonFilePaths(JToken currentNode)
-        {
-            if (currentNode != null)
-            {
-                if (currentNode.Type == JTokenType.Property)
-                {
-                    var prop = currentNode as JProperty;
-
-                    // Attempt to process any source.path nodes to correct to the original source location.
-                    if (prop.Name == "path" && prop.Parent.Path.EndsWith("source"))
-                    {
-                        string sourceValue = prop.Value.ToString();
-
-                        prop.Value = JValue.CreateString(ApplyPathUpdate(sourceValue));
-                    }
-                }
-                foreach (var child in currentNode.Children())
-                {
-                    if (child.HasValues)
-                    {
-                        ProcessJsonFilePaths(child);
-                    }
-                }
-            }
-        }
-
-        #region setBreakpointsRequest/Response fix.
-
-        /// <summary>
-        /// Create a variable to manage locking around the breakpointDictionary.
-        /// </summary>
-        private static object dictLock = new object();
-
-        /// <summary>
-        /// Dictionary of breakpoints for 'line' remapping.
-        /// </summary>
-        private static Dictionary<int, JToken> breakpointDictionary = new Dictionary<int, JToken>();
-
-        /// <summary>
-        /// Capture line info from the requests and fill in response line info.
-        /// </summary>
-        /// <param name="currentNode">
-        /// The json to resolve breakpoints for.
-        /// </param>
-        private void ResolveSetBreakpoints(JToken currentNode)
-        {
-            if (currentNode != null)
-            {
-                var command = currentNode.SelectToken("$.command")?.Value<string>();
-                if (command == "setBreakpoints")
-                {
-                    var type = currentNode.SelectToken("$.type")?.Value<string>();
-                    if (type == "request")
-                    {
-                        // Request
-                        var sequence = currentNode.SelectToken("$.seq").Value<int>();
-
-                        lock (dictLock)
-                        {
-                            breakpointDictionary[sequence] = currentNode;
-                        }
-                    }
-                    else
-                    {
-                        // Response
-                        var request_seq = currentNode.SelectToken("$.request_seq").Value<int>();
-
-                        JToken requestEvent;
-                        if (breakpointDictionary.TryGetValue(request_seq, out requestEvent))
-                        {
-                            // Overwrite the body.breakpoints with arguments.breakpoints.
-                            var requestBreakpoints = requestEvent.SelectToken("$.arguments.breakpoints");
-                            var respBreakpoints = currentNode.SelectToken("$.body.breakpoints");
-                            if (requestBreakpoints != null && respBreakpoints != null)
-                            {
-                                var reqParent = requestBreakpoints as JContainer;
-                                var respParent = respBreakpoints as JContainer;
-
-                                if (reqParent != null && respParent != null)
-                                {
-                                    respParent.Merge(reqParent,
-                                        new JsonMergeSettings()
-                                        {
-                                            MergeArrayHandling = MergeArrayHandling.Merge
-                                        });
-                                }
-                            }
-                        }
-
-                        lock (dictLock)
-                        {
-                            breakpointDictionary.Remove(request_seq);
-                        }
-                    }
-                }
-            }
-        }
-
-        #endregion
     }
 }

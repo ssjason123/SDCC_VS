@@ -3,8 +3,14 @@ using System.Windows.Forms;
 
 namespace SDCCVSPackage
 {
+    /// <summary>
+    ///     The form for the new project configuration.
+    /// </summary>
     public partial class SDCCForm : Form
     {
+        /// <summary>
+        ///     Default constructor.
+        /// </summary>
         public SDCCForm()
         {
             InitializeComponent();
@@ -34,11 +40,29 @@ namespace SDCCVSPackage
             BuildFormat.Items.Add("Library");
         }
 
+        /// <summary>
+        ///     Handle cancel button finish.
+        /// </summary>
+        /// <param name="sender">
+        ///     The object that called Click.
+        /// </param>
+        /// <param name="e">
+        ///     Event arguments.
+        /// </param>
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        ///     Handle finish button finish.
+        /// </summary>
+        /// <param name="sender">
+        ///     The object that called Click.
+        /// </param>
+        /// <param name="e">
+        ///     Event arguments.
+        /// </param>
         private void FinishButton_Click(object sender, EventArgs e)
         {
             Close();
