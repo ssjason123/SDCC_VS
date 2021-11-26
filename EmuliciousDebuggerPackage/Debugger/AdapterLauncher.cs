@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -72,10 +74,16 @@ namespace EmuliciousDebuggerPackage.Debugger
                             EmuliciousPackage.DebugAdapterPath
                         });
                     */
+                    var args = new List<string>();
+
+                    if (EmuliciousDebuggerLaunchProvider.EmuliciousRemoteDebugArgument)
+                    {
+                        args.Add(string.Format("-remotedebug {0}", EmuliciousDebuggerLaunchProvider.EmuliciousPort));
+                    }
 
                     try
                     {
-                        var process = Process.Start(emuliciousExec);
+                        var process = Process.Start(emuliciousExec, string.Join(" ", args));
                         if (process != null)
                         {
                             process.WaitForExit();

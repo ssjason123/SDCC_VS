@@ -590,7 +590,8 @@
           AfterTargets="ClLink"
           Condition="'$(BuildFormat)' != 'Library'"
           Inputs="$(LibraryLinkFiles);@(ResolvedLibraries)"
-          Outputs="$(OutDir)$(ProjectName)$(IntBinaryExtension)">
+          Outputs="$(OutDir)$(ProjectName)$(IntBinaryExtension)"
+          DependsOnTargets="GenerateDefaultAreaBaseAddress">
 
     <Message Importance="High" Text="Linking Source Files: @(ClCompile, ' ') @(AsmCompile, ' ')"/>
     <SDCCLink
@@ -697,6 +698,33 @@
 
                  ToolPath                   ="$(SDCCBinPath)"
     />
+  </Target>
+
+  <!--
+  ********************************************************************************
+  * Commmon Utility targets
+  ********************************************************************************
+  -->
+  <Target Name="GenerateDefaultAreaBaseAddress" Condition="'$(AreaBaseAddress)' == ''">
+    <ItemGroup>
+      <!-- Clean up the old address info -->
+      <AreaBaseAddressEntries Remove="@(AreaBaseAddressEntries)"/>
+
+      <!-- Add all the entries -->
+      <AreaBaseAddressEntries Condition="'$(CodeLocation)' != '' and '$(CodeSeg)' != ''" Include="_$(CodeSeg)=$(CodeLocation)"/>
+      <AreaBaseAddressEntries Condition="'$(DataLocation)' != '' and '$(DataSeg)' != ''" Include="_$(DataSeg)=$(DataLocation)"/>
+      <AreaBaseAddressEntries Condition="'$(XRamLocation)' != '' and '$(XRamSegmentName)' != ''" Include="_$(XRamSegmentName)=$(XRamLocation)"/>
+      <AreaBaseAddressEntries Condition="'$(StackLocation)' != '' and '$(StackSegmentName)' != ''" Include="_$(StackSegmentName)=$(StackLocation)"/>
+      <AreaBaseAddressEntries Condition="'$(XStackLocation)' != '' and '$(XStackSegmentName)' != ''" Include="_$(XStackSegmentName)=$(XStackLocation)"/>
+      <AreaBaseAddressEntries Condition="'$(IDataLocation)' != '' and '$(IDataSegmentName)' != ''" Include="_$(IDataSegmentName)=$(IDataLocation)"/>
+      <AreaBaseAddressEntries Condition="'$(BitLocation)' != '' and '$(BitSegmentName)' != ''" Include="_$(BitSegmentName)=$(BitLocation)"/>
+      <AreaBaseAddressEntries Condition="'$(AdditionalAreaBaseAddress)' == ''" Include="$(AdditionalAreaBaseAddress)"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <!-- Populate the property -->
+      <AreaBaseAddress Condition="'@(AreaBaseAddressEntries)' != ''">@(AreaBaseAddressEntries, ';')</AreaBaseAddress>
+    </PropertyGroup>
   </Target>
 
 

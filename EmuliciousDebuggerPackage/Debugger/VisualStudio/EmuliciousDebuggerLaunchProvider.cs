@@ -52,6 +52,10 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         /// </summary>
         public static string EmuliciousMappingPath = "";
         /// <summary>
+        ///     Argument that enables passing the remote debug argument to emulicious on process start.
+        /// </summary>
+        public static bool EmuliciousRemoteDebugArgument = true;
+        /// <summary>
         ///     Use Junction based source mapping and debugger pass through re-mapping.
         /// </summary>
         public static bool EmuliciousLegacySourceFolders = false;
@@ -172,6 +176,7 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
             var debugPath = (string) await properties.EmuliciousDebugLogPath.GetValueAsync();
             var useLegacySrc = (bool) await properties.EmuliciousLegacySourceFolders.GetValueAsync();
             var useLegacyBreakPointFix = (bool) await properties.EmuliciousLegacyBreakpointFix.GetValueAsync();
+            var useRemoteDebugArg = (bool) await properties.EmuliciousRemoteDebugArgument.GetValueAsync();
 
             // Cache properties used by the launch adapter.
             EmuliciousExecutable = executable;
@@ -180,6 +185,7 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
             EmuliciousLaunchDelay = startDelay;
             EmuliciousDebugFolder = debugPath;
             EmuliciousMappingPath = debugDir;
+            EmuliciousRemoteDebugArgument = useRemoteDebugArg;
             EmuliciousLegacySourceFolders = useLegacySrc;
             EmuliciousLegacyBreakpointFix = useLegacyBreakPointFix;
 
@@ -303,39 +309,47 @@ namespace EmuliciousDebuggerPackage.Debugger.VisualStudio
         /// </param>
         protected void CreateProjectJunctions(Dictionary<string, string> projectDirs, string junctionRoot)
         {
-            // Create a junction folder for each project.
-            var rootFolder = Path.Combine(junctionRoot, "ProjectDirs");
-            if (!Directory.Exists(rootFolder))
+            if (projectDirs.Count > 0)
             {
-                // Clean up the folder and create new links.
-                Directory.CreateDirectory(rootFolder);
-            }
-
-            // Create a junction for each project dir.
-            foreach (var projectDir in projectDirs)
-            {
-                // Clean up junctions and apply new ones.
-                var junctionName = Path.Combine(rootFolder, projectDir.Key);
-                var fileInfo = new DirectoryInfo(junctionName);
-                if (fileInfo.Exists)
+                // Create a junction folder for each project.
+                var rootFolder = Path.Combine(junctionRoot, "ProjectDirs");
+                if (!Directory.Exists(rootFolder))
                 {
-                    fileInfo.Delete();
-                    fileInfo.Refresh();
-                    while (fileInfo.Exists)
-                    {
-                        Thread.Sleep(100);
-                        fileInfo.Refresh();
-                    }
+                    // Clean up the folder and create new links.
+                    Directory.CreateDirectory(rootFolder);
                 }
 
-                CreateSolutionJunction(projectDir.Value, junctionName);
+                // Create paths to monitor.
+                var projectMapping = projectDirs.ToDictionary(path => path.Value,
+                    path => new DirectoryInfo(Path.Combine(rootFolder, path.Key)));
 
-                // Wait for the junction to become available.
-                fileInfo = new DirectoryInfo(junctionName);
-                while (!fileInfo.Exists)
+                // Clean up any existing paths.
+                var removePaths = projectMapping.Values.Where(info => info.Exists).ToList();
+                removePaths.ForEach(info =>
+                {
+                    info.Delete();
+                    info.Refresh();
+                });
+
+                while (removePaths.Any(info => info.Exists))
                 {
                     Thread.Sleep(100);
-                    fileInfo.Refresh();
+                    removePaths.ForEach(info => info.Refresh());
+                }
+
+                // Create the new paths
+                foreach (var pair in projectMapping)
+                {
+                    CreateSolutionJunction(pair.Key, pair.Value.FullName);
+                }
+
+                // Wait until all paths have been created successfully.
+                var createdPaths = projectMapping.Values.ToList();
+                createdPaths.ForEach(info => info.Refresh());
+                while (!createdPaths.All(value => value.Exists))
+                {
+                    Thread.Sleep(100);
+                    removePaths.ForEach(info => info.Refresh());
                 }
             }
         }

@@ -2,6 +2,11 @@
 Visual Studio package to add SDCC toolchain support. SDCC is not included in the package but can be downloaded from: http://sdcc.sourceforge.net/.
 
 # Release Notes
+# Version 2.6
+Fix Bug where the AreaAddressBase was not correctly updated with modified values.
+Add support for Emulicious 'remotedebug' command line argument.
+Update the legacy additional source folder junction process to reduce the number of sleep calls to avoid launch timeouts when using multiple additional source folders.
+
 # Version 2.5
 Update to add support for the emulcious "additionalSrcFolders" option.
 Major code cleanup.

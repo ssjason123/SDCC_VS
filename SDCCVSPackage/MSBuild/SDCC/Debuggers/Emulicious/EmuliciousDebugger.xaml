@@ -68,6 +68,9 @@
             <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
         </StringListProperty.DataSource>
     </StringListProperty>
+    <BoolProperty Name="EmuliciousRemoteDebugArgument" DisplayName="Remote Debug Argument"
+                  Default="True"
+                  Description="Passes the '-remotedebug &lt;port&gt;' argument to emulicious to enable remote debugging without manual configuration." />
     <!-- Legacy Emulicious support -->
     <BoolProperty Name="EmuliciousLegacySourceFolders" DisplayName="Legacy Source Folders"
                   Default="False"

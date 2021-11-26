@@ -177,17 +177,6 @@
   -->
 
   <PropertyGroup>
-    <AreaBaseAddress Condition="'$(CodeLocation)' != '' and '$(CodeSeg)' != ''">$(AreaBaseAddress);_$(CodeSeg)=$(CodeLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(DataLocation)' != '' and '$(DataSeg)' != ''">$(AreaBaseAddress);_$(DataSeg)=$(DataLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(XRamLocation)' != '' and '$(XRamSegmentName)' != ''">$(AreaBaseAddress);_$(XRamSegmentName)=$(XRamLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(StackLocation)' != '' and '$(StackSegmentName)' != ''">$(AreaBaseAddress);_$(StackSegmentName)=$(StackLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(XStackLocation)' != '' and '$(XStackSegmentName)' != ''">$(AreaBaseAddress);_$(XStackSegmentName)=$(XStackLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(IDataLocation)' != '' and '$(IDataSegmentName)' != ''">$(AreaBaseAddress);_$(IDataSegmentName)=$(IDataLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(BitLocation)' != '' and '$(BitSegmentName)' != ''">$(AreaBaseAddress);_$(BitSegmentName)=$(BitLocation)</AreaBaseAddress>
-    <AreaBaseAddress Condition="'$(AdditionalAreaBaseAddress)' == ''">$(AreaBaseAddress);$(AdditionalAreaBaseAddress)</AreaBaseAddress>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <PlatformActual>$(Platform)</PlatformActual>
     <Platform Condition="'$(Platform)' == 'Gameboy'">Win32</Platform>
 
