@@ -61,7 +61,7 @@
   <Import Project="../SDCCVSPackage.proj" />
   <ItemGroup>
     <ProjectReference Include="..\..\EmuliciousDebuggerPackage\vs2022\EmuliciousDebuggerPackage-vs2022.csproj">
-      <Project>{e3320cea-3afb-4304-964b-c57fd988b822}</Project>
+      <Project>{d48cada1-7b63-4287-94f2-85c48f4dfd8a}</Project>
       <Name>EmuliciousDebuggerPackage-vs2022</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>VSIXContainerProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
