@@ -1,3 +1,7 @@
+# Refactor Project Notes
+This refactor is a complete rewrite of the msbuild implementation. The goal is to follow the c++ toolchain integration described at: https://learn.microsoft.com/en-us/visualstudio/extensibility/visual-cpp-project-extensibility?view=vs-2022. By adding new platforms (gbz80, etc.) and platform toolsets (sdcc). The end goal is a cleaner and more complete integration that follows the visual studio c++ standard for future compatibility.
+
+
 # SDCC_VS
 Visual Studio package to add SDCC toolchain support. SDCC is not included in the package but can be downloaded from: http://sdcc.sourceforge.net/.
 
