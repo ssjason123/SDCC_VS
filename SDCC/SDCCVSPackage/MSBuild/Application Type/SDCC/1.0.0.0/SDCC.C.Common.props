@@ -1,0 +1,19 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <UseSDCCPropertyPageSchemas>true</UseSDCCPropertyPageSchemas>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ClCompile>
+    </ClCompile>
+    <AsmCompile>
+    </AsmCompile>
+    <Link>
+    </Link>
+    <MakeBin>
+    </MakeBin>
+  </ItemDefinitionGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)BuildCusomizations\SDCC.props"/>
+</Project>

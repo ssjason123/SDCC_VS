@@ -1,0 +1,20 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(SDCCPropertyRulePath)SDAS.Common.xml">
+      <Context>PropertySheet;Project;File</Context>
+    </PropertyPageSchema>
+  </ItemGroup>
+
+  <UsingTask
+    TaskName="SDAS"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Task>$(SDCCPropertyRulePath)SDAS.Common.xml</Task>
+  </UsingTask>
+
+  <UsingTask
+    TaskName="CustomBuild"
+    AssemblyFile="$(VCTargetsPath)\Microsoft.Build.CppTasks.Common.dll"/>
+
+  <Target Name="_SDAS"/>
+</Project>

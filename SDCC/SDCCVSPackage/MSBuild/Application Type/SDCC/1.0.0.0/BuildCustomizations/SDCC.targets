@@ -1,0 +1,208 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup>
+    <!-- This Categories file controls the property page order.-->
+    <PropertyPageSchema Condition="Exists('$(SDCCPropertyRulePath)SDCC.$(PortType).Categories.xml')"
+                        Include="$(SDCCPropertyRulePath)SDCC.$(PortType).Categories.xml">
+      <Context>PropertySheet;Project;File</Context>
+    </PropertyPageSchema>
+    <!-- These are the common properties available to all SDCC applications. -->
+    <PropertyPageSchema Include="$(SDCCPropertyRulePath)SDCC.Common.xml">
+      <Context>PropertySheet;Project;File</Context>
+    </PropertyPageSchema>
+    <!-- This is the platform/port specific properties, these will override the SDCC.Common settings. -->
+    <PropertyPageSchema Condition="Exists('$(SDCCPropertyRulePath)SDCC.$(PortType).xml')"
+                        Include="$(SDCCPropertyRulePath)SDCC.$(PortType).xml">
+      <Context>PropertySheet;Project;File</Context>
+    </PropertyPageSchema>
+  </ItemGroup>
+
+  <UsingTask
+    TaskName="SDCC"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Task>$(SDCCPropertyRulePath)SDCC.Common.xml</Task>
+  </UsingTask>
+
+  <UsingTask 
+    TaskName="CustomBuild"
+    AssemblyFile="$(VCTargetsPath)\Microsoft.Build.CppTasks.Common.dll"/>
+
+  <Target Name="PrepareSDCCItems">
+    <!-- Build the SDCC Items -->
+    <ItemGroup>
+      <SDCC Remove="@(SDCC)"/>
+      <SDCC Include="@(ClCompile)"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <SDCC>
+        <OutputFile>$(IntDir)%(FileName)$(ObjectExtension)</OutputFile>
+        <TempCommandLineFile>$(IntDir)%(FileName)$(ObjectExtension).tmp</TempCommandLineFile>
+      </SDCC>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="SDCCBuild"
+          Condition="'@(ClCompile)' != ''"
+          DependsOnTargets="PrepareSDCCItems;_SDCC"/>
+
+  <Target Name="_SDCC"
+          Inputs="@(SDCC)"
+          Outputs="%(SDCC.OutputFile)">
+    <MakeDir Directories="$(IntDir);$(OutDir)"/>
+
+    <!-- Generate the custom command line. -->
+    <SDCC
+      CommandLineTemplate="echo [AllOptions] [AdditionalOptions] -o %(SDCC.OutputFile) %(SDCC.Identity) > %(SDCC.TempCommandLineFile)"
+      Verbose="%(SDCC.Verbose)"
+      OutputMacros="%(SDCC.OutputMacros)"
+      SDCCPreprocessorDefinitions="%(SDCC.SDCCPreprocessorDefinitions)"
+      AdditionalIncludeDirectories="%(SDCC.AdditionalIncludeDirectories)"
+      AssertAnswer="%(SDCC.AssertAnswer)"
+      PreprocessorUndefines="%(SDCC.PreprocessorUndefines)"
+      DependencyRule="%(SDCC.DependencyRule)"
+      PreprocessorOptions="%(SDCC.PreprocessorOptions)"
+      AssemblerOptions="%(SDCC.AssemblerOptions)"
+      LinkerOptions="%(SDCC.LinkerOptions)"
+      CompileOnly="%(SDCC.CompileOnly)"
+      CompileAndAssemble="%(SDCC.CompileAndAssemble)"
+      PreprocessOnly="%(SDCC.PreprocessOnly)"
+      C1Mode="%(SDCC.C1Mode)"
+      PrintSearchDirs="%(SDCC.PrintSearchDirs)"
+      VCOutput="%(SDCC.VCOutput)"
+      UseStdOut="%(SDCC.UseStdOut)"
+      NoStdLib="%(SDCC.NoStdLib)"
+      NoStdInc="%(SDCC.NoStdInc)"
+      LessPedantic="%(SDCC.LessPedantic)"
+      DisableWarning="%(SDCC.DisableWarning)"
+      WarnErrors="%(SDCC.WarnErrors)"
+      Debug="%(SDCC.Debug)"
+      Cyclomatic="%(SDCC.Cyclomatic)"
+      CStandard="%(SDCC.CStandard)"
+      DollarsInId="%(SDCC.DollarsInId)"
+      SignedChar="%(SDCC.SignedChar)"
+      UseNonFree="%(SDCC.UseNonFree)"
+      PortType="%(SDCC.PortType)"
+      ProcessorType="%(SDCC.ProcessorType)"
+      StackAuto="%(SDCC.StackAuto)"
+      ExternalStack="%(SDCC.ExternalStack)"
+      IntLongReent="%(SDCC.IntLongReent)"
+      FloatReent="%(SDCC.FloatReent)"
+      XRamMovec="%(SDCC.XRamMovec)"
+      CalleeSaves="%(SDCC.CalleeSaves)"
+      Profile="%(SDCC.Profile)"
+      OmitFramePointer="%(SDCC.OmitFramePointer)"
+      AllCalleeSaves="%(SDCC.AllCalleeSaves)"
+      NoXinitOpt="%(SDCC.NoXinitOpt)"
+      NoCCodeInAsm="%(SDCC.NoCCodeInAsm)"
+      NoPeepComments="%(SDCC.NoPeepComments)"
+      CodeSeg="%(SDCC.CodeSeg)"
+      ConstSeg="%(SDCC.ConstSeg)"
+      DataSeg="%(SDCC.DataSeg)"
+      NoOverlay="%(SDCC.NoOverlay)"
+      NoGcse="%(SDCC.NoGcse)"
+      NoLabelOpt="%(SDCC.NoLabelOpt)"
+      NoInvariant="%(SDCC.NoInvariant)"
+      NoInduction="%(SDCC.NoInduction)"
+      NoLoopReverse="%(SDCC.NoLoopReverse)"
+      NoPeep="%(SDCC.NoPeep)"
+      NoRegParams="%(SDCC.NoRegParams)"
+      PeepAsm="%(SDCC.PeepAsm)"
+      PeepReturn="%(SDCC.PeepReturn)"
+      NoPeepReturn="%(SDCC.NoPeepReturn)"
+      PeepFile="%(SDCC.PeepFile)"
+      OptimizeCode="%(SDCC.OptimizeCode)"
+      MaxAllocsPerNode="%(SDCC.MaxAllocsPerNode)"
+      NoLospre="%(SDCC.NoLospre)"
+      AllowUnsafeRead="%(SDCC.AllowUnsafeRead)"
+      NoStdLibCalls="%(SDCC.NoStdLibCalls)"
+      DumpAst="%(SDCC.DumpAst)"
+      DumpICode="%(SDCC.DumpICode)"
+      DumpGraphs="%(SDCC.DumpGraphs)"
+      ICodeInAsm="%(SDCC.ICodeInAsm)"
+      VerboseAsm="%(SDCC.VerboseAsm)"
+      IncludeLibraries="%(SDCC.IncludeLibraries)"
+      AdditionalLibraryPath="%(SDCC.AdditionalLibraryPath)"
+      OutputFormat="%(SDCC.OutputFormat)"
+      XRamLocation="%(SDCC.XRamLocation)"
+      XRamSize="%(SDCC.XRamSize)"
+      IRamSize="%(SDCC.IRamSize)"
+      XStackLocation="%(SDCC.XStackLocation)"
+      CodeLocation="%(SDCC.CodeLocation)"
+      CodeSize="%(SDCC.CodeSize)"
+      StackLocation="%(SDCC.StackLocation)"
+      DataLocation="%(SDCC.DataLocation)"
+      IDataLocation="%(SDCC.IDataLocation)"
+      NoOptSdccInAsm="%(SDCC.NoOptSdccInAsm)"
+      ACallAJump="%(SDCC.ACallAJump)"
+      AssemblerName="%(SDCC.AssemblerName)"
+      CalleeSavesBC="%(SDCC.CalleeSavesBC)"
+      DumpCallTree="%(SDCC.DumpCallTree)"
+      DebugRAlloc="%(SDCC.DebugRAlloc)"
+      DebugXtra="%(SDCC.DebugXtra)"
+      DEnablePeeps="%(SDCC.DEnablePeeps)"
+      EmitExterns="%(SDCC.EmitExterns)"
+      NoOmitFramePointer="%(SDCC.NoOmitFramePointer)"
+      TraceStackPointer="%(SDCC.TraceStackPointer)"
+      IvtLocation="%(SDCC.IvtLocation)"
+      LegacyBanking="%(SDCC.LegacyBanking)"
+      AlternateLinker="%(SDCC.AlternateLinker)"
+      Model="%(SDCC.Model)"
+      MPLABCompatability="%(SDCC.MPLABCompatability)"
+      NMOSz80="%(SDCC.NMOSz80)"
+      NoCRT="%(SDCC.NoCRT)"
+      NoExtendedInstructions="%(SDCC.NoExtendedInstructions)"
+      NoOptimizeGoto="%(SDCC.NoOptimizeGoto)"
+      NoPCodeOptimization="%(SDCC.NoPCodeOptimization)"
+      NoRetWithoutCall="%(SDCC.NoRetWithoutCall)"
+      NoStdCRT="%(SDCC.NoStdCRT)"
+      NoWarnNonFree="%(SDCC.NoWarnNonFree)"
+      NoDefaultLibs="%(SDCC.NoDefaultLibs)"
+      BankSelectOptimization="%(SDCC.BankSelectOptimization)"
+      OldRegisterAllocator="%(SDCC.OldRegisterAllocator)"
+      OptimizeCompares="%(SDCC.OptimizeCompares)"
+      OptimizeDataFlow="%(SDCC.OptimizeDataFlow)"
+      OutputElfFormat="%(SDCC.OutputElfFormat)"
+      ParamPassInBank1="%(SDCC.ParamPassInBank1)"
+      PCodeVerbose="%(SDCC.PCodeVerbose)"
+      NoBANKSEL="%(SDCC.NoBANKSEL)"
+      PortIoMode="%(SDCC.PortIoMode)"
+      ReplaceUdata="%(SDCC.ReplaceUdata)"
+      ProtectSpUpdate="%(SDCC.ProtectSpUpdate)"
+      StackModel="%(SDCC.StackModel)"
+      ReserveRegsIY="%(SDCC.ReserveRegsIY)"
+      StackBits="%(SDCC.StackBits)"
+      StackSize="%(SDCC.StackSize)"
+      LibraryID="%(SDCC.LibraryID)"
+      UseAccelerator="%(SDCC.UseAccelerator)"
+      UseCRT="%(SDCC.UseCRT)"
+      DataBank="%(SDCC.DataBank)"
+      CodeBank="%(SDCC.CodeBank)"
+      ExtendedInstructionSet="%(SDCC.ExtendedInstructionSet)"
+      CustomCrt="%(SDCC.CustomCrt)"
+      AdditionalOptions="%(SDCC.AdditionalOptions)"
+      />
+
+    <!-- Read the commandline from the temporary file. -->
+    <ItemGroup>
+      <SDCC>
+        <Command Condition="Exists(%(SDCC.TempCommandLineFile))">SDCC.exe $([System.IO.File]::ReadAllText(%(SDCC.TempCommandLineFile)).Trim())</Command>
+        <Outputs>%(SDCC.OutputFile)</Outputs>
+      </SDCC>
+    </ItemGroup>
+
+    <!-- Delete the temporary file. -->
+    <Delete Files="%(SDCC.TempCommandLineFile)"/>
+
+    <!-- Run the command to build the file. -->
+    <CustomBuild  
+      Sources="@(SDCC)"
+      MinimalRebuildFromTracking="true"
+      TrackerLogDirectory="$(TLogLocation)"
+      EnableErrorListRegex="true"
+      ErrorListRegex="(?'FILENAME'.+):(?'LINE'\d+): (syntax )?(?'CATEGORY'Error|error|warning|info)( (?'CODE'\d+))?:(?'TEXT'.+?)( %3B column (?'COLUMN'\d+))?$"
+      />
+  </Target>
+
+</Project>

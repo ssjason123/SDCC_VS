@@ -1,0 +1,15 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Property Sheets -->
+  <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false'">
+    <PropertyPageSchema Include="
+        $(MSBuildThisFileDirectory)$(LangID)/ProjectItemsSchema.xml;
+        $(VCTargetsPath)$(LangID)\build_events.xml;
+        $(VCTargetsPath)$(LangID)\custom_build_tool.xml;
+        $(VCTargetsPath)$(LangID)\custom_build_step.xml;
+        "/>
+  </ItemGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)BuildCusomizations\SDCC.targets"/>]
+
+</Project>

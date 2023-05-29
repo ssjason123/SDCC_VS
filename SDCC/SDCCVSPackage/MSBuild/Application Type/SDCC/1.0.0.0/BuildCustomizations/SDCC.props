@@ -1,0 +1,22 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <PortType>gbz80</PortType>
+    <VCOutput Condition="'$(VCOutput)' == ''">true</VCOutput>
+    <CompileAndAssemble Condition="'$(CompileAndAssemble)' == ''">true</CompileAndAssemble>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <SDCC>
+      <PortType>$(PortType)</PortType>
+      <VCOutput Condition="'%(SDCC.VCOutput)' == ''">$(VCOutput)</VCOutput>
+      <CompileAndAssemble Condition="'%(SDCC.CompileAndAssemble)' == ''">$(CompileAndAssemble)</CompileAndAssemble>
+    </SDCC>
+    <ClCompile>
+      <PortType>$(PortType)</PortType>
+      <VCOutput Condition="'%(ClCompile.VCOutput)' == ''">$(VCOutput)</VCOutput>
+      <CompileAndAssemble Condition="'%(ClCompile.CompileAndAssemble)' == ''">$(CompileAndAssemble)</CompileAndAssemble>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+</Project>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Package\SDCCPackage.cs">
+      <Link>Package\SDCCPackage.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SDCCForm.cs" >
+      <Link></Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SDCCForm.Designer.cs">
+      <DependentUpon>SDCCForm.cs</DependentUpon>
+      <Link>SDCCForm.Designer.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" >
+      <Link>Properties\AssemblyInfo.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SDCCWizard.cs" >
+      <Link>SDCCWizard.cs</Link>
+      <Visible>true</Visible>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.ASMItem\ASMFile.asm">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.ASMItem</VSIXSubPath>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.ASMItem\ASMFile.asm</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.ASMItem\SDCC.ASMItem.ico">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.ASMItem</VSIXSubPath>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.ASMItem\SDCC.ASMItem.ico</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.ASMItem\SDCC.ASMItem.vstemplate">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.ASMItem</VSIXSubPath>
+      <SubType>Designer</SubType>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.ASMItem\SDCC.ASMItem.vstemplate</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.CItem\SDCC.CItem.vstemplate">
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.CItem</VSIXSubPath>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.CItem\SDCC.CItem.vstemplate</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.CItem\SDCC.CItem.ico">
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.CItem</VSIXSubPath>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.CItem\SDCC.CItem.ico</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.CItem\CFile.c">
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.CItem</VSIXSubPath>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.CItem\CFile.c</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.HItem\HFile.h">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.HItem</VSIXSubPath>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.HItem\HFile.h</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.HItem\SDCC.HItem.ico">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.HItem</VSIXSubPath>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.HItem\SDCC.HItem.ico</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ItemTemplates\VC\SDCC\1033\SDCC.HItem\SDCC.HItem.vstemplate">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ItemTemplates\VC\SDCC\1033\SDCC.HItem</VSIXSubPath>
+      <Link>ItemTemplates\VC\SDCC\1033\SDCC.HItem\SDCC.HItem.vstemplate</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\ProjectTemplate.vcxproj.filters">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate</VSIXSubPath>
+      <Link>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\ProjectTemplate.vcxproj.filters</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\SDCCProjectTemplate.vstemplate">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate</VSIXSubPath>
+      <SubType>Designer</SubType>
+      <Link>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\SDCCProjectTemplate.vstemplate</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\ProjectTemplate.vcxproj">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate</VSIXSubPath>
+      <SubType>Designer</SubType>
+      <Link>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\ProjectTemplate.vcxproj</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\SDCCProjectTemplate.ico">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate</VSIXSubPath>
+      <Link>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\SDCCProjectTemplate.ico</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\main.c">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate</VSIXSubPath>
+      <Link>ProjectTemplates\VC\SDCC\1033\SDCC.ProjectTemplate\main.c</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)SDCC.pkgdef">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <Link>SDCC.pkgdef</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Extensions\GameBoyAssembly\syntaxes\z80.tmLanguage">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <VSIXSubPath>Extensions\GameBoyAssembly\syntaxes</VSIXSubPath>
+      <Link>Extensions\GameBoyAssembly\syntaxes\z80.tmLanguage</Link>
+      <Visible>true</Visible>
+    </Content>
+    <None Include="$(MSBuildThisFileDirectory)key.snk" >
+      <Link>key.snk</Link>
+      <Visible>true</Visible>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)index.html" >
+      <Link>index.html</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)stylesheet.css">
+      <Link>stylesheet.css</Link>
+      <Visible>true</Visible>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)SDCCForm.resx">
+      <DependentUpon>SDCCForm.cs</DependentUpon>
+      <Link>SDCCForm.resx</Link>
+      <Visible>true</Visible>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDAS.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDAS.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDAS.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDAS.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDCC.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDCC.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDCC.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDCC.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Default.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Default.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Dependency.Download.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Dependency.Download.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.Common.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.Common.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.default.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.default.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\Platform.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\PlatformToolsets\sdcc\Toolset.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\PlatformToolsets\sdcc\Toolset.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\PlatformToolsets\sdcc\Toolset.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\gbz80\PlatformToolsets\sdcc\Toolset.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\Platform.default.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\Platform.default.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\Platform.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\Platform.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\Platform.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\Platform.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\PlatformToolset\sdcc\Toolset.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\PlatformToolset\sdcc\Toolset.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\PlatformToolset\sdcc\Toolset.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\Platforms\template\PlatformToolset\sdcc\Toolset.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\SDCC.C.Common.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\SDCC.C.Common.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\SDCC.C.Common.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\SDCC.C.Common.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\MakeBin.Common.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\MakeBin.Common.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\ProjectItemsSchema.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\ProjectItemsSchema.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\SDAS.Common.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\SDAS.Common.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.Common.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.Common.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.gbz80.Categories.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.gbz80.Categories.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.gbz80.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.gbz80.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.General.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\SDCC.General.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\1033\SDLD.Common.xml">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\1033\SDLD.Common.xml</Link>
+      <Visible>true</Visible>
+    </Content>
+  </ItemGroup>
+
+<!--
+  <Target Name="IncludeNuGetPackageReferences" AfterTargets="GetVsixSourceItems">
+    <ItemGroup>
+      <VSIXSourceItem Include="@(ReferenceCopyLocalPaths)" Condition="$([System.String]::new('%(ReferenceCopyLocalPaths.NuGetPackageId)').StartsWith('Microsoft.VisualStudio'))" />
+    </ItemGroup>
+  </Target>
+-->
+</Project>

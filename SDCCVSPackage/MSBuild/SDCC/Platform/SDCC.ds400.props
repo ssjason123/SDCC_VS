@@ -1,8 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <!-- SDCC DS400 Overrides -->
-  <PropertyGroup Condition="'$(ProcessorType)' == 'ds400'">
-    <!-- TODO: Add Overrides -->
-  </PropertyGroup>
-
-</Project>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule 
+      Name="SDAS" 
+      PageTemplate="generic" 
+      DisplayName="SDAS" 
+      SwitchPrefix="-" 
+      Order="11" 
+      xmlns="http://schemas.microsoft.com/build/2009/properties" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <Rule.Categories>
+      <Category 
+        Name="General" 
+        DisplayName="General"/>
+    </Rule.Categories>
+    <Rule.DataSource>
+      <DataSource 
+          Persistence="ProjectFile" 
+          Label="" 
+          ItemType="AsmCompile"
+          HasConfigurationCondition="true" />
+    </Rule.DataSource>
+  
+    <!--
+    **************************************
+    * General Rules
+    **************************************
+  
+    -d   Decimal listing
+    -q   Octal   listing
+    -x   Hex     listing (default)
+    -->
+    <EnumProperty
+      Name="NumberFormat"
+      DisplayName="Listing Number Format"
+      Description="The format to report numbers in the listing file."
+      Category="General"
+      F1Keyword="VC.Project.SDASAssemblerTool.ListingNumberFormat">
+      <EnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </EnumProperty.DataSource>
+      <EnumValue
+        Name="Decimal"
+        Switch="d"
+        DisplayName="Decimal"
+        Description="Decimal number format.    (-d)."/>
+      <EnumValue
+        Name="Octal"
+        Switch="q"
+        DisplayName="Octal"
+        Description="Octal number format.    (-q)."/>
+      <EnumValue
+        Name="Hex"
+        Switch="x"
+        DisplayName="Hex"
+        Description="Hex number format.    (-x)."/>
+    </EnumProperty>
+    <!--
+    -g   Undefined symbols made global
+    -->
+    <BoolProperty
+      Name="UndefinedSymbolsMadeGlobal"
+      DisplayName="Undefined Symbols Made Global"
+      Description="Undefined symbols made global.     (-g)"
+      Category="General"
+      Switch="g"
+      F1Keyword="VC.Project.SDASAssemblerTool.UndefinedSymbolsMadeGlobal"/>
+    <!--
+    -a   All user symbols made global
+    -->
+    <BoolProperty
+      Name="AllUserSymbolsMadeGlobal"
+      DisplayName="All User Symbols Made Global"
+      Description="All user symbols made global.     (-a)"
+      Category="General"
+      Switch="a"
+      F1Keyword="VC.Project.SDASAssemblerTool.AllUserSymbolsMadeGlobal"/>
+    <!--
+    -b   Display .define substitutions in listing
+    -bb  and display without .define substitutions
+    -->
+    <EnumProperty
+      Name="ListingDefineFormat"
+      DisplayName="Define Display in Listing File"
+      Description="The format to display .define substitutions in the listing file."
+      Category="General"
+      F1Keyword="VC.Project.SDASAssemblerTool.ListingDefineFormat">
+      <EnumValue
+        Name="WithDefines"
+        Switch="b"
+        DisplayName="With Defines"
+        Description="Display .define substitutions in listing.    (-b)."/>
+      <EnumValue
+        Name="WithoutDefines"
+        Switch="bb"
+        DisplayName="Without Defines"
+        Description="Display without .define substitutions.    (-bb)."/>
+    </EnumProperty>
+    <!--
+    -c   Disable instruction cycle count in listing
+    -->
+    <BoolProperty
+      Name="DisableInstructionCycleCountInListing"
+      DisplayName="Disable Instruction Cycle Count in Listing"
+      Description="Disable instruction cycle count in listing.     (-c)"
+      Category="General"
+      Switch="c"
+      F1Keyword="VC.Project.SDASAssemblerTool.DisableInstructionCycleCountInListing"/>
+    <!--
+    -j   Enable NoICE Debug Symbols
+    -->
+    <BoolProperty
+      Name="EnableNoICEDebugSymbols"
+      DisplayName="Enable NoICE Debug Symbols"
+      Description="Enable NoICE Debug Symbols.     (-j)"
+      Category="General"
+      Switch="j"
+      F1Keyword="VC.Project.SDASAssemblerTool.EnableNoICEDebugSymbols"/>
+    <!--
+    -y   Enable SDCC  Debug Symbols
+    -->
+    <BoolProperty
+      Name="EnableSDCCDebugSymbols"
+      DisplayName="Enable SDCC  Debug Symbols"
+      Description="Enable SDCC  Debug Symbols.     (-y)"
+      Category="General"
+      Switch="y"
+      F1Keyword="VC.Project.SDASAssemblerTool.EnableSDCCDebugSymbols"/>
+    <!--
+    -l   Create list   file/outfile[.lst]
+    -->
+    <BoolProperty
+      Name="CreateListFile"
+      DisplayName="Create Listing File"
+      Description="Create list file/outfile[.lst].     (-l)"
+      Category="General"
+      Switch="l"
+      F1Keyword="VC.Project.SDASAssemblerTool.CreateListFile"/>
+    <!--
+    -o   Create object file/outfile[.rel]
+    -->
+    <BoolProperty
+      Name="CreateObjectFile"
+      DisplayName="Create Object File"
+      Description="Create object file/outfile[.rel].     (-o)"
+      Category="General"
+      Switch="o"
+      F1Keyword="VC.Project.SDASAssemblerTool.CreateObjectFile"/>
+    <!--
+    -s   Create symbol file/outfile[.sym]
+    -->
+    <BoolProperty
+      Name="CreateSymbolFile"
+      DisplayName="Create Symbol File"
+      Description="Create symbol file/outfile[.sym].     (-s)"
+      Category="General"
+      Switch="s"
+      F1Keyword="VC.Project.SDASAssemblerTool.CreateSymbolFile"/>
+    <!--
+    -p   Disable automatic listing pagination
+    -->
+    <BoolProperty
+      Name="DisableAutoListingPagination"
+      DisplayName="Disable Automatic Listing Pagination"
+      Description="Disable automatic listing pagination.     (-p)"
+      Category="General"
+      Switch="p"
+      F1Keyword="VC.Project.SDASAssemblerTool.DisableAutoListingPagination"/>
+    <!--
+    -u   Disable .list/.nlist processing
+    -->
+    <BoolProperty
+      Name="DisableListProcessing"
+      DisplayName="Disable .list/.nlist Processing"
+      Description="Disable .list/.nlist processing.     (-u)"
+      Category="General"
+      Switch="u"
+      F1Keyword="VC.Project.SDASAssemblerTool.DisableListProcessing"/>
+    <!--
+    -w   Wide listing format for symbol table
+    -->
+    <BoolProperty
+      Name="UseWideListingFormat"
+      DisplayName="Use Wide Listing Format"
+      Description="Wide listing format for symbol table.     (-w)"
+      Category="General"
+      Switch="w"
+      F1Keyword="VC.Project.SDASAssemblerTool.UseWideListingFormat"/>
+    <!--
+    -z   Disable case sensitivity for symbols
+    -->
+    <BoolProperty
+      Name="DisableCaseSensitivity"
+      DisplayName="Disable Case Sensitivity"
+      Description="Disable case sensitivity for symbols.     (-z)"
+      Category="General"
+      Switch="z"
+      F1Keyword="VC.Project.SDASAssemblerTool.DisableCaseSensitivity"/>
+    <!--
+    -f   Flag relocatable references by  `   in listing file
+    -ff  Flag relocatable references by mode in listing file
+    -->
+    <EnumProperty
+      Name="RelocatableReferenceMode"
+      DisplayName="Relocatable Reference Mode"
+      Description="Method used to flag relocatable references in the listing file."
+      Category="General"
+      F1Keyword="VC.Project.SDASAssemblerTool.RelocatableReferenceMode">
+      <EnumValue
+        Name="Flag by '"
+        Switch="f"
+        DisplayName="Flag by '"
+        Description="Flag relocatable references by  `   in listing file.    (-f)."/>
+      <EnumValue
+        Name="Flag by mode"
+        Switch="ff"
+        DisplayName="Flag by mode"
+        Description="Flag relocatable references by mode in listing file.    (-ff)."/>
+    </EnumProperty>
+    <!--
+    -I   Add the named directory to the include file
+         search path.  This option may be used more than once.
+         Directories are searched in the order given.
+    -->
+    <StringListProperty 
+      Subtype="folder" 
+      Name="AdditionalIncludeDirectories"
+      DisplayName="Additional Include Directories"
+      Description="The additional location where the preprocessor will look for &lt;..h&gt; or &quot;..h&quot; files.    (-I&lt;path&gt;)"
+      Category="General" 
+      Switch="I" 
+      F1Keyword="VC.Project.SDASAssemblerTool.AdditionalIncludeDirectories"/>
+  </Rule>
+</ProjectSchemaDefinitions>

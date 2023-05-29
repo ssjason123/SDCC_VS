@@ -1,0 +1,1797 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+  <Rule 
+      Name="SDCC" 
+      PageTemplate="tool" 
+      DisplayName="SDCC" 
+      SwitchPrefix="-" 
+      OverrideMode="Extend"
+      Order="10">
+    <Rule.Categories>
+      <Category 
+        Name="General" 
+        DisplayName="General"/>
+      <!-- 
+      Define the port specific categories. The 'PortSpecific' category will be overwritten with the port specific SDCC.<Port>.xml file.
+      -->
+      <!--
+      <Category
+        Name="mcs51"
+        DisplayName="Mcs51"/>
+      <Category
+        Name="z80"
+        DisplayName="Z80"/>
+      <Category
+        Name="z180"
+        DisplayName="Z180"/>
+      <Category
+        Name="r2k"
+        DisplayName="R2k"/>
+      <Category
+        Name="r2ka"
+        DisplayName="R2ka"/>
+      <Category
+        Name="r3ka"
+        DisplayName="R3ka"/>
+      <Category
+        Name="gbz80"
+        DisplayName="Gbz80"/>
+      <Category
+        Name="tlcs90"
+        DisplayName="Tlcs90"/>
+      <Category
+        Name="ez80_z80"
+        DisplayName="Ez80_z80"/>
+      <Category
+        Name="z80n"
+        DisplayName="Z80n"/>
+      <Category
+        Name="ds390"
+        DisplayName="Ds390"/>
+      <Category
+        Name="pic16"
+        DisplayName="Pic16"/>
+      <Category
+        Name="pic14"
+        DisplayName="Pic14"/>
+      <Category
+        Name="TININative"
+        DisplayName="TININative"/>
+      <Category
+        Name="ds400"
+        DisplayName="Ds400"/>
+      <Category
+        Name="hc08"
+        DisplayName="Hc08"/>
+      <Category
+        Name="s08"
+        DisplayName="S08"/>
+      <Category
+        Name="stm8"
+        DisplayName="Stm8"/>
+        -->
+      <Category
+        Name="CCodeGen"
+        DisplayName="C Code Generation"/>
+      <Category
+        Name="COptimization"
+        DisplayName="C Optimization"/>
+      <Category
+        Name="CDebugging"
+        DisplayName="C Debugging"/>
+      <Category
+        Name="Linker"
+        DisplayName="Linker"/>
+      <Category
+        Name="PortSpecific"
+        DisplayName="Unsupported Port Specific"/>
+      <Category
+        Name="All Options"
+        DisplayName="All Options"
+        Subtype="Search" />
+      <Category
+        Name="Command Line"
+        DisplayName="Command Line"
+        Subtype="CommandLine" />
+    </Rule.Categories>
+    <Rule.DataSource>
+      <DataSource 
+          Persistence="ProjectFile"
+          ItemType="ClCompile"/>
+    </Rule.DataSource>
+  
+    <!--
+    **************************************
+    * General Rules
+    **************************************
+  
+        - -help                Display this help
+    -v  - -version             Display sdcc's version
+        - -verbose             Trace calls to the preprocessor, assembler, and linker
+    -V                        Execute verbosely. Show sub commands as they are run
+    -->
+    <BoolProperty
+      Name="Verbose"
+      DisplayName="Execute Verbosely"
+      Description="Execute verbosely. Show sub commands as they are run.    (-V)"
+      Category="General" 
+      Switch="V" 
+      F1Keyword="VC.Project.SDCCCompilerTool.Verbose"
+      />
+    <!--
+    -d                        Output list of macro definitions in effect. Use with -E
+    -->
+    <BoolProperty
+      Name="OutputMacros"
+      DisplayName="Output Macro List"
+      Description="Output list of macro definitions in effect. Use with -E.    (-d)"
+      Category="General"
+      Switch="d"
+      F1Keyword="VC.Project.SDCCCompilerTool.OutputMacros"
+      />
+    <!--
+    -D                        Define macro as in -Dmacro
+    -->
+    <StringListProperty
+      Name="SDCCPreprocessorDefinitions"
+      DisplayName="Preprocessor Definitions"
+      Description="Command line definition of macros. Passed to the preprocessor.    (-D&lt;macro[=value]&gt;)"
+      Category="General"
+      Switch="D "
+      F1Keyword="VC.Project.SDCCCompilerTool.SDCCPreprocessorDefinitions">
+    </StringListProperty>
+    <!--
+    -I                        Add to the include (*.h) path, as in -Ipath
+    -->
+    <StringListProperty 
+      Subtype="folder" 
+      Name="AdditionalIncludeDirectories"
+      DisplayName="Additional Include Directories"
+      Description="The additional location where the preprocessor will look for &lt;..h&gt; or &quot;..h&quot; files.    (-I&lt;path&gt;)"
+      Category="General" 
+      Switch="I"
+      F1Keyword="VC.Project.SDCCCompilerTool.AdditionalIncludeDirectories">
+      <!--
+      <StringListProperty.DataSource>
+        <DataSource
+          Persistence="ProjectFile"
+          Label=""
+          ItemType=""
+          HasConfigurationCondition="true"/>
+      </StringListProperty.DataSource>
+      -->
+    </StringListProperty>
+    <!--
+    -A
+    -->
+    <StringListProperty 
+      Name="AssertAnswer"
+      DisplayName="Assert Question Answer"
+      Description="Assert the answer answer for question, in case it is tested with a preprocessor conditional such as ‘#if #question(answer)’. ‘-A-’ disables the standard assertions that normally describe the target machine.    (-Aquestion(answer))"
+      Category="General" 
+      Switch="A" 
+      F1Keyword="VC.Project.SDCCCompilerTool.AssertAnswer"/>
+    <!--
+    -U                        Undefine macro as in -Umacro
+    -->
+    <StringListProperty 
+      Name="PreprocessorUndefines"
+      DisplayName="Preprocessor Undefines"
+      Description="Undefine macro macro. ‘-U’ options are evaluated after all ‘-D’ options, but before any ‘-include’ and ‘-imacros’ options.    (-Umacro)"
+      Category="General" 
+      Switch="U" 
+      F1Keyword="VC.Project.SDCCCompilerTool.PreprocessorUndefines"/>
+    <!--
+    -M                        Preprocessor option
+    -->
+    <EnumProperty 
+      Name="DependencyRule" 
+      DisplayName="Output Dependency Rules" 
+      Description="Output make rules for dependencies." 
+      Category="General" 
+      F1Keyword="VC.Project.SDCCCompilerTool.DependencyRule">
+        <EnumValue 
+          Name="AllHeaders" 
+          Switch="M" 
+          DisplayName="All Headers" 
+          Description="Tell the preprocessor to output a rule suitable for make describing the dependencies of each object file. For each source file, the preprocessor outputs one make-rule whose target is the object file name for that source file and whose dependencies are all the files ‘#include’d in it. This rule may be a single line or may be continued with ‘\’-newline if it is long. The list of rules is printed on standard output instead of the preprocessed C program. ‘-M’ implies ‘-E’    (-M)."/>
+        <EnumValue 
+          Name="UserHeadersOnly" 
+          Switch="MM" 
+          DisplayName="User Headers" 
+          Description="Like ‘-M’ but the output mentions only the user header files included with ‘#include &quot;file&quot;’. Systemheader files included with ‘#include &lt;file&gt;’ are omitted.    (-MM)"/>
+    </EnumProperty>
+    <!--
+    -W                        Pass through options to the pre-processor (p), assembler (a) or linker (l)
+    -->
+    <StringListProperty 
+      Name="PreprocessorOptions"
+      CommandLineValueSeparator=","
+      DisplayName="Preprocessor Options"
+      Description="Pass the preprocessorOption to the preprocessor sdcpp.    (-Wp preprocessorOption[,preprocessorOption]...)"
+      Category="General" 
+      Switch="Wp " 
+      F1Keyword="VC.Project.SDCCCompilerTool.PreprocessorOptions"/>
+    <StringListProperty
+      Name="AssemblerOptions"
+      CommandLineValueSeparator=","
+      DisplayName="Assembler Options"
+      Description="Pass the assemblerOption to the assembler sdcpp.    (-Wa assemblerOption[,assemblerOption]...)"
+      Category="General"
+      Switch="Wa "
+      F1Keyword="VC.Project.SDCCCompilerTool.AssemblerOptions"/>
+    <!-- NOTE: the linker is run independently.-->
+    <StringListProperty
+      Name="LinkerOptions"
+      CommandLineValueSeparator=","
+      DisplayName="Linker Options"
+      Description="Pass the linkerOption to the linker sdcpp.    (-Wl linkerOption[,linkerOption]...)"
+      Category="General"
+      Switch="Wl "
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.LinkerOptions"/>
+    <!--
+    -S                        Compile only; do not assemble or link
+    -->
+    <BoolProperty
+      Name="CompileOnly"
+      DisplayName="Compile only"
+      Description="Compile only; do not assemble or link.     (-S)"
+      Category="General"
+      Switch="S"
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.CompileOnly"/>
+    <!--
+    -c  - -compile-only        Compile and assemble, but do not link
+    -->
+    <BoolProperty
+      Name="CompileAndAssemble"
+      DisplayName="Compile and Assemble"
+      Description="Compile and assemble, but do not link.     (-c --compile-only)"
+      Category="General"
+      Switch="c"
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.CompileAndAssemble"/>
+    <!--
+    -E  - -preprocessonly      Preprocess only, do not compile
+    -->
+    <BoolProperty
+      Name="PreprocessOnly"
+      DisplayName="Preprocess Only"
+      Description="Preprocess only, do not compile.     (-E --preprocessonly)"
+      Category="General"
+      Switch="E"
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.PreprocessOnly"/>
+    <!--
+        - -c1mode              Act in c1 mode.  The standard input is preprocessed code, the output is assembly code.
+    -->
+    <BoolProperty
+      Name="C1Mode"
+      DisplayName="C1 Mode"
+      Description="Act in c1 mode.  The standard input is preprocessed code, the output is assembly code.     (--c1mode)"
+      Category="General"
+      Switch="-c1mode"
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.C1Mode"/>
+    <!--
+    -o                        Place the output into the given path resp. file
+        - -print-search-dirs   display the directories in the compiler's search path
+    -->
+    <BoolProperty 
+      Name="PrintSearchDirs" 
+      DisplayName="Print Search Directories" 
+      Description="Display the directories in the compiler's search path.     (--print-search-dirs)"
+      Category="General" 
+      Switch="-print-search-dirs" 
+      F1Keyword="VC.Project.SDCCCompilerTool.PrintSearchDirs"/>
+    <!--
+        - -vc                  messages are compatible with Micro$oft visual studio
+    -->
+    <BoolProperty
+      Name="VCOutput"
+      DisplayName="Visual Studio Output"
+      Description="Messages are compatible with Micro$oft visual studio.     (--vc)"
+      Category="General"
+      Switch="-vc"
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.VCOutput"/>
+    <!--
+        - -use-stdout          send errors to stdout instead of stderr
+    -->
+    <BoolProperty
+      Name="UseStdOut"
+      DisplayName="Standard Output"
+      Description="Send errors to stdout instead of stderr.     (--use-stdout)"
+      Category="General"
+      Switch="-use-stdout"
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.UseStdOut"/>
+    <!--
+        - -nostdlib            Do not include the standard library directory in the search path
+    -->
+    <BoolProperty
+      Name="NoStdLib"
+      DisplayName="No Standard Library"
+      Description="Do not include the standard library directory in the search path.     (--nostdlib)"
+      Category="General"
+      Switch="-nostdlib"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoStdLib"/>
+    <!--
+        - -nostdinc            Do not include the standard include directory in the search path
+    -->
+    <BoolProperty
+      Name="NoStdInc"
+      DisplayName="No Standard Includes"
+      Description="Do not include the standard include directory in the search path.     (--nostdlib)"
+      Category="General"
+      Switch="-nostdinc"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoStdInc"/>
+    <!--
+        - -less-pedantic       Disable some of the more pedantic warnings
+    -->
+    <BoolProperty
+      Name="LessPedantic"
+      DisplayName="Less Pedantic"
+      Description="Disable some of the more pedantic warnings.     (--less-pedantic)"
+      Category="General"
+      Switch="-less-pedantic"
+      F1Keyword="VC.Project.SDCCCompilerTool.LessPedantic"/>
+    <!--
+        - -disable-warning     <nnnn> Disable specific warning
+    -->
+    <StringListProperty
+      Name="DisableWarning"
+      DisplayName="Disable Warning"
+      Description="Disable specific warning    (--disable-warning &lt;num&gt;)"
+      Category="General"
+      Switch="--disable-warning "
+      F1Keyword="VC.Project.SDCCCompilerTool.DisableWarning"/>
+    <!--
+        - -Werror              Treat the warnings as errors
+    -->
+    <BoolProperty
+      Name="WarnErrors"
+      DisplayName="Treat Warnings as Errors"
+      Description="Treat Warnings as Errors.     (--Werror)"
+      Category="General"
+      Switch="-Werror"
+      F1Keyword="VC.Project.SDCCCompilerTool.WarnErrors"/>
+    <!--
+        - -debug               Enable debugging symbol output
+    -->
+    <BoolProperty
+      Name="Debug"
+      DisplayName="Enable Debugging Symbols"
+      Description="Enable debugging symbol output.     (--debug)"
+      Category="General"
+      Switch="-debug"
+      F1Keyword="VC.Project.SDCCCompilerTool.Debug"/>
+    <!--
+        - -cyclomatic          Display complexity of compiled functions
+    -->
+    <BoolProperty
+      Name="Cyclomatic"
+      DisplayName="Cyclomatic"
+      Description="Display complexity of the compiled functions.     (--cyclomatic)"
+      Category="General"
+      Switch="-cyclomatic"
+      F1Keyword="VC.Project.SDCCCompilerTool.Cyclomatic"/>
+    <!--
+        - -std-c89             Use ISO C90 (aka ANSI C89) standard (slightly incomplete)
+        - -std-sdcc89          Use ISO C90 (aka ANSI C89) standard with SDCC extensions
+        - -std-c95             Use ISO C95 (aka ISO C94) standard (slightly incomplete)
+        - -std-c99             Use ISO C99 standard (incomplete)
+        - -std-sdcc99          Use ISO C99 standard with SDCC extensions
+        - -std-c11             Use ISO C11 standard (incomplete)
+        - -std-sdcc11          Use ISO C11 standard with SDCC extensions (default)
+        - -std-c2x             Use ISO C2X standard (incomplete)
+        - -std-sdcc2x          Use ISO C2X standard with SDCC extensions
+    -->
+    <EnumProperty
+      Name="CStandard"
+      DisplayName="C ISO Standard Format"
+      Description="The C ISO Standard Format to use."
+      Category="General"
+      F1Keyword="VC.Project.SDCCCompilerTool.CStandard">
+      <EnumValue
+        Name="std-c89"
+        Switch="-std-c89"
+        DisplayName="ISO C90"
+        Description="Use ISO C90 (aka ANSI C89) standard (slightly incomplete)    (--std-c89)."/>
+      <EnumValue
+        Name="std-sdcc89"
+        Switch="-std-sdcc89"
+        DisplayName="SDCC ISO C90"
+        Description="Use ISO C90 (aka ANSI C89) standard with SDCC extensions   (--std-sdcc89)."/>
+      <EnumValue
+        Name="std-c95"
+        Switch="-std-c95"
+        DisplayName="ISO C95"
+        Description="Use ISO C95 (aka ISO C94) standard (slightly incomplete)   (--std-c95)."/>
+      <EnumValue
+        Name="std-c99"
+        Switch="-std-c99"
+        DisplayName="ISO C99"
+        Description="Use ISO C99 standard (slightly incomplete)   (--std-c99)."/>
+      <EnumValue
+        Name="std-sdcc99"
+        Switch="-std-sdcc99"
+        DisplayName="SDCC ISO C99"
+        Description="Use ISO C99 standard with SDCC extensions   (--std-sdcc99)."/>
+      <EnumValue
+        Name="std-c11"
+        Switch="-std-c11"
+        DisplayName="ISO C11"
+        Description="Use ISO C11 standard (slightly incomplete)   (--std-c11)."/>
+      <EnumValue
+        Name="std-sdcc11"
+        Switch="-std-sdcc11"
+        DisplayName="SDCC ISO C11"
+        Description="Use ISO C11 standard with SDCC extensions (default)   (--std-sdcc11)."/>
+      <EnumValue
+        Name="std-c2x"
+        Switch="-std-c2x"
+        DisplayName="ISO C2X"
+        Description="Use ISO C2X standard (slightly incomplete)   (--std-c2x)."/>
+      <EnumValue
+        Name="std-sdcc2x"
+        Switch="-std-sdcc2x"
+        DisplayName="SDCC ISO C2X"
+        Description="Use ISO C2X standard with SDCC extensions   (--std-sdcc2x)."/>
+    </EnumProperty>
+    <!--
+        - -fdollars-in-identifiers  Permit '$' as an identifier character
+    -->
+    <BoolProperty
+      Name="DollarsInId"
+      DisplayName="Dollars in Identifiers"
+      Description="Permit '$' as an identifier character.     (--fdollars-in-identifiers)"
+      Category="General"
+      Switch="-fdollars-in-identifiers"
+      F1Keyword="VC.Project.SDCCCompilerTool.DollarsInId"/>
+    <!--
+        - -fsigned-char        Make "char" signed by default
+    -->
+    <BoolProperty
+      Name="SignedChar"
+      DisplayName="Signed Char"
+      Description="Make 'char' signed by default.     (--fsigned-char)"
+      Category="General"
+      Switch="-fsigned-char"
+      F1Keyword="VC.Project.SDCCCompilerTool.SignedChar"/>
+    <!--
+        - -use-non-free        Search / include non-free licensed libraries and header files
+    -->
+    <BoolProperty
+      Name="UseNonFree"
+      DisplayName="Use Non-Free Files"
+      Description="Search / include non-free licensed libraries and header files.     (--use-non-free)"
+      Category="General"
+      Switch="-use-non-free"
+      F1Keyword="VC.Project.SDCCCompilerTool.UseNonFree"/>
+  
+  
+    <!--
+    **************************************
+    * Code Generation Rules
+    **************************************
+  
+  Code generation options:
+    -m                        Set the port to use e.g. -mz80.
+    -->
+    <EnumProperty 
+      Name="PortType" 
+      DisplayName="Port Type" 
+      Description="The processor type to build for.    (-m)" 
+      Category="CCodeGen" 
+      ReadOnly="true"
+      F1Keyword="VC.Project.SDCCCompilerTool.PortType">
+      <EnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" />
+      </EnumProperty.DataSource>
+      <EnumValue 
+        Switch="mmcs51" 
+        Name="mcs51" 
+        DisplayName="Intel MCS51" 
+        Description="Generate code for the Intel MCS51 family of processors."/>
+      <EnumValue 
+        Switch="mds390"
+        Name="ds390" 
+        DisplayName="Dallas DS80C390" 
+        Description="Generate code for the Dallas DS80C390 processor."/>
+      <EnumValue 
+        Switch="mds400" 
+        Name="ds400" 
+        DisplayName="Dallas DS80C400" 
+        Description="Generate code for the Dallas DS80C400 processor."/>
+      <EnumValue 
+        Switch="mhc08" 
+        Name="hc08" 
+        DisplayName="Freescale/Motorola HC08" 
+        Description="Generate code for the Freescale/Motorola HC08 (aka 68HC08) family of processors."/>
+      <EnumValue 
+        Switch="ms08"
+        Name="s08" 
+        DisplayName="Freescale/Motorola S08" 
+        Description="Generate code for the Freescale/Motorola S08 (aka 68HCS08, HCS08, CS08) family of processors."/>
+      <EnumValue 
+        Switch="mz80" 
+        Name="z80" 
+        DisplayName="Zilog Z80" 
+        Description="Generate code for the Zilog Z80 family of processors."/>
+      <EnumValue 
+        Switch="mz180" 
+        Name="z180" 
+        DisplayName="Zilog Z180" 
+        Description="Generate code for the Zilog Z180 family of processors."/>
+      <EnumValue 
+        Switch="mr2k" 
+        Name="r2k" 
+        DisplayName="Rabbit 2000 / Rabbit 3000" 
+        Description="Generate code for the Rabbit 2000 / Rabbit 3000 family of processors"/>
+      <EnumValue 
+        Switch="mr3ka" 
+        Name="r3ka" 
+        DisplayName="Rabbit 3000A" 
+        Description="Generate code for the Rabbit 3000A family of processors."/>
+      <EnumValue 
+        Switch="mgbz80" 
+        Name="gbz80" 
+        DisplayName="GameBoy Z80" 
+        Description="Generate code for the LR35902 GameBoy Z80 processor"/>
+      <EnumValue 
+        Switch="mtlcs90" 
+        Name="tlcs90" 
+        DisplayName="Toshiba TLCS-90" 
+        Description="Generate code for the Toshiba TLCS-90 processor"/>
+      <EnumValue 
+        Switch="mez80_z80"
+        Name="ez80_z80" 
+        DisplayName="Zilog eZ80 processor in Z80 mode" 
+        Description="Generate code for the Zilog eZ80 processor in Z80 mode."/>
+      <EnumValue 
+        Switch="mstm8"
+        Name="stm8"
+        DisplayName="STMicroelectronics STM8" 
+        Description="Generate code for the STMicroelectronics STM8 family of processors."/>
+      <EnumValue 
+        Switch="mpdk13"
+        Name="pdk13" 
+        DisplayName="Padauk 13 bit" 
+        Description="Generate code for Padauk processors with 13 bit wide program memory."/>
+      <EnumValue 
+        Switch="mpdk14" 
+        Name="pdk14" 
+        DisplayName="Padauk 14 bit" 
+        Description="Generate code for Padauk processors with 14 bit wide program memory."/>
+      <EnumValue 
+        Switch="mpdk15" 
+        Name="pdk15" 
+        DisplayName="Padauk 15 bit"
+        Description="Generate code for Padauk processors with 15 bit wide program memory."/>
+      <EnumValue 
+        Switch="mpic14" 
+        Name="pic14" 
+        DisplayName="Microchip PIC 14-bit" 
+        Description="Generate code for the Microchip PIC 14-bit processors (p16f84 and variants. In development, not complete)."/>
+      <EnumValue 
+        Switch="mpic16" 
+        Name="pic16" 
+        DisplayName="Microchip PIC 16-bit" 
+        Description="Generate code for the Microchip PIC 16-bit processors (p18f452 and variants. In development, not complete)."/>
+      <EnumValue
+        Switch="mTININative"
+        Name="TININative"
+        DisplayName="TININative"
+        Description="Generate code for the TININative."/>
+    </EnumProperty>
+    <!--
+    -p                        Select port specific processor e.g. -mpic14 -p16f84
+    -->
+    <StringProperty
+      Name="ProcessorType"
+      DisplayName="Processor Type"
+      Description="Select port specific processor e.g. -mpic14 -p16f84.    (-p&lt;processorId&gt;)"
+      Category="CCodeGen"
+      Switch="p"
+      F1Keyword="VC.Project.SDCCCompilerTool.ProcessorType">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="Globals" HasConfigurationCondition="false" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -stack-auto          Stack automatic variables
+    -->
+    <BoolProperty
+      Name="StackAuto"
+      DisplayName="Stack Automatic Variables"
+      Description="Stack automatic variables.     (--stack-auto)"
+      Category="CCodeGen"
+      Switch="-stack-auto"
+      F1Keyword="VC.Project.SDCCCompilerTool.StackAuto"/>
+    <!--
+        - -xstack              Use external stack
+    -->
+    <BoolProperty
+      Name="ExternalStack"
+      DisplayName="Use External Stack"
+      Description="Use external stack.     (--xstack)"
+      Category="CCodeGen"
+      Switch="-xstack"
+      F1Keyword="VC.Project.SDCCCompilerTool.ExternalStack"/>
+    <!--
+        - -int-long-reent      Use reentrant calls on the int and long support functions
+    -->
+    <BoolProperty
+      Name="IntLongReent"
+      DisplayName="Int/Long Reenterant Functions"
+      Description="Use reentrant calls on the int and long support functions.     (--int-long-reent)"
+      Category="CCodeGen"
+      Switch="-int-long-reent"
+      F1Keyword="VC.Project.SDCCCompilerTool.IntLongReent"/>
+    <!--
+        - -float-reent         Use reentrant calls on the float support functions
+    -->
+    <BoolProperty
+      Name="FloatReent"
+      DisplayName="Float Reenterant Functions"
+      Description="Use reentrant calls on the float support functions.     (--float-reent)"
+      Category="CCodeGen"
+      Switch="-float-reent"
+      F1Keyword="VC.Project.SDCCCompilerTool.FloatReent"/>
+    <!--
+        - -xram-movc           Use movc instead of movx to read xram (xdata)
+    -->
+    <BoolProperty
+      Name="XRamMovec"
+      DisplayName="Use MOVC to read XRAM"
+      Description="Use movc instead of movx to read xram (xdata).     (--xram-movc)"
+      Category="CCodeGen"
+      Switch="-xram-movc"
+      F1Keyword="VC.Project.SDCCCompilerTool.XRamMovec"/>
+    <!--
+        - -callee-saves        &lt;func[,func,...]&gt; Cause the called function to save registers instead of the caller
+    -->
+    <StringListProperty
+      Name="CalleeSaves"
+      DisplayName="Callee Saves Registers"
+      Description="Cause the called function to save registers instead of the caller.     (--callee-saves &lt;func[,func,...]&gt;)"
+      Category="CCodeGen"
+      Switch="-callee-saves"
+      F1Keyword="VC.Project.SDCCCompilerTool.CalleeSaves"/>
+    <!--
+        - -profile             On supported ports, generate extra profiling information
+    -->
+    <BoolProperty
+      Name="Profile"
+      DisplayName="Profile"
+      Description="On supported ports, generate extra profiling information.     (--profile)"
+      Category="CCodeGen"
+      Switch="-profile"
+      F1Keyword="VC.Project.SDCCCompilerTool.Profile"/>
+    <!--
+        - -fomit-frame-pointer  Leave out the frame pointer.
+    -->
+    <BoolProperty
+      Name="OmitFramePointer"
+      DisplayName="Omit Frame Pointer"
+      Description="Leave out the frame pointer.     (--fomit-frame-pointer)"
+      Category="CCodeGen"
+      Switch="-fomit-frame-pointer"
+      F1Keyword="VC.Project.SDCCCompilerTool.OmitFramePointer"/>
+    <!--
+        - -all-callee-saves    callee will always save registers used
+    -->
+    <BoolProperty
+      Name="AllCalleeSaves"
+      DisplayName="All Callee Saves Register"
+      Description="Callee will always save registers used.     (--all-callee-saves)"
+      Category="CCodeGen"
+      Switch="-all-callee-saves"
+      F1Keyword="VC.Project.SDCCCompilerTool.AllCalleeSaves"/>
+    <!--
+        - -stack-probe         insert call to function __stack_probe at each function prologue
+    -->
+    <BoolProperty
+      Name="StackProbe"
+      DisplayName="Stack Probe"
+      Description="Insert call to function __stack_probe at each function prologue.     (--stack-probe)"
+      Category="CCodeGen"
+      Switch="-stack-probe"
+      F1Keyword="VC.Project.SDCCCompilerTool.StackProbe"/>
+    <!--
+        - -no-xinit-opt        don't memcpy initialized xram from code
+    -->
+    <BoolProperty
+      Name="NoXinitOpt"
+      DisplayName="No Xinit Options"
+      Description="Don't memcpy initialized xram from code.     (--no-xinit-opt)"
+      Category="CCodeGen"
+      Switch="-no-xinit-opt"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoXinitOpt"/>
+    <!--
+        - -no-c-code-in-asm    don't include c-code as comments in the asm file
+    -->
+    <BoolProperty
+      Name="NoCCodeInAsm"
+      DisplayName="No C Code in Asm"
+      Description="Don't include C-Code as comments in the asm file.     (--no-c-code-in-asm)"
+      Category="CCodeGen"
+      Switch="-no-c-code-in-asm"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoCCodeInAsm"/>
+    <!--
+        - -no-peep-comments    don't include peephole optimizer comments
+    -->
+    <BoolProperty
+      Name="NoPeepComments"
+      DisplayName="No Peephole Comments"
+      Description="Don't include peephole optimizer comments.     (--no-peep-comments)"
+      Category="CCodeGen"
+      Switch="-no-peep-comments"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoPeepComments"/>
+    <!--
+        - -codeseg             <name> use this name for the code segment
+    -->
+    <StringProperty
+      Name="CodeSeg"
+      DisplayName="Code Segment Name"
+      Description="Use this name for the code segment.     (--codeseg &lt;name&gt;)"
+      Category="CCodeGen"
+      Switch="-codeseg"
+      F1Keyword="VC.Project.SDCCCompilerTool.CodeSeg">
+    </StringProperty>
+    <!--
+        - -constseg            <name> use this name for the const segment
+    -->
+    <StringProperty
+      Name="ConstSeg"
+      DisplayName="Const Segment Name"
+      Description="Use this name for the const segment.     (--constseg &lt;name&gt;)"
+      Category="CCodeGen"
+      Switch="-constseg"
+      F1Keyword="VC.Project.SDCCCompilerTool.ConstSeg"/>
+    <!--
+        - -dataseg             <name> use this name for the data segment
+    -->
+    <StringProperty
+      Name="DataSeg"
+      DisplayName="Data Segment Name"
+      Description="Use this name for the data segment.     (--dataseg &lt;name&gt;)"
+      Category="CCodeGen"
+      Switch="-dataseg"
+      F1Keyword="VC.Project.SDCCCompilerTool.DataSeg"/>
+  
+  
+  
+    <!--
+    **************************************
+    * Optimization Rules
+    **************************************
+  
+  Optimization options:
+        - -nooverlay           Disable overlaying leaf function auto variables
+    -->
+    <BoolProperty
+      Name="NoOverlay"
+      DisplayName="Disable Overlaying"
+      Description="Disable overlaying leaf function auto variables.     (--nooverlay)"
+      Category="COptimization"
+      Switch="-nooverlay"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoOverlay"/>
+    <!--
+        - -nogcse              Disable the GCSE optimization
+    -->
+    <BoolProperty
+      Name="NoGcse"
+      DisplayName="Disable GCSE"
+      Description="Disable the GCSE optimisation.     (--nogcse)"
+      Category="COptimization"
+      Switch="-nogcse"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoGcse"/>
+    <!--
+        - -nolabelopt          Disable label optimization
+    -->
+    <BoolProperty
+      Name="NoLabelOpt"
+      DisplayName="Disable Label Optimization"
+      Description="Disable label optimization.     (--nolabelopt)"
+      Category="COptimization"
+      Switch="-nolabelopt"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoLabelOpt"/>
+    <!--
+        - -noinvariant         Disable optimization of invariants
+    -->
+    <BoolProperty
+      Name="NoInvariant"
+      DisplayName="Disable Invariant Optimization"
+      Description="Disable optimization of invariants.     (--noinvariant)"
+      Category="COptimization"
+      Switch="-noinvariant"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoInvariant"/>
+    <!--
+        - -noinduction         Disable loop variable induction
+    -->
+    <BoolProperty
+      Name="NoInduction"
+      DisplayName="Disable Loop Variable Induction"
+      Description="Disable loop variable induction.     (--noinduction)"
+      Category="COptimization"
+      Switch="-noinduction"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoInduction"/>
+    <!--
+        - -noloopreverse       Disable the loop reverse optimization
+    -->
+    <BoolProperty
+      Name="NoLoopReverse"
+      DisplayName="Disable Loop Reverse Optimization"
+      Description="Disable the loop reverse optimization.     (--noloopreverse)"
+      Category="COptimization"
+      Switch="-noloopreverse"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoLoopReverse"/>
+    <!--
+        - -no-peep             Disable the peephole assembly file optimization
+    -->
+    <BoolProperty
+      Name="NoPeep"
+      DisplayName="Disable Peephole File Optimization"
+      Description="Disable the peephole assembly file optimization.     (--no-peep)"
+      Category="COptimization"
+      Switch="-no-peep"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoPeep"/>
+    <!--
+        - -no-reg-params       On some ports, disable passing some parameters in registers
+    -->
+    <BoolProperty
+      Name="NoRegParams"
+      DisplayName="Disable Passing Parameters in Registers"
+      Description="On some ports, disable passing some parameters in registers.     (--no-reg-params)"
+      Category="COptimization"
+      Switch="-no-reg-params"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoRegParams"/>
+    <!--
+        - -peep-asm            Enable peephole optimization on inline assembly
+    -->
+    <BoolProperty
+      Name="PeepAsm"
+      DisplayName="Enable Peephole Optimization on Inline Assembly"
+      Description="Enable peephole optimization on inline assembly.     (--peep-asm)"
+      Category="COptimization"
+      Switch="-peep-asm"
+      F1Keyword="VC.Project.SDCCCompilerTool.PeepAsm"/>
+    <!--
+        - -peep-return         Enable peephole optimization for return instructions
+    -->
+    <BoolProperty
+      Name="PeepReturn"
+      DisplayName="Enable Peephole Optimization on Return Instructions"
+      Description="Enable peephole optimization for return instructions.     (--peep-return)"
+      Category="COptimization"
+      Switch="-peep-return"
+      F1Keyword="VC.Project.SDCCCompilerTool.PeepReturn"/>
+    <!--
+        - -no-peep-return      Disable peephole optimization for return instructions
+    -->
+    <BoolProperty
+      Name="NoPeepReturn"
+      DisplayName="Disable Peephole Optimization on Return Instructions"
+      Description="Disable peephole optimization for return instructions.     (--no-peep-return)"
+      Category="COptimization"
+      Switch="-no-peep-return"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoPeepReturn"/>
+    <!--
+        - -peep-file           <file> use this extra peephole file
+    -->
+    <StringProperty
+      Name="PeepFile"
+      DisplayName="Disable Peephole Optimization on Return Instructions"
+      Description="use this extra peephole file.     (--peep-file &lt;file&gt;)"
+      Category="COptimization"
+      Switch="-peep-file "
+      F1Keyword="VC.Project.SDCCCompilerTool.PeepFile"/>
+    <!--
+        - -opt-code-speed      Optimize for code speed rather than size
+        - -opt-code-size       Optimize for code size rather than speed
+    -->
+    <EnumProperty
+      Name="OptimizeCode"
+      DisplayName="Code Optimization"
+      Description="Optimize Code for Size/Speed"
+      Category="COptimization"
+      F1Keyword="VC.Project.SDCCCompilerTool.OptimizeCode">
+      <EnumValue
+        Name="CodeSpeed"
+        Switch="-opt-code-speed"
+        DisplayName="Optimize Code for Speed"
+        Description="Optimize for code speed rather than size.    (--opt-code-speed)."/>
+      <EnumValue
+        Name="CodeSize"
+        Switch="-opt-code-size"
+        DisplayName="Optimize Code for Size"
+        Description="Optimize for code size rather than speed.    (--opt-code-size)."/>
+    </EnumProperty>
+    <!--
+        - -max-allocs-per-node  Maximum number of register assignments considered at each node of the tree decomposition
+    -->
+    <IntProperty
+      Name="MaxAllocsPerNode"
+      DisplayName="Max Allocs Per Node"
+      Description="Maximum number of register assignments considered at each node of the tree decomposition.    (--max-allocs-per-node)"
+      Category="COptimization"
+      Switch="-max-allocs-per-node"
+      F1Keyword="VC.Project.SDCCCompilerTool.MaxAllocsPerNode"/>
+    <!--
+        - -nolospre            Disable lospre
+    -->
+    <BoolProperty
+      Name="NoLospre"
+      DisplayName="Disable lospre"
+      Description="Disable lospre.     (--nolospre)"
+      Category="COptimization"
+      Switch="-nolospre"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoLospre"/>
+    <!--
+        - -allow-unsafe-read   Allow optimizations to read any memory location anytime
+    -->
+    <BoolProperty
+      Name="AllowUnsafeRead"
+      DisplayName="Allow Unsafe Reads"
+      Description="Allow optimizations to read any memory location anytime.     (--allow-unsafe-read)"
+      Category="COptimization"
+      Switch="-allow-unsafe-read"
+      F1Keyword="VC.Project.SDCCCompilerTool.AllowUnsafeReads"/>
+    <!--
+        - -nostdlibcall        Disable optimization of calls to standard library
+    -->
+    <BoolProperty
+      Name="NoStdLibCalls"
+      DisplayName="No STD Lib Calls"
+      Description="Disable optimization of calls to standard library.     (--nostdlibcall)"
+      Category="COptimization"
+      Switch="-nostdlibcall"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoStdLibCalls"/>
+  
+  
+    <!--
+    **************************************
+    * Debugging Rules
+    **************************************
+    
+  Internal debugging options:
+        - -dump-ast            Dump front-end AST before generating i-code
+    -->
+    <BoolProperty
+      Name="DumpAst"
+      DisplayName="Dump AST"
+      Description="Dump front-end AST before generating i-code.     (--dump-ast)"
+      Category="CDebugging"
+      Switch="-dump-ast"
+      F1Keyword="VC.Project.SDCCCompilerTool.DumpAst"/>
+    <!--
+        - -dump-i-code         Dump the i-code structure at all stages
+    -->
+    <BoolProperty
+      Name="DumpICode"
+      DisplayName="Dump I-Code"
+      Description="Dump the i-code structure at all stages.     (--dump-i-code)"
+      Category="CDebugging"
+      Switch="-dump-i-code"
+      F1Keyword="VC.Project.SDCCCompilerTool.DumpICode"/>
+    <!--
+        - -dump-graphs         Dump graphs (control-flow, conflict, etc)
+    -->
+    <BoolProperty
+      Name="DumpGraphs"
+      DisplayName="Dump Graphs"
+      Description="Dump graphs (control-flow, conflict, etc).     (--dump-graphs)"
+      Category="CDebugging"
+      Switch="-dump-graphs"
+      F1Keyword="VC.Project.SDCCCompilerTool.DumpGraphs"/>
+    <!--
+        - -i-code-in-asm       Include i-code as comments in the asm file
+    -->
+    <BoolProperty
+      Name="ICodeInAsm"
+      DisplayName="Include I-Code in ASM"
+      Description="Include i-code as comments in the asm file.     (--i-code-in-asm)"
+      Category="CDebugging"
+      Switch="-i-code-in-asm"
+      F1Keyword="VC.Project.SDCCCompilerTool.ICodeInAsm"/>
+    <!--
+        - -fverbose-asm        Include code generator comments in the asm output
+    -->
+    <BoolProperty
+      Name="VerboseAsm"
+      DisplayName="Include Code Generator Comments in ASM"
+      Description="Include code generator comments in the asm output.     (--fverbose-asm)"
+      Category="CDebugging"
+      Switch="-fverbose-asm"
+      F1Keyword="VC.Project.SDCCCompilerTool.VerboseAsm"/>
+  
+  
+    <!--
+    **************************************
+    * Linker Rules
+    **************************************
+  
+  Linker options:
+    -l                        Include the given library in the link
+    -->
+    <StringListProperty
+      Name="IncludeLibraries"
+      DisplayName="Include Additional Library"
+      Description="Include the given library in the link.    (-l&lt;library&gt;)"
+      Category="Linker"
+      Switch="l "
+      F1Keyword="VC.Project.SDCCCompilerTool.IncludeLibraries">
+      <!--
+      <StringListProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringListProperty.DataSource>
+      -->
+    </StringListProperty>
+    <!--
+    -L                        Add the next field to the library search path
+        - -lib-path            <path> use this path to search for libraries
+    -->
+    <StringListProperty 
+      Name="AdditionalLibraryPath" 
+      DisplayName="Additional Library Path" 
+      Description="Path to search for libraries.    (-L&lt;path&gt;)"
+      Category="Linker" 
+      Switch="L " 
+      Subtype="folder"
+      F1Keyword="VC.Project.SDCCCompilerTool.AdditionalLibraryPath">
+      <!--
+      <StringListProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringListProperty.DataSource>
+      -->
+    </StringListProperty>
+    <!--
+        - -out-fmt-ihx         Output in Intel hex format
+        - -out-fmt-s19         Output in S19 hex format
+        - -out-fmt-elf         Output in ELF hex format
+    -->
+    <EnumProperty
+      Name="OutputFormat"
+      DisplayName="Output Format"
+      Description="Output file format"
+      Category="Linker"
+      F1Keyword="VC.Project.SDCCCompilerTool.OutputFormat">
+      <!--
+      <EnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </EnumProperty.DataSource>
+      -->
+      <EnumValue
+        Name="Intel"
+        Switch="-out-fmt-ihx"
+        DisplayName="Intel Hex Format"
+        Description="Output in Intel hex format.    (--out-fmt-ihx)."/>
+      <EnumValue
+        Name="S19"
+        Switch="-opt-fmt-s19"
+        DisplayName="S19 Hex Format"
+        Description="Output in S19 hex format.    (--opt-fmt-s19)."/>
+      <EnumValue
+        Name="ELF"
+        Switch="-opt-fmt-elf"
+        DisplayName="ELF Hex Format"
+        Description="Output in ELF hex format.    (--opt-fmt-elf)."/>
+    </EnumProperty>
+    <!--
+        - -xram-loc            <nnnn> External Ram start location
+    -->
+    <StringProperty
+      Name="XRamLocation"
+      DisplayName="External Ram Location"
+      Description="External Ram start location.    (--xram-loc &lt;value&gt;)"
+      Category="Linker"
+      Switch="-xram-loc"
+      F1Keyword="VC.Project.SDCCCompilerTool.XRamLocation">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -xram-size           <nnnn> External Ram size
+    -->
+    <StringProperty
+      Name="XRamSize"
+      DisplayName="External Ram Size"
+      Description="External Ram size.    (--xram-size &lt;value&gt;)"
+      Category="Linker"
+      Switch="-xram-size"
+      F1Keyword="VC.Project.SDCCCompilerTool.XRamSize">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -iram-size           <nnnn> Internal Ram size
+    -->
+    <StringProperty
+      Name="IRamSize"
+      DisplayName="Internal Ram Size"
+      Description="Internal Ram size.    (--iram-size &lt;value&gt;)"
+      Category="Linker"
+      Switch="-iram-size"
+      F1Keyword="VC.Project.SDCCCompilerTool.IRamSize">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -xstack-loc          <nnnn> External Stack start location
+    -->
+    <StringProperty
+      Name="XStackLocation"
+      DisplayName="External Stack Start Location"
+      Description="External Stack start location.    (--xstack-loc &lt;value&gt;)"
+      Category="Linker"
+      Switch="-xstack-loc"
+      F1Keyword="VC.Project.SDCCCompilerTool.XRamLocation">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -code-loc            <nnnn> Code Segment Location
+    -->
+    <StringProperty
+      Name="CodeLocation"
+      DisplayName="Code Segment Location"
+      Description="Code Segment Location.    (--code-loc &lt;value&gt;)"
+      Category="Linker"
+      Switch="-code-loc"
+      F1Keyword="VC.Project.SDCCCompilerTool.CodeLocation">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -code-size           <nnnn> Code Segment size
+    -->
+    <StringProperty
+      Name="CodeSize"
+      DisplayName="Code Segment Size"
+      Description="Code Segment size.    (--code-size &lt;value&gt;)"
+      Category="Linker"
+      Switch="-code-size"
+      F1Keyword="VC.Project.SDCCCompilerTool.CodeSize">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -stack-loc           <nnnn> Stack pointer initial value
+    -->
+    <StringProperty
+      Name="StackLocation"
+      DisplayName="Stack Pointer Initial Value"
+      Description="Stack pointer initial value.    (--stack-loc &lt;value&gt;)"
+      Category="Linker"
+      Switch="-stack-loc"
+      F1Keyword="VC.Project.SDCCCompilerTool.StackLocation">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -data-loc            <nnnn> Direct data start location
+    -->
+    <StringProperty
+      Name="DataLocation"
+      DisplayName="Direct Data Start Location"
+      Description="Direct data start location.    (--data-loc &lt;value&gt;)"
+      Category="Linker"
+      Switch="-data-loc"
+      F1Keyword="VC.Project.SDCCCompilerTool.DataLocation">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -idata-loc
+    -->
+    <StringProperty
+      Name="IDataLocation"
+      DisplayName="Indirect Data Start Location"
+      Description="Indirect data start location.    (--idata-loc &lt;value&gt;)"
+      Category="Linker"
+      Switch="-idata-loc"
+      F1Keyword="VC.Project.SDCCCompilerTool.IDataLocation">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+    <!--
+        - -no-optsdcc-in-asm   Do not emit .optsdcc in asm
+    -->
+    <BoolProperty
+      Name="NoOptSdccInAsm"
+      DisplayName="No .optsdcc in Asm"
+      Description="Do not emit .optsdcc in asm.     (--no-optsdcc-in-asm)"
+      Category="Linker"
+      Switch="-no-optsdcc-in-asm"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoOptSdccInAsm"/>
+  
+    <!--
+    **************************************
+    * Superset of all port specific options.
+    **************************************
+    * NOTE: this will be overriden in the port specific 
+    * property sheet.
+    **************************************
+    -->
+    <!--
+        - -acall-ajmp          Use acall/ajmp instead of lcall/ljmp
+    -->
+    <BoolProperty
+      Name="ACallAJump"
+      DisplayName="Use acall/ajmp"
+      Description="Use acall/ajmp instead of lcall/ljmp.     (--acall-ajmp)"
+      Category="PortSpecific"
+      Switch="-acall-ajmp"
+      F1Keyword="VC.Project.SDCCCompilerTool.ACallAJump"/>
+    <!--
+        - -asm=                Define assembler name (rgbds/asxxxx/isas/z80asm/gas)
+        - -asm=                Use alternative assembler
+    -->
+    <StringProperty
+      Name="AssemblerName"
+      DisplayName="Custom Assembler"
+      Description="Define assembler name (rgbds/asxxxx/isas/z80asm/gas).     (--asm=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-asm="
+      F1Keyword="VC.Project.SDCCCompilerTool.AssemblerName"/>
+    <!--
+        - -callee-saves-bc     Force a called function to always save BC
+    -->
+    <BoolProperty
+      Name="CalleeSavesBC"
+      DisplayName="Callee Saves BC"
+      Description="Force a called function to always save BC.     (--callee-saves-bc)"
+      Category="PortSpecific"
+      Switch="-callee-saves-bc"
+      F1Keyword="VC.Project.SDCCCompilerTool.CalleeSavesBC"/>
+    <!--
+        - -calltree            dump call tree in .calltree file
+    -->
+    <BoolProperty
+      Name="DumpCallTree"
+      DisplayName="Dump Call Tree"
+      Description="Dump call tree in .calltree file.     (--calltree)"
+      Category="PortSpecific"
+      Switch="-calltree"
+      F1Keyword="VC.Project.SDCCCompilerTool.DumpCallTree"/>
+    <!--
+        - -debug-ralloc        dump register allocator debug file *.d
+    -->
+    <BoolProperty
+      Name="DebugRAlloc"
+      DisplayName="Debug Register Allocator"
+      Description="Dump register allocator debug file *.d.     (--debug-ralloc)"
+      Category="PortSpecific"
+      Switch="-debug-ralloc"
+      F1Keyword="VC.Project.SDCCCompilerTool.DebugRAlloc"/>
+    <!--
+        - -debug-xtra          show more debug info in assembly output
+    -->
+    <BoolProperty
+      Name="DebugXtra"
+      DisplayName="Extra Debug"
+      Description="Show more debug info in assembly output.     (--debug-xtra)"
+      Category="PortSpecific"
+      Switch="-debug-xtra"
+      F1Keyword="VC.Project.SDCCCompilerTool.DebugXtra"/>
+    <!--
+        - -denable-peeps       explicit enable of peepholes
+    -->
+    <BoolProperty
+      Name="DEnablePeeps"
+      DisplayName="Enable Peepholes"
+      Description="Explicit enable of peepholes.     (--denable-peeps)"
+      Category="PortSpecific"
+      Switch="-denable-peeps"
+      F1Keyword="VC.Project.SDCCCompilerTool.DEnablePeeps"/>
+    <!--
+        - -emit-externs        Emit externs list in generated asm
+    -->
+    <BoolProperty
+      Name="EmitExterns"
+      DisplayName="Emit Externs"
+      Description="Emit externs list in generated asm.     (--emit-externs)"
+      Category="PortSpecific"
+      Switch="-emit-externs"
+      F1Keyword="VC.Project.SDCCCompilerTool.EmitExterns"/>
+    <!--
+        - -fno-omit-frame-pointer  Do not omit frame pointer
+    -->
+    <BoolProperty
+      Name="NoOmitFramePointer"
+      DisplayName="Do Not Omit Frame Pointer"
+      Description="Do not omit frame pointer.     (--fno-omit-frame-pointer)"
+      Category="PortSpecific"
+      Switch="-fno-omit-frame-pointer"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoOmitFramePointer"/>
+    <!--
+        - -gstack              trace stack pointer push/pop to overflow
+    -->
+    <BoolProperty
+      Name="TraceStackPointer"
+      DisplayName="Trace Stack Pointer"
+      Description="Trace stack pointer push/pop to overflow.     (--gstack)"
+      Category="PortSpecific"
+      Switch="-gstack"
+      F1Keyword="VC.Project.SDCCCompilerTool.TraceStackPointer"/>
+    <!--
+        - -ivt-loc=            Set address of interrupt vector table.
+    -->
+    <StringProperty
+      Name="IvtLocation"
+      DisplayName="Interrupt Vector Table Location"
+      Description="Set address of interrupt vector table.     (--ivt-loc=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-ivt-loc="
+      F1Keyword="VC.Project.SDCCCompilerTool.DataSeg"/>
+    <!--
+        - -legacy-banking      Use legacy method to call banked functions
+    -->
+    <BoolProperty
+      Name="LegacyBanking"
+      DisplayName="Legacy Banking"
+      Description="Use legacy method to call banked functions.     (--legacy-banking)"
+      Category="PortSpecific"
+      Switch="-legacy-banking"
+      F1Keyword="VC.Project.SDCCCompilerTool.TraceStackPointer"/>
+    <!--
+        - -link=               Use alternative linker
+    -->
+    <StringProperty
+      Name="AlternateLinker"
+      DisplayName="Alternate Linker"
+      Description="Use alternative linker.     (--link=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-link="
+      Visible="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.DataSeg"/>
+    <!--
+        - -model-flat24        use the flat24 model for the ds390 (default)
+        - -model-flat24        use the flat24 model for the ds400 (default)
+        - -model-huge          functions are banked, data in external space
+        - -model-large         16-bit address space for data (default)
+        - -model-large         16-bit address space for data, 24-bit for code
+        - -model-large         external data space is used
+        - -model-medium        16-bit address space for both data and code (default)
+        - -model-medium        external paged data space is used
+        - -model-small         8-bit address space for data
+        - -model-small         internal data space is used (default)
+    -->
+    <EnumProperty
+      Name="Model"
+      DisplayName="Model"
+      Description="Address space model"
+      Category="PortSpecific"
+      F1Keyword="VC.Project.SDCCCompilerTool.Model">
+      <!--
+      <EnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </EnumProperty.DataSource>
+      -->
+      <EnumValue
+        Name="Flat24"
+        Switch="-model-flat24"
+        DisplayName="Flat24"
+        Description="Use the flat24 model.    (--model-flat24)."/>
+      <EnumValue
+        Name="Huge"
+        Switch="-model-huge"
+        DisplayName="Huge"
+        Description="Functions are banked, data in external space.    (--model-huge)."/>
+      <EnumValue
+        Name="Large"
+        Switch="-model-large"
+        DisplayName="Large"
+        Description="16-bit address space for data, 24-bit for code.    (--model-large)."/>
+      <EnumValue
+        Name="Medium"
+        Switch="-model-medium"
+        DisplayName="Medium"
+        Description="16-bit address space for both data and code.    (--model-medium)."/>
+      <EnumValue
+        Name="Small"
+        Switch="-model-small"
+        DisplayName="Small"
+        Description="8-bit address space for data.    (--model-small)."/>
+    </EnumProperty>
+    <!--
+        - -mplab-comp          enable compatibility mode for MPLAB utilities (MPASM/MPLINK)
+    -->
+    <BoolProperty
+      Name="MPLABCompatability"
+      DisplayName="MPLAB Compatibility Mode"
+      Description="Enable compatibility mode for MPLAB utilities (MPASM/MPLINK).     (--mplab-comp)"
+      Category="PortSpecific"
+      Switch="-mplab-comp"
+      F1Keyword="VC.Project.SDCCCompilerTool.MPLABCompatability"/>
+    <!--
+        - -nmos-z80            Generate workaround for NMOS Z80 when saving IFF2
+    -->
+    <BoolProperty
+      Name="NMOSz80"
+      DisplayName="NMOS Z80 IFF2 Workaround"
+      Description="Generate workaround for NMOS Z80 when saving IFF2.     (--nmos-z80)"
+      Category="PortSpecific"
+      Switch="-nmos-z80"
+      F1Keyword="VC.Project.SDCCCompilerTool.NMOSz80"/>
+    <!--
+        - -no-crt              do not link any default run-time initialization module
+    -->
+    <BoolProperty
+      Name="NoCRT"
+      DisplayName="No CRT"
+      Description="Do not link any default run-time initialization module.     (--no-crt)"
+      Category="PortSpecific"
+      Switch="-no-crt"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoCRT"/>
+    <!--
+        - -no-extended-instructions  forbid use of the extended instruction set (e.g., ADDFSR)
+    -->
+    <BoolProperty
+      Name="NoExtendedInstructions"
+      DisplayName="No Extended Instructions"
+      Description="Forbid use of the extended instruction set (e.g., ADDFSR).     (--no-extended-instructions)"
+      Category="PortSpecific"
+      Switch="-no-extended-instructions"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoExtendedInstructions"/>
+    <!--
+        - -no-optimize-goto    do NOT use (conditional) BRA instead of GOTO
+    -->
+    <BoolProperty
+      Name="NoOptimizeGoto"
+      DisplayName="No Optimize GOTO"
+      Description="Do NOT use (conditional) BRA instead of GOTO.     (--no-optimize-goto)"
+      Category="PortSpecific"
+      Switch="-no-optimize-goto"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoOptimizeGoto"/>
+    <!--
+        - -no-pcode-opt        disable (slightly faulty) optimization on pCode
+    -->
+    <BoolProperty
+      Name="NoPCodeOptimization"
+      DisplayName="Disable pCode Optimization"
+      Description="Disable (slightly faulty) optimization on pCode.     (--no-pcode-opt)"
+      Category="PortSpecific"
+      Switch="-no-pcode-opt"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoPCodeOptimization"/>
+    <!--
+        - -no-ret-without-call  Do not use ret independent of acall/lcall
+    -->
+    <BoolProperty
+      Name="NoRetWithoutCall"
+      DisplayName="Disable RET without CALL"
+      Description="Do not use ret independent of acall/lcall.     (--no-ret-without-call)"
+      Category="PortSpecific"
+      Switch="-no-ret-without-call"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoPCodeOptimization"/>
+    <!--
+        - -no-std-crt0         For the z80/gbz80 do not link default crt0.rel
+    -->
+    <BoolProperty
+      Name="NoStdCRT"
+      DisplayName="No Std CRT"
+      Description="For the z80/gbz80 do not link default crt0.rel.     (--no-std-crt0)"
+      Category="PortSpecific"
+      Switch="-no-std-crt0"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoStdCRT"/>
+    <!--
+        - -no-warn-non-free    suppress warning on absent - -use-non-free option
+    -->
+    <BoolProperty
+      Name="NoWarnNonFree"
+      DisplayName="Suppress non-free warning"
+      Description="Suppress warning on absent --use-non-free option.     (--no-warn-non-free)"
+      Category="PortSpecific"
+      Switch="-no-warn-non-free"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoWarnNonFree"/>
+    <!--
+        - -nodefaultlibs       do not link default libraries when linking
+    -->
+    <BoolProperty
+      Name="NoDefaultLibs"
+      DisplayName="No Default Libs"
+      Description="Do not link default libraries when linking.     (--nodefaultlibs)"
+      Category="PortSpecific"
+      Switch="-nodefaultlibs"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoDefaultLibs"/>
+    <!--
+        - -obanksel=           set banksel optimization level (default=0 no)
+    -->
+    <StringProperty
+      Name="BankSelectOptimization"
+      DisplayName="Bank Select Optimization"
+      Description="Set banksel optimization level (default=0 no).     (--obanksel=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-obanksel="
+      F1Keyword="VC.Project.SDCCCompilerTool.BankSelectOptimization"/>
+    <!--
+        - -oldralloc           Use old register allocator
+    -->
+    <BoolProperty
+      Name="OldRegisterAllocator"
+      DisplayName="Old Reigster Allocator"
+      Description="Use old register allocator.     (--oldralloc)"
+      Category="PortSpecific"
+      Switch="-oldralloc"
+      F1Keyword="VC.Project.SDCCCompilerTool.OldRegisterAllocator"/>
+    <!--
+        - -optimize-cmp        try to optimize some compares
+    -->
+    <BoolProperty
+      Name="OptimizeCompares"
+      DisplayName="Optimize Compares"
+      Description="Try to optimize some compares.     (--optimize-cmp)"
+      Category="PortSpecific"
+      Switch="-optimize-cmp"
+      F1Keyword="VC.Project.SDCCCompilerTool.OptimizeCompares"/>
+    <!--
+        - -optimize-df         thoroughly analyze data flow (memory and time intensive!)
+    -->
+    <BoolProperty
+      Name="OptimizeDataFlow"
+      DisplayName="Optimize Data Flow"
+      Description="Thoroughly analyze data flow (memory and time intensive!).     (--optimize-df)"
+      Category="PortSpecific"
+      Switch="-optimize-df"
+      F1Keyword="VC.Project.SDCCCompilerTool.OptimizeDataFlow"/>
+    <!--
+        - -out-fmt-elf         Output executable in ELF format
+    -->
+    <BoolProperty
+      Name="OutputElfFormat"
+      DisplayName="Output Elf Format"
+      Description="Output executable in ELF format.     (--out-fmt-elf)"
+      Category="PortSpecific"
+      Switch="-out-fmt-elf"
+      F1Keyword="VC.Project.SDCCCompilerTool.OutputElfFormat"/>
+    <!--
+        - -parms-in-bank1      use Bank1 for parameter passing
+    -->
+    <BoolProperty
+      Name="ParamPassInBank1"
+      DisplayName="Bank1 for Parameters"
+      Description="Use Bank1 for parameter passing.     (--parms-in-bank1)"
+      Category="PortSpecific"
+      Switch="-parms-in-bank1"
+      F1Keyword="VC.Project.SDCCCompilerTool.ParamPassInBank1"/>
+    <!--
+        - -pcode-verbose       dump pcode related info
+    -->
+    <BoolProperty
+      Name="PCodeVerbose"
+      DisplayName="Dump pCode"
+      Description="Dump pcode related info.     (--pcode-verbose)"
+      Category="PortSpecific"
+      Switch="-pcode-verbose"
+      F1Keyword="VC.Project.SDCCCompilerTool.PCodeVerbose"/>
+    <!--
+        - -pno-banksel         do not generate BANKSEL assembler directives
+    -->
+    <BoolProperty
+      Name="NoBANKSEL"
+      DisplayName="No BANKSEL"
+      Description="Do not generate BANKSEL assembler directives.     (--pno-banksel)"
+      Category="PortSpecific"
+      Switch="-pno-banksel"
+      F1Keyword="VC.Project.SDCCCompilerTool.NoBANKSEL"/>
+    <!--
+        - -portmode=           Determine PORT I/O mode (z80/z180)
+    -->
+    <StringProperty
+      Name="PortIoMode"
+      DisplayName="Port I/O Mode"
+      Description="Determine PORT I/O mode (z80/z180).     (--portmode=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-portmode="
+      F1Keyword="VC.Project.SDCCCompilerTool.PortIoMode"/>
+    <!--
+        - -preplace-udata-with=  Place udata variables at another section: udata_acs, udata_ovr, udata_shr
+    -->
+    <StringProperty
+      Name="ReplaceUdata"
+      DisplayName="Replace UDATA Section"
+      Description="Place udata variables at another section: udata_acs, udata_ovr, udata_shr.     (--preplace-udata-with=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-preplace-udata-with="
+      F1Keyword="VC.Project.SDCCCompilerTool.ReplaceUdata"/>
+    <!--
+        - -protect-sp-update   will disable interrupts during ESP:SP updates
+    -->
+    <BoolProperty
+      Name="ProtectSpUpdate"
+      DisplayName="Protect SP"
+      Description="Will disable interrupts during ESP:SP updates.     (--protect-sp-update)"
+      Category="PortSpecific"
+      Switch="-protect-sp-update"
+      F1Keyword="VC.Project.SDCCCompilerTool.ProtectSpUpdate"/>
+    <!--
+        - -pstack-model=       use stack model 'small' (default) or 'large'  
+    -->
+    <!-- Should this be an ENUM? -->
+    <StringProperty
+      Name="StackModel"
+      DisplayName="Stack Model"
+      Description="Use stack model 'small' (default) or 'large'.     (--pstack-model=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-pstack-model="
+      F1Keyword="VC.Project.SDCCCompilerTool.StackModel"/>
+    <!--
+        - -reserve-regs-iy     Do not use IY (incompatible with - -fomit-frame-pointer)
+    -->
+    <BoolProperty
+      Name="ReserveRegsIY"
+      DisplayName="Reserver Register IY"
+      Description="Do not use IY (incompatible with --fomit-frame-pointer).     (--reserve-regs-iy)"
+      Category="PortSpecific"
+      Switch="-reserve-regs-iy"
+      F1Keyword="VC.Project.SDCCCompilerTool.ReserveRegsIY"/>
+    <!--
+        - -stack-10bit         use the 10bit stack for ds390 (default)
+        - -stack-10bit         use the 10bit stack for ds400 (default)
+        - -stack-8bit          use the 8bit stack for the ds390 (not supported yet)
+        - -stack-8bit          use the 8bit stack for the ds400 (not supported yet)
+    -->
+    <EnumProperty
+      Name="StackBits"
+      DisplayName="Stack Bits"
+      Description="The bitcount for the stack."
+      Category="PortSpecific"
+      F1Keyword="VC.Project.SDCCCompilerTool.StackBits">
+      <!--
+      <EnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" Label="" HasConfigurationCondition="true" />
+      </EnumProperty.DataSource>
+      -->
+      <EnumValue
+        Name="10bitStack"
+        Switch="-stack-10bit"
+        DisplayName="10bit Stack"
+        Description="use the 10bit stack (default).    (--stack-10bit)."/>
+      <EnumValue
+        Name="8bitStack"
+        Switch="-stack-8bit"
+        DisplayName="8bit Stack"
+        Description="use the 8bit stack (default).    (--stack-8bit)."/>
+    </EnumProperty>
+    <!--
+        - -stack-size          sets the size if the argument passing stack (default: 16, minimum: 4)
+        - -stack-size          Tells the linker to allocate this space for stack
+    -->
+    <StringProperty
+      Name="StackSize"
+      DisplayName="Stack Size"
+      Description="Sets the size if the argument passing stack (default: 16, minimum: 4).     (--stack-size=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-pstack-size="
+      F1Keyword="VC.Project.SDCCCompilerTool.StackSize"/>
+    <!--
+        - -tini-libid          <nnnn> LibraryID used in -mTININative
+    -->
+    <StringProperty
+      Name="LibraryID"
+      DisplayName="Library ID"
+      Description="LibraryID used in -mTININative.     (--tini-libid &lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-tini-libid "
+      F1Keyword="VC.Project.SDCCCompilerTool.LibraryID"/>
+    <!--
+        - -use-accelerator     generate code for ds390 arithmetic accelerator
+        - -use-accelerator     generate code for ds400 arithmetic accelerator
+    -->
+    <BoolProperty
+      Name="UseAccelerator"
+      DisplayName="Use Arithmetic Accelerator"
+      Description="Generate code for ds390 arithmetic accelerator.     (--use-accelerator)"
+      Category="PortSpecific"
+      Switch="-use-accelerator"
+      F1Keyword="VC.Project.SDCCCompilerTool.UseAccelerator"/>
+    <!--
+        - -use-crt=            use <crt-o> run-time initialization module
+    -->
+    <StringProperty
+      Name="UseCRT"
+      DisplayName="Use CRT"
+      Description="Use &lt;crt-o&gt; run-time initialization module.     (--use-crt=&lt;value&gt;)"
+      Category="PortSpecific"
+      Switch="-use-crt="
+      F1Keyword="VC.Project.SDCCCompilerTool.UseCRT"/>
+    <!--
+        -ba                   <num> use data bank <num>
+    -->
+    <IntProperty
+      Name="DataBank"
+      DisplayName="Use Data Bank"
+      Description="Use data bank &lt;Num&gt;.     (-bo&lt;Num&gt;)"
+      Category="PortSpecific"
+      Switch="ba"
+      F1Keyword="VC.Project.SDCCCompilerTool.DataBank"/>
+    <!--
+        -bo                   <num> use code bank <num>
+    -->
+    <IntProperty
+      Name="CodeBank"
+      DisplayName="Use Code Bank"
+      Description="Use code bank &lt;Num&gt;.     (-bo&lt;Num&gt;)"
+      Category="PortSpecific"
+      Switch="bo"
+      F1Keyword="VC.Project.SDCCCompilerTool.CodeBank"/>
+    <!--
+    -y  - -extended            enable Extended Instruction Set/Literal Offset Addressing mode
+    -->
+    <BoolProperty
+      Name="ExtendedInstructionSet"
+      DisplayName="Enable Extended Instruction Set"
+      Description="Enable Extended Instruction Set/Literal Offset Addressing mode.     (-y --extended)"
+      Category="PortSpecific"
+      Switch="-extended"
+      F1Keyword="VC.Project.SDCCCompilerTool.ExtendedInstructionSet"/>
+  
+  
+    <!--
+    **************************************
+    * TODO: should this be a linker thing? It's like an additional lib/object file...
+    **************************************
+    -->
+    <StringProperty
+      Name="CustomCrt"
+      DisplayName="Custom CRT"
+      Description="Path to the custom CRT."
+      Category="PortSpecific"
+      F1Keyword="VC.Project.SDCCCompilerTool.CustomCrt">
+      <!--
+      <StringProperty.DataSource>
+        <DataSource
+          Persistence="ProjectFile"
+          Label=""
+          HasConfigurationCondition="true"
+          ItemType=""/>
+      </StringProperty.DataSource>
+      -->
+    </StringProperty>
+  
+    <!--
+    **************************************
+    * Command Line - Additional Options
+    **************************************
+    -->
+    <StringProperty
+      Name="AdditionalOptions"
+      DisplayName="Additional Options"
+      Description="Additional Options."
+      Category="Command Line"
+      F1Keyword="vc.project.AdditionalOptionsPage">
+    </StringProperty>
+  </Rule>
+</ProjectSchemaDefinitions>

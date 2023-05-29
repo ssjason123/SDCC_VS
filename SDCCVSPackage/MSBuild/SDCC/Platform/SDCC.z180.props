@@ -1,8 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <!-- SDCC Z180 Overrides -->
-  <PropertyGroup Condition="'$(ProcessorType)' == 'z180'">
-    <!-- TODO: Add Overrides -->
-  </PropertyGroup>
-
-</Project>

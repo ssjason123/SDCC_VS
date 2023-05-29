@@ -1,8 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <!-- SDCC EZ80_Z80 Overrides -->
-  <PropertyGroup Condition="'$(ProcessorType)' == 'ez80_z80'">
-    <!-- TODO: Add Overrides -->
-  </PropertyGroup>
-
-</Project>

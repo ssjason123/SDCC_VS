@@ -1,0 +1,21 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Import Before -->
+  <Import Condition="Exists('$(MSBuildThisFileDirectory)ImportBefore\Default')" Project="$(MSBuildThisFileDirectory)ImportBefore\Default\*.props" />
+
+  <PropertyGroup>
+    <PlatformShortName>gbz80</PlatformShortName>
+    <PlatformArchitecture>8</PlatformArchitecture>
+    <PlatformTarget>gbz80</PlatformTarget>
+    <DefaultPlatformToolset Condition="'$(DefaultPlatformToolset)' == ''">sdcc</DefaultPlatformToolset>
+
+    <!-- Have to maintain compatibility with VS2010 projects, which might not have toolset defined in the project-->
+    <PlatformToolset Condition="'$(PlatformToolset)' == ''">sdcc</PlatformToolset>
+
+    <!-- Required for enabling Team Build for packaging Windows Store app projects -->
+    <OutDirWasSpecified Condition=" '$(OutDir)'!='' AND '$(OutDirWasSpecified)'=='' ">true</OutDirWasSpecified>
+    <OutDirWasSpecified Condition=" '$(OutDir)'=='' AND '$(OutDirWasSpecified)'=='' ">false</OutDirWasSpecified>
+  </PropertyGroup>
+
+  <!-- Import After -->
+  <Import Condition="Exists('$(MSBuildThisFileDirectory)ImportAfter\Default')" Project="$(MSBuildThisFileDirectory)ImportAfter\Default\*.props" />
+</Project>

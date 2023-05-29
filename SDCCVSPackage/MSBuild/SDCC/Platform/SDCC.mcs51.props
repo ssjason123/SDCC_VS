@@ -1,8 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <!-- SDCC MCS51 Overrides -->
-  <PropertyGroup Condition="'$(ProcessorType)' == 'mcs51'">
-    <!-- TODO: Add Overrides -->
-  </PropertyGroup>
-
-</Project>
