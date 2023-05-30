@@ -10,6 +10,6 @@
         "/>
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)BuildCusomizations\SDCC.targets"/>]
+  <Import Project="$(MSBuildThisFileDirectory)BuildCusomizations\SDCC.targets"/>
 
 </Project>

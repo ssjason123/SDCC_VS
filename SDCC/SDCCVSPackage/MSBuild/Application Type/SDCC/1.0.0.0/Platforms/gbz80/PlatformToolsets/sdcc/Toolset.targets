@@ -2,7 +2,9 @@
   <Import Project="$(MSBuildThisFileDirectory)ImportBefore\*.targets" Condition="Exists('$(MSBuildThisFileDirectory)ImportBefore')" />
   
   <Import Project="$(VCTargetsPath)\Microsoft.CppCommon.targets" />
+  <!--
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.WindowsSDK.targets" />
+  -->
 
   <Import Project="$(MSBuildThisFileDirectory)ImportAfter\*.targets" Condition="Exists('$(MSBuildThisFileDirectory)ImportAfter')" />
 </Project>

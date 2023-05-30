@@ -1,0 +1,125 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <DependencyDownloadFolder Condition="'$(DependencyDownloadFolder)' == ''">$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))\.vs\SDCC\Tools\</DependencyDownloadFolder>
+    <!--<Is64Bit>$([System.Environment]::Is64BitProcess)</Is64Bit>-->
+    <Is64Bit>false</Is64Bit>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PlatformDependencyDownloadFolder Condition="'$(PlatformDependencyDownloadFolder)' == '' AND '$(Is64Bit)'=='true'">$(DependencyDownloadFolder)x64\</PlatformDependencyDownloadFolder>
+    <PlatformDependencyDownloadFolder Condition="'$(PlatformDependencyDownloadFolder)' == '' AND '$(Is64Bit)'=='false'">$(DependencyDownloadFolder)x86\</PlatformDependencyDownloadFolder>
+  </PropertyGroup>
+
+  <!-- Break this down and move to the appropriate files.-->
+  <PropertyGroup>
+    <DownloadDependenciesDependsOn>
+      $(DownloadDependenciesDependsOn);
+      PrepareSDCCDependencies;
+      PrepareGBDKDependencies;
+      PrepareEmuliciousDependencies
+    </DownloadDependenciesDependsOn>
+  </PropertyGroup>
+
+  <!-- Move this to GBDK specific project -->
+  <Target Name="PrepareSDCCDependencies">
+    <ItemGroup Condition="'$(Is64Bit)'=='true'">
+      <DownloadDependency Include="$(PlatformDependencyDownloadFolder)sdcc\">
+        <Name>SDCC</Name>
+        <Url>https://sourceforge.net/projects/sdcc/files/snapshot_builds/x86_64-w64-mingw32/sdcc-snapshot-x86_64-w64-mingw32-20230529-14088.zip/download</Url>
+        <ExpectedHash></ExpectedHash>
+        <ZipName>sdcc.zip</ZipName>
+        <ExtractFolder>$(PlatformDependencyDownloadFolder)</ExtractFolder>
+      </DownloadDependency>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Is64Bit)'!='true'">
+      <DownloadDependency Include="$(PlatformDependencyDownloadFolder)sdcc\">
+        <Name>SDCC</Name>
+        <Url>https://sourceforge.net/projects/sdcc/files/snapshot_builds/i586-mingw32msvc/sdcc-snapshot-i586-mingw32msvc-20230528-14088.zip/download</Url>
+        <ExpectedHash></ExpectedHash>
+        <ZipName>sdcc.zip</ZipName>
+        <ExtractFolder>$(PlatformDependencyDownloadFolder)</ExtractFolder>
+      </DownloadDependency>
+    </ItemGroup>
+  </Target>
+
+  <!-- Move this to GBDK specific project -->
+  <Target Name="PrepareGBDKDependencies">
+    <ItemGroup Condition="'$(Is64Bit)'=='true'">
+      <DownloadDependency Include="$(PlatformDependencyDownloadFolder)gbdk\">
+        <Name>GBDK-2020</Name>
+        <Url>https://github.com/gbdk-2020/gbdk-2020/releases/download/4.1.1/gbdk-win64.zip</Url>
+        <ExpectedHash></ExpectedHash>
+        <ZipName>gbdk.zip</ZipName>
+        <ExtractFolder>$(PlatformDependencyDownloadFolder)</ExtractFolder>
+      </DownloadDependency>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Is64Bit)'!='true'">
+      <DownloadDependency Include="$(PlatformDependencyDownloadFolder)gbdk\">
+        <Name>GBDK-2020</Name>
+        <Url>https://github.com/gbdk-2020/gbdk-2020/releases/download/4.1.1/gbdk-win64.zip</Url>
+        <ExpectedHash></ExpectedHash>
+        <ZipName>gbdk.zip</ZipName>
+        <ExtractFolder>$(PlatformDependencyDownloadFolder)</ExtractFolder>
+      </DownloadDependency>
+    </ItemGroup>
+  </Target>
+
+  <!-- Move this to the Emulicious specific project -->
+  <Target Name="PrepareEmuliciousDependencies">
+    <ItemGroup Condition="'$(Is64Bit)'=='true'">
+      <DownloadDependency Include="$(PlatformDependencyDownloadFolder)emulicious\">
+        <Name>Emulicious</Name>
+        <Url>https://emulicious.net/download/emulicious-with-64-bit-java-for-windows/</Url>
+        <ZipName>Emulicious.zip</ZipName>
+        <ExpectedHash></ExpectedHash>
+        <ExtractFolder>$(PlatformDependencyDownloadFolder)emulicious\</ExtractFolder>
+      </DownloadDependency>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Is64Bit)'!='true'">
+      <DownloadDependency Include="$(PlatformDependencyDownloadFolder)emulicious\">
+        <Name>Emulicious</Name>
+        <Url>https://emulicious.net/download/emulicious-with-java-for-windows/</Url>
+        <ZipName>Emulicious.zip</ZipName>
+        <ExpectedHash></ExpectedHash>
+        <ExtractFolder>$(PlatformDependencyDownloadFolder)emulicious\</ExtractFolder>
+      </DownloadDependency>
+    </ItemGroup>
+  </Target>
+
+  <!--
+  * Download dependency tools when tools are not found.
+  -->
+  <Target Name="DownloadDependencies" 
+          DependsOnTargets="$(DownloadDependenciesDependsOn)"
+          BeforeTargets="PrepareForBuild">
+
+    <!-- Expand the DownloadDependencies with the zip file name. -->
+    <ItemGroup>
+      <DownloadDependency Update="@(DownloadDependency)">
+        <DownloadLocation>$(PlatformDependencyDownloadFolder)%(ZipName)</DownloadLocation>
+      </DownloadDependency>
+    </ItemGroup>
+
+    <!--
+    <Message Importance="High" Text="Url: %(DownloadDependency.Url)%0aDest Folder: $(PlatformDependencyDownloadFolder)%0aDest File: %(DownloadDependency.ZipName)%0a%(DownloadDependency.DownloadLocation)"/>
+    -->
+
+    <DownloadFile
+      Condition="!Exists(%(DownloadLocation))"
+      SourceUrl="@(DownloadDependency->'%(Url)')"
+      SkipUnchangedFiles="true"
+      DestinationFolder="$(PlatformDependencyDownloadFolder)"
+      DestinationFileName="%(DownloadDependency.ZipName)">
+      <Output TaskParameter="DownloadedFile"
+              ItemName="DownloadDependency"/>
+    </DownloadFile>
+
+    <Unzip
+      Condition="!Exists(%(DownloadDependency.Identity))"
+      SourceFiles="%(DownloadDependency.DownloadLocation)"
+      DestinationFolder="%(DownloadDependency.ExtractFolder)"/>
+
+  </Target>
+
+</Project>
