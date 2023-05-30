@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <DependencyDownloadFolder Condition="'$(DependencyDownloadFolder)' == ''">$([System.Environment]::GetFolderPath(SpecialFolder.UserProfile))\.vs\SDCC\Tools\</DependencyDownloadFolder>
-    <!--<Is64Bit>$([System.Environment]::Is64BitProcess)</Is64Bit>-->
-    <Is64Bit>false</Is64Bit>
+    <Is64Bit>$([System.Environment]::Is64BitProcess)</Is64Bit>
   </PropertyGroup>
 
   <PropertyGroup>
