@@ -24,6 +24,25 @@
     <Task>$(SDCCPropertyRulePath)SDCC.Common.xml</Task>
   </UsingTask>
 
+  <!-- Inline task used to replace the End of line for lib generation. -->
+  <UsingTask TaskName="TokenReplace" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Path ParameterType="System.String" Required="true" />
+      <Token ParameterType="System.String" Required="true" />
+      <Replacement ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+string content = File.ReadAllText(Path);
+content = content.Replace(Token, Replacement);
+File.WriteAllText(Path, content);
+
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
   <UsingTask 
     TaskName="CustomBuild"
     AssemblyFile="$(VCTargetsPath)\Microsoft.Build.CppTasks.Common.dll"/>
@@ -31,6 +50,7 @@
   <Target Name="PrepareSDCCItems">
     <!-- Build the SDCC Items -->
     <ItemGroup>
+      <!-- TODO: Unify SDCC/ClCompile, managing both  -->
       <SDCC Remove="@(SDCC)"/>
       <SDCC Include="@(ClCompile)"/>
     </ItemGroup>
@@ -196,12 +216,20 @@
     <Delete Files="%(SDCC.TempCommandLineFile)"/>
 
     <!-- Run the command to build the file. -->
-    <CustomBuild  
+    <CustomBuild
       Sources="@(SDCC)"
       MinimalRebuildFromTracking="true"
       TrackerLogDirectory="$(TLogLocation)"
       EnableErrorListRegex="true"
-      ErrorListRegex="(?'FILENAME'.+):(?'LINE'\d+): (syntax )?(?'CATEGORY'Error|error|warning|info)( (?'CODE'\d+))?:(?'TEXT'.+?)( %3B column (?'COLUMN'\d+))?$"
+      ErrorListRegex="(?'FILENAME'.+)[(](?'LINE'\d+)[)]([ ]?): (syntax )?(?'CATEGORY'Error|error|warning|info)( (?'CODE'\d+))?:(?'TEXT'.+?)( %3B column (?'COLUMN'\d+))?$"
+      />
+
+    <!-- Update the end of line data (\r\n->\n) on the output, otherwise sdar may fail when building a lib. -->
+    <TokenReplace
+      Condition="'$(SDCCEndOfLineFix)' != 'false'"
+      Path="%(SDCC.OutputFile)"
+      Token="%0D%0A"
+      Replacement="%0A"
       />
   </Target>
 

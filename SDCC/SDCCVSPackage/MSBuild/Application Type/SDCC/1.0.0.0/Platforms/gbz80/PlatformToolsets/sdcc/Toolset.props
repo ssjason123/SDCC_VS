@@ -13,12 +13,10 @@
     <OutDir Condition="'$(OutDir)'=='' AND '$(SolutionDir)' == ''">$(IntDir)</OutDir>
   </PropertyGroup>
 
-  <!-- TODO: set the default toolsets -->
-  <!--
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Common.props" />
-  -->
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.MSVC.Toolset.Win32.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.MSVC.Toolset.Common.props"/>
+  <Import Project="$(SDCCPlatformRoot)SDCC.C.Common.props"/>
 
+  <!-- TODO: update these paths for SDCC support. -->
   <PropertyGroup>
     <ExecutablePath Condition="'$(ExecutablePath)' == ''">$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
     <IncludePath Condition="'$(IncludePath)' == ''">$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>

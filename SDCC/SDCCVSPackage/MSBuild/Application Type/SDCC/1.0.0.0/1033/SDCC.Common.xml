@@ -345,7 +345,7 @@
       DisplayName="Disable Warning"
       Description="Disable specific warning    (--disable-warning &lt;num&gt;)"
       Category="General"
-      Switch="--disable-warning "
+      Switch="-disable-warning "
       F1Keyword="VC.Project.SDCCCompilerTool.DisableWarning"/>
     <!--
         - -Werror              Treat the warnings as errors

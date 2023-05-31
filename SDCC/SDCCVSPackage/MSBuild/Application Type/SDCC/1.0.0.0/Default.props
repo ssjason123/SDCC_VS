@@ -1,2 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SDCCPlatformRoot>$(MSBuildThisFileDirectory)</SDCCPlatformRoot>
+    <SDCCPropertyRulePath>$(MSBuildThisFileDirectory)$(LangId)/</SDCCPropertyRulePath>
+  </PropertyGroup>
 </Project>

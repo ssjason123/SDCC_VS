@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <UseSDCCPropertyPageSchemas>true</UseSDCCPropertyPageSchemas>
+    <UseDefaultPropertyPageSchemas>false</UseDefaultPropertyPageSchemas>
   </PropertyGroup>
 
   <ItemDefinitionGroup>
@@ -15,5 +16,5 @@
     </MakeBin>
   </ItemDefinitionGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)BuildCusomizations\SDCC.props"/>
+  <Import Project="$(MSBuildThisFileDirectory)BuildCustomizations\SDCC.props"/>
 </Project>

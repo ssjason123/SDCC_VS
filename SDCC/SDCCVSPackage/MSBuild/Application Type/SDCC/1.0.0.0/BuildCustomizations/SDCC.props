@@ -4,6 +4,7 @@
     <PortType>gbz80</PortType>
     <VCOutput Condition="'$(VCOutput)' == ''">true</VCOutput>
     <CompileAndAssemble Condition="'$(CompileAndAssemble)' == ''">true</CompileAndAssemble>
+    <ObjectExtension>.o</ObjectExtension>
   </PropertyGroup>
 
   <ItemDefinitionGroup>

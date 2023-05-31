@@ -10,6 +10,12 @@
         "/>
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)BuildCusomizations\SDCC.targets"/>
+  <Import Project="$(MSBuildThisFileDirectory)BuildCustomizations\SDCC.targets"/>
+
+  <!-- TODO: implement the targets Against the SDCC toolset -->
+  <Target Name="ClCompile"
+          DependsOnTargets="SDCCBuild"/>
+
+  <Target Name="Link"/>
 
 </Project>
