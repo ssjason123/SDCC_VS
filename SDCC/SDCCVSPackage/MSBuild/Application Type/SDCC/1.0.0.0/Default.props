@@ -3,4 +3,16 @@
     <SDCCPlatformRoot>$(MSBuildThisFileDirectory)</SDCCPlatformRoot>
     <SDCCPropertyRulePath>$(MSBuildThisFileDirectory)$(LangId)/</SDCCPropertyRulePath>
   </PropertyGroup>
+
+  <!-- Move to download dependency scripts. -->
+  <PropertyGroup>
+    <DownloadToolArchitecture Condition="'$(DownloadToolArchitecture)' == '' AND '$([System.Environment]::Is64BitProcess)' == 'true'">x64</DownloadToolArchitecture>
+    <DownloadToolArchitecture Condition="'$(DownloadToolArchitecture)' == '' AND '$([System.Environment]::Is64BitProcess)' != 'true'">x86</DownloadToolArchitecture>
+    <ToolDownloadFolder>$(UserProfile)\.vs\SDCC\Tools\$(DownloadToolArchitecture)\</ToolDownloadFolder>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SDCCDownload_x86>https://sourceforge.net/projects/sdcc/files/snapshot_builds/i586-mingw32msvc/sdcc-snapshot-i586-mingw32msvc-20230528-14088.zip/download</SDCCDownload_x86>
+    <SDCCDownload_x64>https://sourceforge.net/projects/sdcc/files/snapshot_builds/x86_64-w64-mingw32/sdcc-snapshot-x86_64-w64-mingw32-20230529-14088.zip/download</SDCCDownload_x64>
+  </PropertyGroup>
 </Project>

@@ -16,6 +16,9 @@
       <Category
         Name="SDCC"
         DisplayName="SDCC"/>
+      <Category
+        Name="Downloads"
+        DisplayName="Downloads"/>
     </Rule.Categories>
     <Rule.DataSource>
       <DataSource
@@ -209,7 +212,7 @@
         <DataSource Persistence="ProjectFile" ItemType="" Label="Globals" HasConfigurationCondition="false" />
       </StringProperty.DataSource>
     </StringProperty>
-  
-  
+
+
   </Rule>
 </ProjectSchemaDefinitions>

@@ -69,38 +69,38 @@
       ItemType="Library">
     </ContentType>
 
-    <ItemType Name="ClCompile" DisplayName="C/C++ compiler"/>
-    <ItemType Name="ClInclude" DisplayName="C/C++ header"/>
-    <ItemType Name="CustomBuild" DisplayName="Custom Build Tool"/>
-    <ItemType Name="None" DisplayName="Does not participate in build"/>
-    <ItemType Name="Object" DisplayName="Object"/>
-    <ItemType Name="Library" DisplayName="Library"/>
-    <ItemType Name="Text" DisplayName="Text"/>
-    <ItemType Name="CopyFileToFolders" DisplayName="Copy file" />
+  <ItemType Name="ClCompile" DisplayName="C/C++ compiler"/>
+  <ItemType Name="ClInclude" DisplayName="C/C++ header"/>
+  <ItemType Name="CustomBuild" DisplayName="Custom Build Tool"/>
+  <ItemType Name="None" DisplayName="Does not participate in build"/>
+  <ItemType Name="Object" DisplayName="Object"/>
+  <ItemType Name="Library" DisplayName="Library"/>
+  <ItemType Name="Text" DisplayName="Text"/>
+  <ItemType Name="CopyFileToFolders" DisplayName="Copy file" />
 
-    <FileExtension Name=".asm" ContentType="ASMCode"/>
-    <FileExtension Name=".s" ContentType="ASMCode"/>
-    <FileExtension Name=".rasm" ContentType="ASMCode"/>
+  <FileExtension Name=".asm" ContentType="ASMCode"/>
+  <FileExtension Name=".s" ContentType="ASMCode"/>
+  <FileExtension Name=".rasm" ContentType="ASMCode"/>
 
-    <FileExtension Name=".cpp" ContentType="CppCode"/>
-    <FileExtension Name=".cc" ContentType="CppCode"/>
-    <FileExtension Name=".cxx" ContentType="CppCode"/>
-    <FileExtension Name=".c" ContentType="CCode"/>
+  <FileExtension Name=".cpp" ContentType="CppCode"/>
+  <FileExtension Name=".cc" ContentType="CppCode"/>
+  <FileExtension Name=".cxx" ContentType="CppCode"/>
+  <FileExtension Name=".c" ContentType="CCode"/>
 
-    <FileExtension Name=".h" ContentType="CppHeader"/>
-    <FileExtension Name=".hh" ContentType="CppHeader"/>
-    <FileExtension Name=".hpp" ContentType="CppHeader"/>
-    <FileExtension Name=".hxx" ContentType="CppHeader"/>
-    <FileExtension Name=".ipp" ContentType="CppHeader"/>
+  <FileExtension Name=".h" ContentType="CppHeader"/>
+  <FileExtension Name=".hh" ContentType="CppHeader"/>
+  <FileExtension Name=".hpp" ContentType="CppHeader"/>
+  <FileExtension Name=".hxx" ContentType="CppHeader"/>
+  <FileExtension Name=".ipp" ContentType="CppHeader"/>
 
-    <FileExtension Name=".mk" ContentType="MakeFile"/>
-    <FileExtension Name=".mak" ContentType="MakeFile"/>
-    <FileExtension Name=".txt" ContentType="Text"/>
-    <FileExtension Name=".log" ContentType="Text"/>
-    <FileExtension Name=".obj" ContentType="OBJ"/>
-    <FileExtension Name=".o" ContentType="OBJ"/>
-    <FileExtension Name=".rel" ContentType="OBJ"/>
-    <FileExtension Name=".lib" ContentType="LIB"/>
+  <FileExtension Name=".mk" ContentType="MakeFile"/>
+  <FileExtension Name=".mak" ContentType="MakeFile"/>
+  <FileExtension Name=".txt" ContentType="Text"/>
+  <FileExtension Name=".log" ContentType="Text"/>
+  <FileExtension Name=".obj" ContentType="OBJ"/>
+  <FileExtension Name=".o" ContentType="OBJ"/>
+  <FileExtension Name=".rel" ContentType="OBJ"/>
+  <FileExtension Name=".lib" ContentType="LIB"/>
 
 </ProjectSchemaDefinitions>
 

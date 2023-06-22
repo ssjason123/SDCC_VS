@@ -10,11 +10,12 @@
     </ClCompile>
     <AsmCompile>
     </AsmCompile>
-    <Link>
-    </Link>
+    <Linker>
+    </Linker>
     <MakeBin>
     </MakeBin>
   </ItemDefinitionGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)BuildCustomizations\SDCC.props"/>
+  <Import Project="$(MSBuildThisFileDirectory)BuildCustomizations\SDLD.props"/>
 </Project>

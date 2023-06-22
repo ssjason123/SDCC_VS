@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false'">
     <!-- This Categories file controls the property page order.-->
     <PropertyPageSchema Condition="Exists('$(SDCCPropertyRulePath)SDCC.$(PortType).Categories.xml')"
                         Include="$(SDCCPropertyRulePath)SDCC.$(PortType).Categories.xml">
@@ -24,43 +24,22 @@
     <Task>$(SDCCPropertyRulePath)SDCC.Common.xml</Task>
   </UsingTask>
 
-  <!-- Inline task used to replace the End of line for lib generation. -->
-  <UsingTask TaskName="TokenReplace" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
-    <ParameterGroup>
-      <Path ParameterType="System.String" Required="true" />
-      <Token ParameterType="System.String" Required="true" />
-      <Replacement ParameterType="System.String" Required="true" />
-    </ParameterGroup>
-    <Task>
-      <Code Type="Fragment" Language="cs">
-        <![CDATA[
-string content = File.ReadAllText(Path);
-content = content.Replace(Token, Replacement);
-File.WriteAllText(Path, content);
-
-]]>
-      </Code>
-    </Task>
-  </UsingTask>
-
-  <UsingTask 
-    TaskName="CustomBuild"
-    AssemblyFile="$(VCTargetsPath)\Microsoft.Build.CppTasks.Common.dll"/>
-
   <Target Name="PrepareSDCCItems">
+
     <!-- Build the SDCC Items -->
     <ItemGroup>
-      <!-- TODO: Unify SDCC/ClCompile, managing both  -->
       <SDCC Remove="@(SDCC)"/>
-      <SDCC Include="@(ClCompile)"/>
+      <!-- Get items that have not been excluded from build. -->
+      <SDCC Include="@(ClCompile)" Condition="'%(ClCompile.ExcludedFromBuild)'!='true'"/>
     </ItemGroup>
 
     <ItemGroup>
-      <SDCC>
+      <SDCC Update="@(SDCC)">
         <OutputFile>$(IntDir)%(FileName)$(ObjectExtension)</OutputFile>
         <TempCommandLineFile>$(IntDir)%(FileName)$(ObjectExtension).tmp</TempCommandLineFile>
       </SDCC>
     </ItemGroup>
+
   </Target>
 
   <Target Name="SDCCBuild"
@@ -69,7 +48,8 @@ File.WriteAllText(Path, content);
 
   <Target Name="_SDCC"
           Inputs="@(SDCC)"
-          Outputs="%(SDCC.OutputFile)">
+          Outputs="%(SDCC.OutputFile).dummy">
+
     <MakeDir Directories="$(IntDir);$(OutDir)"/>
 
     <!-- Generate the custom command line. -->
@@ -206,8 +186,9 @@ File.WriteAllText(Path, content);
 
     <!-- Read the commandline from the temporary file. -->
     <ItemGroup>
-      <SDCC>
+      <SDCC Update="%(SDCC.Identity)">
         <Command Condition="Exists(%(SDCC.TempCommandLineFile))">SDCC.exe $([System.IO.File]::ReadAllText(%(SDCC.TempCommandLineFile)).Trim())</Command>
+        <Message>Compiling '%(Identity)'</Message>
         <Outputs>%(SDCC.OutputFile)</Outputs>
       </SDCC>
     </ItemGroup>
@@ -218,7 +199,11 @@ File.WriteAllText(Path, content);
     <!-- Run the command to build the file. -->
     <CustomBuild
       Sources="@(SDCC)"
+      TrackCommandLines="true"
       MinimalRebuildFromTracking="true"
+      TLogCommandFile="$(TLogLocation)SDCC.command.1.tlog"
+      TLogReadFiles="$(TLogLocation)SDCC.read.1.tlog"
+      TLogWriteFiles="$(TLogLocation)SDCC.write.1.tlog"
       TrackerLogDirectory="$(TLogLocation)"
       EnableErrorListRegex="true"
       ErrorListRegex="(?'FILENAME'.+)[(](?'LINE'\d+)[)]([ ]?): (syntax )?(?'CATEGORY'Error|error|warning|info)( (?'CODE'\d+))?:(?'TEXT'.+?)( %3B column (?'COLUMN'\d+))?$"

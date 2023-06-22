@@ -1,0 +1,13 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup>
+    <Linker>
+      <LinkerExecutable Condition="'%(Linker.LinkerExecutable)' == ''">SDLD.exe</LinkerExecutable>
+      <OutputFormat Condition="'%(Linker.OutputFormat)'==''">Intel</OutputFormat>
+      <EchoCommandInput Condition="'%(Linker.EchoCommandInput)' == ''">NoEcho</EchoCommandInput>
+    </Linker>
+  </ItemDefinitionGroup>
+
+  <PropertyGroup>
+    <OutputFile></OutputFile>
+  </PropertyGroup>
+</Project>

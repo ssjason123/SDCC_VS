@@ -2,7 +2,7 @@
 <ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
   <Rule 
       Name="SDLD" 
-      PageTemplate="generic" 
+      PageTemplate="tool" 
       DisplayName="SDLD" 
       SwitchPrefix="-" 
       Order="12" 
@@ -13,15 +13,30 @@
       <Category 
         Name="General" 
         DisplayName="General"/>
+      <Category
+        Name="All Options"
+        DisplayName="All Options"
+        Subtype="Search" />
+      <Category
+        Name="Command Line"
+        DisplayName="Command Line"
+        Subtype="CommandLine" />
     </Rule.Categories>
     <Rule.DataSource>
       <DataSource 
-          Persistence="ProjectFile" 
-          Label="" 
-          ItemType=""
+          Persistence="ProjectFile"
+          ItemType="Linker"
           HasConfigurationCondition="true" />
     </Rule.DataSource>
-  
+
+    <StringProperty
+      Name="LinkerExecutable"
+      DisplayName="Linker Executable"
+      Description="The name of the linker executable."
+      IncludeInCommandLine="false"
+      Category="General"
+      F1Keyword="VC.Project.SDLDLinkerTool.LinkerExecutable"/>
+
     <!--
     **************************************
     * General Rules
@@ -30,6 +45,25 @@
   Startup:
     -p   Echo commands to stdout (default)
     -n   No echo of commands to stdout
+    -->
+    <EnumProperty
+      Name="EchoCommandInput"
+      DisplayName="Echo Command Input"
+      Description="Echo command input to the output window."
+      Category="General"
+      F1Keyword="VC.Project.SDLDLinkerTool.EchoCommandInput">
+      <EnumValue
+        Name="Echo"
+        Switch="p"
+        DisplayName="Echo"
+        Description="Decimal number format.    (-p)."/>
+      <EnumValue
+        Name="NoEcho"
+        Switch="n"
+        DisplayName="No Echo"
+        Description="Octal number format.    (-n)."/>
+    </EnumProperty>
+    <!--
   Alternates to Command Line Input:
     -c                   ASlink >> prompt input
     -f   file[.lk]       Command File input
@@ -92,7 +126,7 @@
     <BoolProperty
       Name="WideListMapFormatEnabled"
       DisplayName="Use Wide Listing Map Format"
-      Description="Wide listing format for map file.     (-m)"
+      Description="Wide listing format for map file.     (-w)"
       Category="General"
       Switch="w"
       F1Keyword="VC.Project.SDLDLinkerTool.WideListMapFormatEnabled"/>
@@ -257,5 +291,27 @@
   End:
     -e   or null line terminates input
     -->
+
+
+    <!--
+    **************************************
+    * Command Line - Additional Options
+    **************************************
+    -->
+    <StringProperty
+      Name="AdditionalOptions"
+      DisplayName="Additional Options"
+      Description="Additional Options."
+      Category="Command Line"
+      F1Keyword="vc.project.AdditionalOptionsPage">
+    </StringProperty>
+
+    <StringListProperty
+      Name="Inputs"
+      Category="Command Line"
+      IsRequired="true"
+      IncludeInCommandLine="false"
+      Separator=" ">
+    </StringListProperty>
   </Rule>
 </ProjectSchemaDefinitions>

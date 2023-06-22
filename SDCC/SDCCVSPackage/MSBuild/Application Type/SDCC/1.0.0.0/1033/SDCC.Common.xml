@@ -11,6 +11,9 @@
       <Category 
         Name="General" 
         DisplayName="General"/>
+      <Category
+        Name="Downloads"
+        DisplayName="Downloads"/>
       <!-- 
       Define the port specific categories. The 'PortSpecific' category will be overwritten with the port specific SDCC.<Port>.xml file.
       -->
@@ -1780,6 +1783,58 @@
       </StringProperty.DataSource>
       -->
     </StringProperty>
+
+
+    <!--
+    **************************************
+    * Download options.
+    **************************************
+    -->
+    <EnumProperty
+      Name="DownloadToolArchitecture"
+      DisplayName="Preferred Tool Architecture"
+      Description="Preferred Architecture for downloaded tools."
+      Category="Downloads"
+      IncludeInCommandLine="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.DownloadToolArchitecture">
+      <EnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="false" />
+      </EnumProperty.DataSource>
+      <EnumValue
+        Name="x64"
+        DisplayName="x64"
+        Description="Download x64 Tools."/>
+      <EnumValue
+        Name="x86"
+        DisplayName="x86"
+        Description="Download x86 Tools."/>
+    </EnumProperty>
+
+    <StringProperty
+      Name="ToolDownloadFolder"
+      DisplayName="Tool Download Folder"
+      Description="Folder to save downloaded tools to."
+      Category="Downloads"
+      IncludeInCommandLine="false"
+      F1Keyword="VC.Project.SDCCCompilerTool.ToolDownloadFolder">
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="false" />
+      </StringProperty.DataSource>
+    </StringProperty>
+
+    <StringProperty
+      Name="SDCCDownloadURL"
+      DisplayName="SDCC Download URL"
+      Description="The URL to download SDCC from."
+      Category="Downloads"
+      IncludeInCommandLine="false"
+      Subtype="Url"
+      F1Keyword="VC.Project.SDCCCompilerTool.ToolDownloadFolder">
+      <StringProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="false" />
+      </StringProperty.DataSource>
+    </StringProperty>
+
   
     <!--
     **************************************
@@ -1793,5 +1848,6 @@
       Category="Command Line"
       F1Keyword="vc.project.AdditionalOptionsPage">
     </StringProperty>
+
   </Rule>
 </ProjectSchemaDefinitions>

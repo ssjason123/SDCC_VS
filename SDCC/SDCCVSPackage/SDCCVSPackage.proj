@@ -161,6 +161,18 @@
       <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDCC.targets</Link>
       <Visible>true</Visible>
     </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDLD.props">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDLD.props</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDLD.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SDLD.targets</Link>
+      <Visible>true</Visible>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SharedTasks.targets">
+      <Link>MSBuild\Application Type\SDCC\1.0.0.0\BuildCustomizations\SharedTasks.targets</Link>
+      <Visible>true</Visible>
+    </Content>
     <Content Include="$(MSBuildThisFileDirectory)MSBuild\Application Type\SDCC\1.0.0.0\Default.props">
       <Link>MSBuild\Application Type\SDCC\1.0.0.0\Default.props</Link>
       <Visible>true</Visible>

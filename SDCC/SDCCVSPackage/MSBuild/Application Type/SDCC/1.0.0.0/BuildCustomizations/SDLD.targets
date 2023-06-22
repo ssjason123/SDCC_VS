@@ -1,0 +1,107 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false'">
+    <!-- These are the common properties available to all SDLD applications. -->
+    <PropertyPageSchema Include="$(SDCCPropertyRulePath)SDLD.Common.xml">
+      <Context>PropertySheet;Project;File</Context>
+    </PropertyPageSchema>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseSDCCPropertyPageSchemas)' != 'false'">
+    <ProjectTools Include="Linker"/>
+  </ItemGroup>
+
+  <UsingTask
+    TaskName="SDLD"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Task>$(SDCCPropertyRulePath)SDLD.Common.xml</Task>
+  </UsingTask>
+
+  <Target Name="SDCCLink"
+          DependsOnTargets="PrepareSDLDItems;_SDLD"/>
+
+  <Target Name="PrepareSDLDItems">
+    <ItemGroup>
+      <SDCCObjects Include="%(SDCC.OutputFile)"/>
+    </ItemGroup>
+    <ItemGroup>
+      <Linker Remove="@(Linker)"/>
+      <Linker Include="$(ProjectPath)"/>
+      <Linker Update="@(Linker)">
+        <OutputExtension Condition="'%(Linker.OutputFormat)'=='Intel'">.ihx</OutputExtension>
+        <OutputExtension Condition="'%(Linker.OutputFormat)'=='S19'">.s19</OutputExtension>
+        <OutputExtension Condition="'%(Linker.OutputFormat)'=='ELF'">.elf</OutputExtension>
+      </Linker>
+      <Linker Update="@(Linker)">
+        <TargetName>$(TargetName)</TargetName>
+        <OutputFileBase>$(OutDir)$(TargetName)</OutputFileBase>
+        <OutputFile>$(OutDir)$(TargetName)%(Linker.OutputExtension)</OutputFile>
+        <TempCommandLineFile>$(IntDir)$(TargetName)%(Linker.OutputExtension)</TempCommandLineFile>
+      </Linker>
+      <LinkerOutputs Include="%(Linker.OutputFile)"/>
+    </ItemGroup>
+    <Message Importance="High" Text="@(LinkerOutputs) Inputs: @(SDCCObjects)"/>
+  </Target>
+
+  <Target Name="_SDLD"
+          Condition="'@(SDCCObjects)'!=''"
+          Inputs="@(SDCCObjects)"
+          Outputs="@(LinkerOutputs)">
+
+    <ItemGroup>
+      <SDLD Remove="@(SDLD)"/>
+      <SDLD Include="@(Linker)"/>
+    </ItemGroup>
+    <!--
+    Call the normal SDLD link to build the command line.
+    -->
+    <SDLD
+      CommandLineTemplate="echo [AllOptions] [AdditionalOptions] %(SDLD.OutputFileBase) [Inputs] > %(SDLD.TempCommandLineFile)"
+      EchoCommandInput="%(SDLD.EchoCommandInput)"
+      AdditionalLibraryPath="%(SDLD.AdditionalLibraryPath)"
+      IncludeLibraries="%(SDLD.IncludeLibraries)"
+      AreaBaseAddress="%(SDLD.AreaBaseAddress)"
+      GlobalSymbols="%(SDLD.GlobalSymbols)"
+      GenerateMapFile="%(SDLD.GenerateMapFile)"
+      WideListMapFormatEnabled="%(SDLD.WideListMapFormatEnabled)"
+      NumberFormat="%(SDLD.NumberFormat)"
+      OutputFormat="%(SDLD.OutputFormat)"
+      NoIceDebugOutput="%(SDLD.NoIceDebugOutput)"
+      SDCDBDebugOutput="%(SDLD.SDCDBDebugOutput)"
+      UpdateListingFiles="%(SDLD.UpdateListingFiles)"
+      DisableSymbolCaseSensitivity="%(SDLD.DisableSymbolCaseSensitivity)"
+      IRamSize="%(SDLD.IRamSize)"
+      XRamSize="%(SDLD.XRamSize)"
+      CodeSize="%(SDLD.CodeSize)"
+      GenerateMemSummaryFile="%(SDLD.GenerateMemSummaryFile)"
+      PackInternalRam="%(SDLD.PackInternalRam)"
+      StackSize="%(SDLD.StackSize)"
+      Inputs="@(SDCCObjects)"
+      AdditionalOptions="%(SDLD.AdditionalOptions)"/>
+
+    <!-- Read the commandline from the temporary file. -->
+    <ItemGroup>
+      <SDLD Update="@(SDLD)">
+        <Command Condition="Exists(%(SDLD.TempCommandLineFile))">%(SDLD.LinkerExecutable) $([System.IO.File]::ReadAllText(%(SDLD.TempCommandLineFile)).Trim())</Command>
+        <Message>Linking '%(SDLD.TargetName)'</Message>
+        <Outputs>%(SDLD.OutputFile)</Outputs>
+      </SDLD>
+    </ItemGroup>
+
+    <!-- Delete the temporary file. -->
+    <Delete Files="%(SDLD.TempCommandLineFile)"/>
+
+    <!-- Run the command to build the file. -->
+    <CustomBuild
+      Sources="@(SDLD)"
+      TrackCommandLines="true"
+      MinimalRebuildFromTracking="true"
+      TLogCommandFile="$(TLogLocation)SDLD.command.1.tlog"
+      TLogReadFiles="$(TLogLocation)SDLD.read.1.tlog"
+      TLogWriteFiles="$(TLogLocation)SDLD.write.1.tlog"
+      TrackerLogDirectory="$(TLogLocation)"
+      EnableErrorListRegex="true"
+      ErrorListRegex="(?'FILENAME'.+)[(](?'LINE'\d+)[)]([ ]?): (syntax )?(?'CATEGORY'Error|error|warning|info)( (?'CODE'\d+))?:(?'TEXT'.+?)( %3B column (?'COLUMN'\d+))?$"
+    />
+  </Target>
+</Project>
